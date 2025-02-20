@@ -2,16 +2,16 @@
 const isOpen = ref(false)
 </script>
 <template>
-  <header class="fixed top-0 w-full">
-    <u-container class="py-3">
+  <header class="fixed top-0 w-full z-20 bg-gray-800/20 rounded-b-full">
+    <u-container class="py-2">
       <div class=" flex justify-between lg:justify-around md:justify-around items-center w-full">
-        <div class="w-1/3  lg:hidden md:hidden block">
+        <div class="w-1/3  lg:hidden  block">
           <UButton class="rounded-full mx-1" @click="isOpen = true" icon="material-symbols:menu-rounded"
                    color="yellow"/>
         </div>
-        <div class="hidden md:flex lg:flex w-1/3  justify-center">
+        <div class="hidden  lg:flex w-1/3  justify-center">
           <ul class="flex ">
-            <li class="px-2">
+            <li class="px-2" :class="{'text-amber-400': $route.path==='/'}">
               <nuxt-link to="/">
                 خونه
               </nuxt-link>
@@ -40,12 +40,13 @@ const isOpen = ref(false)
         </div>
         <div class=" w-1/3 flex justify-end mx-1">
           <div class="hidden lg:block">
+
             <!---->
-            <UButton class="rounded-full mx-1" icon="material-symbols:search-rounded" color="yellow"/>
+            <UButton class="rounded-full mx-1" icon="material-symbols:search" color="yellow"/>
             <!---->
             <UButton class="rounded-full mx-1" icon="mdi:cards-heart" color="yellow"/>
             <!---->
-            <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart-rounded" color="yellow"/>
+            <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart" color="yellow"/>
           </div>
           <UButton color="yellow" class="mx-2" :ui="{ rounded: 'rounded-full' }">
             <span class="hidden md:block">ثبت نام | ورود</span>
@@ -101,11 +102,11 @@ const isOpen = ref(false)
         <template #footer>
           <div class="text-center">
 
-            <UButton class="rounded-full mx-1" icon="material-symbols:search-rounded" color="yellow"/>
+            <UButton class="rounded-full mx-1" icon="material-symbols:search" color="yellow"/>
             <!---->
             <UButton class="rounded-full mx-1" icon="mdi:cards-heart" color="yellow"/>
             <!---->
-            <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart-rounded" color="yellow"/>
+            <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart" color="yellow"/>
           </div>
         </template>
       </UCard>
