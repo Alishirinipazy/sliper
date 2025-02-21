@@ -1,10 +1,21 @@
 <script setup lang="ts">
 const isOpen = ref(false)
+const classHeader = ref('header');
+onMounted(() => {
+  window.onscroll = () => {
+    if (document.documentElement.scrollTop <= 400) {
+      classHeader.value = "header"
+    } else {
+      classHeader.value = "header-scroll"
+
+    }
+  }
+})
 </script>
 <template>
-  <header class="fixed top-0 w-full z-20 bg-gray-800/20 rounded-b-full">
-    <u-container class="py-2">
-      <div class=" flex justify-between lg:justify-around md:justify-around items-center w-full">
+  <header class="transition-all duration-700 ease-in-out z-110" :class="classHeader">
+    <u-container class="">
+      <div class="   flex justify-between lg:justify-around md:justify-around items-center w-full">
         <div class="w-1/3  lg:hidden  block">
           <UButton class="rounded-full mx-1" @click="isOpen = true" icon="material-symbols:menu-rounded"
                    color="yellow"/>
@@ -106,10 +117,18 @@ const isOpen = ref(false)
             <!---->
             <UButton class="rounded-full mx-1" icon="mdi:cards-heart" color="yellow"/>
             <!---->
-            <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart" color="yellow"/>
+            <UButton class="rounded-full  mx-1" icon="material-symbols:shopping-cart" color="yellow"/>
           </div>
         </template>
       </UCard>
     </USlideover>
   </header>
 </template>
+<style>
+.header {
+  @apply fixed top-0 w-full z-20  dark:bg-gray-800/20 rounded-b-full py-2
+}
+.header-scroll {
+  @apply fixed top-0 w-full z-20 dark:bg-gray-800 py-1
+}
+</style>
