@@ -11,6 +11,7 @@ module.exports = {
                 mainColor:'',
                 secColor:'#222831',
                 cosColor:'#FF4C4C',
+                darkColor:'#1C1B22'
             }
         }
     }

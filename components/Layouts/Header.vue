@@ -11,6 +11,15 @@ onMounted(() => {
     }
   }
 })
+const colorMode = useColorMode()
+const isDark = computed({
+  get () {
+    return colorMode.value === 'dark'
+  },
+  set () {
+    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+  }
+})
 </script>
 <template>
   <header class="transition-all duration-700 ease-in-out z-110" :class="classHeader">
@@ -28,17 +37,17 @@ onMounted(() => {
               </nuxt-link>
             </li>
             <li class="px-2">
-              <nuxt-link to="/product">
+              <nuxt-link to="/products" :class="{'text-amber-400': $route.path==='/products'}">
                 محصولاتمون
               </nuxt-link>
             </li>
             <li class="px-2">
-              <nuxt-link to="/about">
+              <nuxt-link to="/about" :class="{'text-amber-400': $route.path==='/about'}">
                 دربارمون
               </nuxt-link>
             </li>
             <li class="px-2">
-              <nuxt-link to="/contact">
+              <nuxt-link to="/contact" :class="{'text-amber-400': $route.path==='/contact'}">
                 تماس با ما
               </nuxt-link>
             </li>
@@ -51,7 +60,15 @@ onMounted(() => {
         </div>
         <div class=" w-1/3 flex justify-end mx-1">
           <div class="hidden lg:block">
-
+            <!---->
+            <ClientOnly>
+              <UButton
+                  :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
+                  color="yellow"
+                  @click="isDark = !isDark"
+                  class="rounded-full mx-1"
+              />
+            </ClientOnly>
             <!---->
             <UButton class="rounded-full mx-1" icon="material-symbols:search" color="yellow"/>
             <!---->
@@ -89,13 +106,13 @@ onMounted(() => {
 
         <Placeholder class="h-full"/>
         <ul class="">
-          <li class="p-2  ">
+          <li class="p-2 ">
             <nuxt-link to="/" @click="isOpen = false">
               خونه
             </nuxt-link>
           </li>
           <li class="p-2 border-t-2 ">
-            <nuxt-link to="/product" @click="isOpen = false">
+            <nuxt-link to="/products" @click="isOpen = false">
               محصولاتمون
             </nuxt-link>
           </li>
@@ -126,9 +143,9 @@ onMounted(() => {
 </template>
 <style>
 .header {
-  @apply fixed top-0 w-full z-20  dark:bg-gray-800/20 rounded-b-full py-2
+  @apply fixed top-0 w-full z-20  bg-gray-800/20 rounded-b-full py-2
 }
 .header-scroll {
-  @apply fixed top-0 w-full z-20 dark:bg-gray-800 py-1
+  @apply fixed top-0 w-full z-20 bg-secColor py-1
 }
 </style>

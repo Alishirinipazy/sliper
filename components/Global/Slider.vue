@@ -26,7 +26,7 @@ const props = defineProps(['items']);
         <UButton class="rounded-full my-2" label="همین الان بخرش" color="yellow"/>
       </nuxt-link>
     </div>
-    <div class="absolute hidden lg:block bottom-0 z-10 w-full rounded-t-full dark:bg-gray-800 h-5">
+    <div class="absolute hidden lg:block bottom-0 z-10 w-full rounded-t-full bg-white dark:bg-darkColor h-5">
 
     </div>
   </div>
