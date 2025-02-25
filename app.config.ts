@@ -13,7 +13,15 @@ export default defineAppConfig({
          background: '',
          padding: '',
        },
-     }
+     },
+    carousel:{
+      indicators: {
+        wrapper: 'absolute flex items-center justify-center gap-3 bottom-8 inset-x-0',
+        base: 'h-2 w-8',
+        active: 'bg-mainColor dark:bg-mainColor ',
+        inactive: 'bg-gray-100 dark:bg-gray-100'
+      },
+    }
   }
 
 })

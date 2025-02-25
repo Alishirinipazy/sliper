@@ -8,7 +8,7 @@ module.exports = {
                 video: '16 / 9'
             },
             colors:{
-                mainColor:'',
+                mainColor:'#ffbe33',
                 secColor:'#222831',
                 cosColor:'#FF4C4C',
                 darkColor:'#1C1B22'

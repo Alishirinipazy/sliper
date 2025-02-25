@@ -1,11 +1,13 @@
 <script setup lang="ts">
-const props = defineProps(['productImage'])
+const props = defineProps(['product'])
 </script>
 <template>
+
   <UCard class="m-2 shadow shadow-gray-700">
 
-    <img class="w-full h-25  rounded-t-2xl" :src="productImage" alt="">
+    <img class="w-full h-25  rounded-t-2xl" :src="product" alt="">
     <template #footer>
+
       <h4 class="text-center font-bold">دمپاییی پاپا پی یو </h4>
       <div class="flex justify-between w-full items-center mt-2">
         <ul class="flex" >
@@ -21,10 +23,18 @@ const props = defineProps(['productImage'])
         <UButton class="rounded-full mx-1" icon="icon-park-outline:buy"   color="yellow"/>
       </div>
     </template>
+
   </UCard>
+  <div class="product-option">
+    15% تخفیف
+  </div>
 </template>
 <style>
 .color-product {
-  @apply w-3 h-3 mx-1 rounded-full
+  @apply w-3 h-3 mx-1 rounded-full relative
+}
+.product-option {
+  @apply absolute w-auto  p-1 rounded text-xs top-5 ml-5 bg-cosColor text-center
+
 }
 </style>
