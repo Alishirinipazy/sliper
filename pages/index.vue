@@ -39,6 +39,7 @@ const dataHotAverg = ref({
   <GlobalProductCard :dataProduct="dataHotProduct"/>
     <br>
   <GlobalProductCard :dataProduct="dataHotAverg"/>
+    <HomeBanner/>
   </u-container>
 </template>
 

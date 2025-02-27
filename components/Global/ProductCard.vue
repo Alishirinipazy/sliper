@@ -35,7 +35,7 @@ onMounted(() => {
     <UCarousel class="py-1" ref="carouselRef"
                v-slot="{ item }" :items="props.dataProduct.product"
                :ui="{ item: 'basis-full basis-1/2 md:basis-1/2 lg:basis-1/4' }" arrows>
-      <ProductIitem :product-image="item"/>
+      <ProductIitem :product="item"/>
     </UCarousel>
 
   </div>

@@ -22,7 +22,7 @@ const isDark = computed({
 })
 </script>
 <template>
-  <header class="transition-all duration-700 ease-in-out z-110" :class="classHeader">
+  <header class="transition-all text-cyan-50 duration-700 ease-in-out z-110" :class="classHeader">
     <u-container class="">
       <div class="   flex justify-between lg:justify-around md:justify-around items-center w-full">
         <div class="w-1/3  lg:hidden  block">
@@ -143,7 +143,7 @@ const isDark = computed({
 </template>
 <style>
 .header {
-  @apply fixed top-0 w-full z-20  bg-gray-800/20 rounded-b-full py-2
+  @apply fixed top-0 w-full z-20   py-2
 }
 .header-scroll {
   @apply fixed top-0 w-full z-20 bg-secColor py-1

@@ -7,10 +7,11 @@ const props = defineProps(['items']);
 <template>
 
   <div class="relative">
-    <UCarousel v-if="Array.isArray(props.items)" v-slot="{ item }" class="h-full w-full" :items="props.items" :ui="{ item: 'basis-full' }"
+    <UCarousel v-if="Array.isArray(props.items)" v-slot="{ item }" class="h-full w-full" :items="props.items"
+               :ui="{ item: 'basis-full' }"
                indicators>
       <div class="slider-body"
-           style="height:90vh; direction: rtl" :style="{ backgroundImage: 'url(' + item.image + ')'}">
+           :style="{ backgroundImage: 'url(' + item.image + ');filter: brightness(60%);height:90vh; direction: rtl'}">
         <h4 class="slider-title">{{ item.title }}</h4>
         <p class="slider-dis">{{ item.dis }}</p>
         <nuxt-link to="/product">
@@ -35,10 +36,12 @@ const props = defineProps(['items']);
 .slider-body {
   @apply w-full px-12 flex flex-col justify-center align-sub  bg-no-repeat bg-cover bg-center
 }
+
 .slider-title {
   @apply py-2 sm:text-4xl font-bold  text-amber-800/80
 }
+
 .slider-dis {
- @apply py-2 font-bold  text-amber-800/80
+  @apply py-2 font-bold  text-amber-800/80
 }
 </style>

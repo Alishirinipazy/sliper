@@ -4,11 +4,11 @@ const props = defineProps(['product'])
 <template>
 
   <UCard class="m-2 shadow shadow-gray-700">
-
-    <img class="w-full h-25  rounded-t-2xl" :src="product" alt="">
+    <img class="w-full   rounded-t-2xl" :src="props.product" alt="">
     <template #footer>
 
       <h4 class="text-center font-bold">دمپاییی پاپا پی یو </h4>
+
       <div class="flex justify-between w-full items-center mt-2">
         <ul class="flex" >
           <li class="color-product bg-pink-300"></li>
