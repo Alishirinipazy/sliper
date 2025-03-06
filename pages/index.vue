@@ -3,15 +3,15 @@ const itemsSlider = [{
   image: 'https://s3-alpha-sig.figma.com/img/f06b/6d1c/ae4a8ea1c7753e6518555af491f20a71?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=WIp~G9CpDSs5TM-qNhHRQf1ep9YGswF1L4WoxKvu2UIB61zIUY0alxFpoAwHUkts0ngopC5h4jGOTbqasvO6FP5puzTuUh2aQR~Uq7Ybo1xjo6eQOzbVyUipJSEtLRs6vTcuxA2Z9Rudji61LBYJWAfu47kveDPzOgpNzJMAxod~DRA-~t-JlkM80LEPb~r3PJCZmYZlpgvpoFVDkti1JMkQVsxo0htVmKYD3zSU4alQS04pZ9WlPZdeVCXhxLjJnKuChEU3OYapzBQKiJJOmSZy7NkdSJwO4wdcWdK-elDDyFb5PaKvSKwyxwr1qb0qvaBL~Z3G-59kS6Zl7btmiw__',
   title: 'با پولیشی سردی زمستون رو گرم کن!',
   dis: 'پولیشی های برند پاپا به زیبای تو پات می درخشتن '
-},{
+}, {
   image: 'https://s3-alpha-sig.figma.com/img/f06b/6d1c/ae4a8ea1c7753e6518555af491f20a71?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=WIp~G9CpDSs5TM-qNhHRQf1ep9YGswF1L4WoxKvu2UIB61zIUY0alxFpoAwHUkts0ngopC5h4jGOTbqasvO6FP5puzTuUh2aQR~Uq7Ybo1xjo6eQOzbVyUipJSEtLRs6vTcuxA2Z9Rudji61LBYJWAfu47kveDPzOgpNzJMAxod~DRA-~t-JlkM80LEPb~r3PJCZmYZlpgvpoFVDkti1JMkQVsxo0htVmKYD3zSU4alQS04pZ9WlPZdeVCXhxLjJnKuChEU3OYapzBQKiJJOmSZy7NkdSJwO4wdcWdK-elDDyFb5PaKvSKwyxwr1qb0qvaBL~Z3G-59kS6Zl7btmiw__',
   title: 'با پولیشی سردی زمستون رو گرم کن!',
   dis: 'پولیشی های برند پاپا به زیبای تو پات می درخشتن '
 }]
 const dataHotProduct = ref({
-  title:'دمپایی های داغ تابستونی',
-  link:'/product?hots',
-  product:[
+  title: 'دمپایی های داغ تابستونی',
+  link: '/product?hots',
+  product: [
     'https://picsum.photos/600/600?random=1',
     'https://picsum.photos/600/600?random=2',
     'https://picsum.photos/600/600?random=3',
@@ -21,9 +21,9 @@ const dataHotProduct = ref({
   ]
 })
 const dataHotAverg = ref({
-  title:'دمپایی های زنانه با تخفیفات بالا',
-  link:'/product?hots',
-  product:[
+  title: 'دمپایی های زنانه با تخفیفات بالا',
+  link: '/product?hots',
+  product: [
     'https://picsum.photos/600/600?random=7',
     'https://picsum.photos/600/600?random=8',
     'https://picsum.photos/600/600?random=9',
@@ -32,13 +32,18 @@ const dataHotAverg = ref({
     'https://picsum.photos/600/600?random=6'
   ]
 })
+const bannerItemData = ref([{
+  image: 'https://s3-alpha-sig.figma.com/img/e396/943a/326b0d11bae991b86e9874e405d4b215?Expires=1742169600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=pAaJ6t~NV1ATVqswgxNOcovbv75ChoEF2MuMJrTryBsgJmYt~FSEIonlB3KWEp0kJtOvUwgnjA~31NM~Wg8z8D1Np2HRF4XXp8lkGpDmquQQsEcq1HR13Cx8VXA9U0NE20H4Mfwzjm1R7rO-6jUc9IUu~2O18lbqU3YyscM9C04qY-v69o-rgZjO3S5AtM97Q5ownjfl8Z1Cpd0mmXKuIamoozXQnE7yyg~HHcAzXujXk~xHUT5WgPhc0SNjHXsR44xqgBpvnpsi4rU8YMmEQ~PBbNzFrH7ePuhu-a~xq0vfHelcka3j11rXpseWU0RJR-1iXf2ovfXwuaY5tUtmAA__',
+  dis: 'کفش های زنانه',
+  link: '/product?title:women'
+}, {image: 'https://www.figma.com/file/XehxIyuXtBCOmok9HwUhA2/image/4a6f9c7c4e1a4ea7eb5dfc8de7982f880f8eaf19', dis:'کیف های مدرن',link: '/product?title:buy'}])
 </script>
 <template>
   <GlobalSlider :items="itemsSlider"/>
   <u-container>
-  <GlobalProductCard :dataProduct="dataHotProduct"/>
+    <GlobalProductCard :dataProduct="dataHotProduct"/>
     <br>
-  <GlobalProductCard :dataProduct="dataHotAverg"/>
+    <GlobalProductCard :dataProduct="dataHotAverg"/>
     <HomeBanner/>
   </u-container>
 </template>

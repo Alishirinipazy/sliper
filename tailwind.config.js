@@ -11,7 +11,8 @@ module.exports = {
                 mainColor:'#ffbe33',
                 secColor:'#222831',
                 cosColor:'#FF4C4C',
-                darkColor:'#1C1B22'
+                darkColor:'#1C1B22',
+                neonColor:'rgba(44,44,44,0)'
             }
         }
     }
