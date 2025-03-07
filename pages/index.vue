@@ -35,8 +35,30 @@ const dataHotAverg = ref({
 const bannerItemData = ref([{
   image: 'https://s3-alpha-sig.figma.com/img/e396/943a/326b0d11bae991b86e9874e405d4b215?Expires=1742169600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=pAaJ6t~NV1ATVqswgxNOcovbv75ChoEF2MuMJrTryBsgJmYt~FSEIonlB3KWEp0kJtOvUwgnjA~31NM~Wg8z8D1Np2HRF4XXp8lkGpDmquQQsEcq1HR13Cx8VXA9U0NE20H4Mfwzjm1R7rO-6jUc9IUu~2O18lbqU3YyscM9C04qY-v69o-rgZjO3S5AtM97Q5ownjfl8Z1Cpd0mmXKuIamoozXQnE7yyg~HHcAzXujXk~xHUT5WgPhc0SNjHXsR44xqgBpvnpsi4rU8YMmEQ~PBbNzFrH7ePuhu-a~xq0vfHelcka3j11rXpseWU0RJR-1iXf2ovfXwuaY5tUtmAA__',
   dis: 'کفش های زنانه',
-  link: '/product?title:women'
-}, {image: 'https://www.figma.com/file/XehxIyuXtBCOmok9HwUhA2/image/4a6f9c7c4e1a4ea7eb5dfc8de7982f880f8eaf19', dis:'کیف های مدرن',link: '/product?title:buy'}])
+  link: '/product?title:women',
+  class:'row-bg-temp'
+}, {
+  image: 'https://www.figma.com/file/XehxIyuXtBCOmok9HwUhA2/image/4a6f9c7c4e1a4ea7eb5dfc8de7982f880f8eaf19',
+  dis: 'کیف های مدرن',
+  link: '/product?title:buy',
+  class:'row-bg-temp'
+},
+  {
+    image: 'https://s3-alpha-sig.figma.com/img/e17f/7cb8/72e961cf52423949faaea4c758047d96?Expires=1742169600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=jUvM-rttNnUnQo6rT0JL3VSfjkSP8BfjzM1xMRuFt-tHuwDyWk5CqSMJ1cujnKwCeIP9PXZMkvI1RKwPBg9tr3zzVRUMg3WixAmHX~c~dQi5pn8nOxHnGXM5xWOYt7ze6NOf4TlxFEj0CDYRFGvblJbl6S5DTO~ZCZcK8AoBlodS~DWvz~AhlFCTASYPdfpH7mPLB0DiwI0oy2F8o4LWlI-tTy~e~yXnq6X7DVMOXl7o0hzwmYOtrsTjnOPBv7Tzex3R1kixhB9RZs5OJXxkbC9Qd1yKrWPEMUrBopoXVr18ZHL2s98LPeDSj8h4HQIK01Q3gGJYCm62G-CVpQYG1g__',
+    dis: 'مانتو های بهاره درسص',
+    link: 'https://www.nouraco.ir/',
+    class:'col-bg-temp'
+  },{
+    image: 'https://www.figma.com/file/XehxIyuXtBCOmok9HwUhA2/image/cb771ba83a89ff72d9c8f41c1a059ff5e88c35f9',
+    dis: 'کیف صندل ست مهراناز',
+    link: 'https://www.nouraco.ir/',
+    class:'col-bg-temp'
+  },{
+    image: 'https://s3-alpha-sig.figma.com/img/d1da/112e/032a26a2e3ade11f2e29f07a30151b53?Expires=1742169600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=PSRCUEKaH5HmZt7UJtJrMYuSAYRZ8Xlq6GQEl0o~8MOojsMnwHQYEioJRUbvjvuVEpEa3AXpaKbtiylapHyK3AVQ6OuGRbv6aAH~p1DdpmmpNDjENfPW52lJf8UEMukOmqUlaUbB4I-uzCQgs03naDBCAbPQa80Ot5E9Ao8X1YdmfFnezZK78x5-JT1cjXNiAWADkJdDduE1zlm41RpFYDEuyNVR4J3BiPnxjLFY12SvhyNaVUKtl-xTp6usLvAtIKhNhCVrHTwCbJpkkNS20nM~7TUoxG712wXF5aEYuKuCDGnYNcTVEd9773PhJfhOvoH1vzMYEeQEEW5XdaiW~A__',
+    dis: 'دمپایی های ناز دخترونه',
+    link: '/product?search=women',
+    class:'col-bg-temp'
+  }])
 </script>
 <template>
   <GlobalSlider :items="itemsSlider"/>
@@ -44,7 +66,7 @@ const bannerItemData = ref([{
     <GlobalProductCard :dataProduct="dataHotProduct"/>
     <br>
     <GlobalProductCard :dataProduct="dataHotAverg"/>
-    <HomeBanner/>
+    <HomeBanner :dataBanner="bannerItemData"/>
   </u-container>
 </template>
 
