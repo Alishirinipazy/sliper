@@ -2,4 +2,5 @@
   <LayoutsHeader />
   <nuxt-page/>
   <LayoutsFooter/>
+
 </template>

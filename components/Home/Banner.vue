@@ -23,11 +23,11 @@ const props = defineProps(['dataBanner'])
 }
 
 .row-bg-temp {
-  @apply relative row-span-3 bg-pink-300  bg-no-repeat bg-cover bg-center rounded-2xl
+  @apply relative row-span-3  bg-no-repeat bg-cover bg-center rounded-2xl
 }
 
 .banner-dis {
-  @apply absolute w-full transition lg:text-xl delay-700 hover:transition  duration-300 ease-in-out hover:to-mainColor  bottom-0 p-3 bg-gradient-to-b from-neonColor to-secColor to-100% rounded-b-2xl
+  @apply absolute w-full transition lg:text-xl delay-700 hover:transition  duration-300 ease-in-out hover:to-mainColor  bottom-0 p-3 bg-gradient-to-b from-neonColor to-secColor to-100% rounded-b-2xl text-cyan-50
 }
 
 </style>

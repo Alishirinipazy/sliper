@@ -3,8 +3,8 @@ const props = defineProps(['product'])
 </script>
 <template>
 
-  <UCard class="m-2 shadow shadow-gray-700">
-    <img class="w-full   rounded-t-2xl" :src="props.product" alt="">
+  <UCard class="m-2 shadow shadow-gray-700 direction-set-rtl" >
+    <img class="w-full rounded-t-2xl" :src="props.product" alt="">
     <template #footer>
 
       <h4 class="text-center font-bold">دمپاییی پاپا پی یو </h4>
