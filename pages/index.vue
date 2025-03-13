@@ -59,6 +59,9 @@ const bannerItemData = ref([{
     link: '/product?search=women',
     class:'col-bg-temp'
   }])
+useHead({
+title:'خوونه'
+})
 </script>
 <template>
   <GlobalSlider :items="itemsSlider"/>
