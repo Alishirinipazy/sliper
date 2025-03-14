@@ -23,7 +23,7 @@ const props = defineProps(['items']);
          style="height:90vh; direction: rtl" :style="{ backgroundImage: 'url(' + items.image + ')'}">
       <h4 class="slider-title">{{ items.title }}</h4>
       <p class="slider-dis">{{ items.dis }}</p>
-      <nuxt-link to="/product">
+      <nuxt-link v-if="items.link" :to="items.link">
         <UButton class="rounded-full my-2" label="همین الان بخرش" color="yellow"/>
       </nuxt-link>
     </div>
