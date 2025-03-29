@@ -61,17 +61,19 @@ const bannerItemData = ref([{
     link: '/product?search=women',
     class:'col-bg-temp'
   }])
+
 useHead({
 title:'خوونه'
 })
 </script>
 <template>
-  <GlobalSlider :items="itemsSlider"/>
+  <GlobalSlider :items="itemsSlider" h="90vh"/>
   <u-container>
     <GlobalProductCard :dataProduct="dataHotProduct"/>
     <br>
-    <GlobalProductCard :dataProduct="dataHotAverg"/>
     <HomeBanner :dataBanner="bannerItemData"/>
+    <GlobalProductCard :dataProduct="dataHotAverg"/>
+
   </u-container>
 </template>
 

@@ -15,6 +15,7 @@ const props = defineProps(['dataBanner'])
       </div>
 
     </template>
+
   </div>
 </template>
 <style>

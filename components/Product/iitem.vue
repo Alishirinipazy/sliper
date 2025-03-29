@@ -3,7 +3,7 @@ const props = defineProps(['product'])
 </script>
 <template>
 
-  <UCard class="m-2 shadow shadow-gray-700 direction-set-rtl" >
+  <UCard class="m-2 shadow shadow-gray-700 direction-set-rtl relative" >
     <img class="w-full rounded-t-2xl" :src="props.product" alt="">
     <template #footer>
 
@@ -23,18 +23,18 @@ const props = defineProps(['product'])
         <UButton class="rounded-full mx-1" icon="icon-park-outline:buy"   color="yellow"/>
       </div>
     </template>
-
+    <div class="product-option">
+      15% تخفیف
+    </div>
   </UCard>
-  <div class="product-option">
-    15% تخفیف
-  </div>
+
 </template>
 <style>
 .color-product {
   @apply w-3 h-3 mx-1 rounded-full relative
 }
 .product-option {
-  @apply absolute w-auto  p-1 rounded text-xs top-5 ml-5 bg-cosColor text-center
+  @apply absolute w-auto  p-1 rounded text-xs top-2 left-2 bg-cosColor text-center
 
 }
 </style>

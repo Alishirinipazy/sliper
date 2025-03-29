@@ -1,6 +1,6 @@
 <script setup>
 useHead({
-  titleTemplate: '%s || اسلیپر ',
+  titleTemplate: '%s | اسلیپر ',
 
 })
 </script>
@@ -8,5 +8,4 @@ useHead({
   <LayoutsHeader />
   <nuxt-page/>
   <LayoutsFooter/>
-
 </template>
