@@ -7,8 +7,8 @@
           <h6 class="text-amber-400 px-5">با عشق زیر پاهاتیم</h6>
           <p class="py-2 px-5">نخستین پلتفرم فروش انواع دمپایی و مد استایل </p>
         </div>
-        <div class="row-span-3 flex justify-around">
-          <div>
+        <div class="row-span-3 flex lg:justify-around justify-center ">
+          <div class="text-center lg:text-right">
             <h5 class="text-2xl py-3 text-amber-400">منو</h5>
           <ul class="">
             <li class="p-2 ">
@@ -33,7 +33,7 @@
             </li>
           </ul>
           </div>
-          <div class="">
+          <div class="text-center lg:text-right">
 
             <h5 class="text-2xl py-3 text-amber-400">محصولاتمون</h5>
             <ul class="">
@@ -60,9 +60,9 @@
             </ul>
           </div>
         </div>
-        <div class="row-span-3 lg:text-left text-center ">
+        <div class="row-span-3 lg:text-right text-center ">
           <br><br>
-          <p class="py-2">آدرس انبار : قم شهرک فاطمیه خیابان بعثت کوچه 5</p>
+          <p class="py-2">آدرس انبار : تهران منیریه امیریه خیابان فروزش کوچه رضایی مجد</p>
           <a class="py-2" href="tel:+989918608594">09918608594</a>
           <br>
           <a class="py-2" href="tel:+989372396496">09372396496</a>

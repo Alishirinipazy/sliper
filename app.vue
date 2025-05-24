@@ -5,7 +5,9 @@ useHead({
 })
 </script>
 <template>
+  <UApp>
   <LayoutsHeader />
   <nuxt-page/>
   <LayoutsFooter/>
+  </UApp>
 </template>
