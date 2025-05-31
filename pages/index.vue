@@ -1,11 +1,11 @@
 <script setup lang="ts">
 const itemsSlider = [{
-  image: 'https://s3-alpha-sig.figma.com/img/f06b/6d1c/ae4a8ea1c7753e6518555af491f20a71?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=WIp~G9CpDSs5TM-qNhHRQf1ep9YGswF1L4WoxKvu2UIB61zIUY0alxFpoAwHUkts0ngopC5h4jGOTbqasvO6FP5puzTuUh2aQR~Uq7Ybo1xjo6eQOzbVyUipJSEtLRs6vTcuxA2Z9Rudji61LBYJWAfu47kveDPzOgpNzJMAxod~DRA-~t-JlkM80LEPb~r3PJCZmYZlpgvpoFVDkti1JMkQVsxo0htVmKYD3zSU4alQS04pZ9WlPZdeVCXhxLjJnKuChEU3OYapzBQKiJJOmSZy7NkdSJwO4wdcWdK-elDDyFb5PaKvSKwyxwr1qb0qvaBL~Z3G-59kS6Zl7btmiw__',
+  image: 'https://www.nouraco.ir/wp-content/uploads/2025/02/%D8%A8%D9%86%D8%B1_%D9%85%D9%84%DB%8C%DA%A9%D8%A7%D8%B3%D8%A8%D8%B2_%D9%85%D8%B2%D9%88%D9%86-%D9%86%D9%88%D8%B1%D8%A7_%D8%AF%D8%B3%DA%A9%D8%AA%D8%A7%D9%BE-scaled.webp',
   title: 'با پولیشی سردی زمستون رو گرم کن!',
   dis: 'پولیشی های برند پاپا به زیبای تو پات می درخشتن ',
   link:'product?search:polish'
 }, {
-  image: 'https://s3-alpha-sig.figma.com/img/f06b/6d1c/ae4a8ea1c7753e6518555af491f20a71?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=WIp~G9CpDSs5TM-qNhHRQf1ep9YGswF1L4WoxKvu2UIB61zIUY0alxFpoAwHUkts0ngopC5h4jGOTbqasvO6FP5puzTuUh2aQR~Uq7Ybo1xjo6eQOzbVyUipJSEtLRs6vTcuxA2Z9Rudji61LBYJWAfu47kveDPzOgpNzJMAxod~DRA-~t-JlkM80LEPb~r3PJCZmYZlpgvpoFVDkti1JMkQVsxo0htVmKYD3zSU4alQS04pZ9WlPZdeVCXhxLjJnKuChEU3OYapzBQKiJJOmSZy7NkdSJwO4wdcWdK-elDDyFb5PaKvSKwyxwr1qb0qvaBL~Z3G-59kS6Zl7btmiw__',
+  image: 'https://www.nouraco.ir/wp-content/uploads/2024/11/%D8%A8%D9%86%D8%B1_%D9%85%D8%B2%D9%88%D9%86-%D9%86%D9%88%D8%B1%D8%A7_%DA%A9%D8%AA-%D9%85%DA%A9%D8%AA%DB%8C%D9%86_%D9%84%D8%A8%D8%A7%D8%B3-%D8%B2%D9%85%D8%B3%D8%AA%D8%A7%D9%86%DB%8C_%D8%AF%D8%B3%DA%A9%D8%AA%D8%A7%D9%BE-scaled.webp',
   title: 'با پولیشی سردی زمستون رو گرم کن!',
   dis: 'پولیشی های برند پاپا به زیبای تو پات می درخشتن ',
   link:'product?search:polish'
@@ -56,7 +56,7 @@ const bannerItemData = ref([{
     link: 'https://www.nouraco.ir/',
     class:'col-bg-temp'
   },{
-    image: 'https://s3-alpha-sig.figma.com/img/d1da/112e/032a26a2e3ade11f2e29f07a30151b53?Expires=1742169600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=PSRCUEKaH5HmZt7UJtJrMYuSAYRZ8Xlq6GQEl0o~8MOojsMnwHQYEioJRUbvjvuVEpEa3AXpaKbtiylapHyK3AVQ6OuGRbv6aAH~p1DdpmmpNDjENfPW52lJf8UEMukOmqUlaUbB4I-uzCQgs03naDBCAbPQa80Ot5E9Ao8X1YdmfFnezZK78x5-JT1cjXNiAWADkJdDduE1zlm41RpFYDEuyNVR4J3BiPnxjLFY12SvhyNaVUKtl-xTp6usLvAtIKhNhCVrHTwCbJpkkNS20nM~7TUoxG712wXF5aEYuKuCDGnYNcTVEd9773PhJfhOvoH1vzMYEeQEEW5XdaiW~A__',
+    image: 'https://www.nouraco.ir/wp-content/uploads/2025/02/%D8%A8%D9%86%D8%B1_%D9%85%D9%84%DB%8C%DA%A9%D8%A7%D8%B3%D8%A8%D8%B2_%D9%85%D8%B2%D9%88%D9%86-%D9%86%D9%88%D8%B1%D8%A7_%D8%AF%D8%B3%DA%A9%D8%AA%D8%A7%D9%BE-scaled.webp',
     dis: 'دمپایی های ناز دخترونه',
     link: '/product?search=women',
     class:'col-bg-temp'
