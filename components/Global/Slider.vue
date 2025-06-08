@@ -11,8 +11,9 @@ const props = defineProps(['items','h']);
                :ui="{ item: 'basis-full' }"
                indicators>
       <div class="slider-body justify-center "
-           :style="{ backgroundImage: 'url(' + item.image + '); direction: rtl',height:h}">
+           :style="{ backgroundImage: 'url(' + items.image + ')',height:h}">
         <h4 class="slider-title">{{ item.title }}</h4>
+
         <p class="slider-dis">{{ item.dis }}</p>
         <nuxt-link to="/product">
           <UButton class="rounded-full my-2" label="همین الان بخرش" color="yellow"/>
