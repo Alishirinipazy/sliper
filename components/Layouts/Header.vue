@@ -3,7 +3,7 @@ const isOpen = ref(false)
 const classHeader = ref('header');
 onMounted(() => {
   window.onscroll = () => {
-    if (document.documentElement.scrollTop <= 400) {
+    if (document.documentElement.scrollTop <= 200) {
       classHeader.value = "header"
     } else {
       classHeader.value = "header-scroll"
@@ -24,7 +24,7 @@ const isDark = computed({
 <template>
   <header class="transition-all text-cyan-50 duration-700 ease-in-out z-110" :class="classHeader">
     <u-container class="">
-      <div class="   flex justify-between lg:justify-around md:justify-around items-center w-full">
+      <div class="flex justify-between lg:justify-around md:justify-around items-center w-full">
 
         <div class="hidden  lg:flex w-1/3  justify-center">
           <ul class="flex ">

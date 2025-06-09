@@ -11,7 +11,7 @@ const props = defineProps(['items','h']);
                :ui="{ item: 'basis-full' }"
                indicators>
       <div class="slider-body justify-center "
-           :style="{ backgroundImage: 'url(' + items.image + ')',height:h}">
+           :style="{ backgroundImage: 'url(' + item.image + ')',height:h}">
         <h4 class="slider-title">{{ item.title }}</h4>
 
         <p class="slider-dis">{{ item.dis }}</p>
@@ -36,7 +36,7 @@ const props = defineProps(['items','h']);
 </template>
 <style>
 .slider-body {
-  @apply w-full lg:px-12 text-center flex flex-col align-sub  bg-no-repeat bg-cover bg-center py-4 text-mainColor font-bold sm:text-right
+  @apply w-full rounded lg:px-12 text-center flex flex-col align-sub  bg-no-repeat bg-cover bg-center py-4 text-mainColor font-bold sm:text-right
 }
 
 .slider-title {
