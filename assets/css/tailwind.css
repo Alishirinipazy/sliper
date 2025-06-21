@@ -16,6 +16,18 @@ body {
     font-family: "Vazir";
     direction: rtl;
 }
+
 .direction-set-rtl {
     direction: rtl;
+}
+.fade-in-iamge {
+    animation: fadeIn 1s;
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }

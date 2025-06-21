@@ -1,0 +1,47 @@
+<script setup>
+const { $request } = useNuxtApp()
+const emit = defineEmits(['showCheckOtpForm'])
+const cellphone = ref(null);
+const pattern = /^(\+98|0)?9\d{9}$/;
+const loading = ref(false);
+const errorMSG = ref([]);
+
+async function login() {
+  if (cellphone.value == null) {
+    errorMSG.value = "شماره تلفنت رو که وارد نکردیی ؟"
+    return
+  }
+  if (!pattern.test(cellphone.value)) {
+    errorMSG.value = "شماره تلفنت رو درست حسابی وارد کن..."
+    return
+  }
+  try {
+    loading.value = true;
+    let data = await apiLogin($request, cellphone.value)
+
+    errorMSG.value = `کد تایید به شماره ${cellphone?.value } ارسال شد`
+    emit('showCheckOtpForm')
+  } catch (error) {
+    console.log(error?.data?.data?.message)
+
+  }
+  finally{
+    loading.value = false
+  }
+}
+</script>
+<template>
+  <div class="py-8 border border-mainColor bg-secColor text-white rounded-2xl flex flex-col items-center  border-2 ">
+    <img src="/images/logo.png" alt="اسلیپر استور" class="w-2/5">
+    <h3 class="text-2xl mt-3 mb-4"> ورود و  ثبت نام  </h3>
+
+    <p>شماره تماست برای ما بفرست که یک کدی رو برات بفرستیم</p>
+    <form @submit.prevent="login" class="mt-5 w-12/12 lg:w-5/12 text-center" >
+      <input type="tel" v-model="cellphone" class="p-1 w-full my-3 bg-cosColor text-center border-mainColor rounded border-2 " placeholder="09100000000">
+      <button class="my-2 text-center bg-mainColor w-full rounded py-2">
+        ورود
+      </button>
+    </form>
+    <p class="text-red-600 fade-in-iamge" >{{errorMSG}}</p>
+  </div>
+</template>

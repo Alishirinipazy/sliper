@@ -72,11 +72,13 @@ const isDark = computed({
             <!---->
             <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart" color="yellow"/>
           </div>
-            <UButton class="rounded-full mx-1" icon="material-symbols:search" color="yellow"/>
-          <UButton color="yellow" class="mx-2" :ui="{ rounded: 'rounded-full' }">
-            <span class="hidden md:block">ثبت نام | ورود</span>
-            <UIcon name="octicon:sign-in-16" class="w-5 h-5"/>
-          </UButton>
+          <UButton class="rounded-full mx-1" icon="material-symbols:search" color="yellow"/>
+          <nuxt-link to="/auth/login">
+            <UButton color="yellow" class="mx-2" :ui="{ rounded: 'rounded-full' }">
+              <span class="hidden md:block">ثبت نام | ورود</span>
+              <UIcon name="octicon:sign-in-16" class="w-5 h-5"/>
+            </UButton>
+          </nuxt-link>
         </div>
       </div>
     </u-container>
@@ -84,20 +86,20 @@ const isDark = computed({
     <div class="fixed lg:hidden bottom-2 flex justify-center w-full z-20">
 
 
-    <div class=" m-2 bg-secColor flex  text-center  rounded-2xl">
-      <nuxt-link to="/" class="header-item" :class="{'text-amber-400': $route.path==='/'}">
-        <UIcon name="material-symbols:other-houses" class="w-5 h-5"/>
-        <p>خوونه</p>
-      </nuxt-link>
-      <nuxt-link to="/products" class="header-item" :class="{'text-amber-400': $route.path==='/products'}">
-        <UIcon name="bxs:category" class="w-5 h-5"/>
-        <p >دسته‌بندی</p></nuxt-link>
-      <nuxt-link to="/cart" class="header-item" :class="{'text-amber-400': $route.path==='/cart'}">
-        <UIcon name="icon-park-solid:buy" class="w-5 h-5"/>
-        <p>سبدخرید</p></nuxt-link>
-      <nuxt-link to="/" class="header-item" >
-        <UIcon name="material-symbols:person-2" class="w-5 h-5"/>
-        <p>ورود</p></nuxt-link>
+      <div class=" m-2 bg-secColor flex  text-center  rounded-2xl">
+        <nuxt-link to="/" class="header-item" :class="{'text-amber-400': $route.path==='/'}">
+          <UIcon name="material-symbols:other-houses" class="w-5 h-5"/>
+          <p>خوونه</p>
+        </nuxt-link>
+        <nuxt-link to="/products" class="header-item" :class="{'text-amber-400': $route.path==='/products'}">
+          <UIcon name="bxs:category" class="w-5 h-5"/>
+          <p>دسته‌بندی</p></nuxt-link>
+        <nuxt-link to="/cart" class="header-item" :class="{'text-amber-400': $route.path==='/cart'}">
+          <UIcon name="icon-park-solid:buy" class="w-5 h-5"/>
+          <p>سبدخرید</p></nuxt-link>
+        <nuxt-link to="/auth/login" class="header-item">
+          <UIcon name="material-symbols:person-2" class="w-5 h-5"/>
+          <p>ورود</p></nuxt-link>
       </div>
     </div>
   </header>
@@ -114,6 +116,7 @@ const isDark = computed({
 .header-item {
   @apply flex flex-1 items-center flex-col px-5 py-2
 }
+
 .header-item p {
   @apply text-xs
 }
