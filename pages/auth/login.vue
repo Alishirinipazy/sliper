@@ -1,5 +1,7 @@
 <script setup lang="ts">
-
+definePageMeta({
+  middleware:'guest'
+})
 const showCheckOTP = ref(false)
 </script>
 <template>

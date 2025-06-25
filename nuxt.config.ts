@@ -8,6 +8,9 @@ export default defineNuxtConfig({
   },
   modules: ["@nuxt/ui",'@nuxthub/core'],
   compatibilityDate: "2025-02-12",
+  build: {
+    transpile: ["vue-toastification"]
+  },
   app:{
     link: [{ rel: 'icon', type: '/fav.png', href: '/' }],
   }

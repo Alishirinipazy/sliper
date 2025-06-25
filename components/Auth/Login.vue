@@ -5,7 +5,7 @@ const cellphone = ref(null);
 const pattern = /^(\+98|0)?9\d{9}$/;
 const loading = ref(false);
 const errorMSG = ref([]);
-
+const router = useRouter()
 async function login() {
   if (cellphone.value == null) {
     errorMSG.value = "شماره تلفنت رو که وارد نکردیی ؟"
@@ -17,12 +17,20 @@ async function login() {
   }
   try {
     loading.value = true;
-    let data = await apiLogin($request, cellphone.value)
+    // let data = await apiLogin($request, cellphone.value)
+    const data = await $fetch('/api/auth/login', {
+      method: 'POST',
+      body: { cellphone: cellphone?.value }
 
+    })
     errorMSG.value = `کد تایید به شماره ${cellphone?.value } ارسال شد`
     emit('showCheckOtpForm')
+    router.push({
+      path:'/auth/login',
+      query: { cellphone: cellphone?.value }
+    })
   } catch (error) {
-    console.log(error?.data?.data?.message)
+
 
   }
   finally{
@@ -37,7 +45,7 @@ async function login() {
 
     <p>شماره تماست برای ما بفرست که یک کدی رو برات بفرستیم</p>
     <form @submit.prevent="login" class="mt-5 w-12/12 lg:w-5/12 text-center" >
-      <input type="tel" v-model="cellphone" class="p-1 w-full my-3 bg-cosColor text-center border-mainColor rounded border-2 " placeholder="09100000000">
+      <input type="tel" v-model="cellphone" class="p-1 w-full my-3 text-secColor text-center border-mainColor rounded border-2 " placeholder="09100000000">
       <button class="my-2 text-center bg-mainColor w-full rounded py-2">
         ورود
       </button>

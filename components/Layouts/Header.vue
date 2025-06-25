@@ -1,16 +1,24 @@
 <script setup lang="ts">
 const isOpen = ref(false)
 const classHeader = ref('header');
-onMounted(() => {
-  window.onscroll = () => {
-    if (document.documentElement.scrollTop <= 200) {
-      classHeader.value = "header"
-    } else {
-      classHeader.value = "header-scroll"
+const {authUser} = useAuth();
+const props = defineProps(['fixed'])
 
+if (props?.fixed){
+  classHeader.value ="header-block"
+} else {
+  classHeader.value = "header"
+  onMounted(() => {
+    window.onscroll = () => {
+      if (document.documentElement.scrollTop <= 200) {
+        classHeader.value = "header"
+      } else {
+        classHeader.value = "header-scroll"
+
+      }
     }
-  }
-})
+  })
+}
 const colorMode = useColorMode()
 const isDark = computed({
   get() {
@@ -73,9 +81,15 @@ const isDark = computed({
             <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart" color="yellow"/>
           </div>
           <UButton class="rounded-full mx-1" icon="material-symbols:search" color="yellow"/>
-          <nuxt-link to="/auth/login">
+          <nuxt-link to="/auth/login" v-if="!authUser">
             <UButton color="yellow" class="mx-2" :ui="{ rounded: 'rounded-full' }">
               <span class="hidden md:block">ثبت نام | ورود</span>
+              <UIcon name="octicon:sign-in-16" class="w-5 h-5"/>
+            </UButton>
+          </nuxt-link>
+          <nuxt-link to="/profile" v-else :class="{'text-amber-400': $route.path==='/profile  '}">
+            <UButton color="yellow" class="mx-2" :class="{'bg-cosColor': $route.path==='/profile'}" :ui="{ rounded: 'rounded-full' }">
+              <span class="hidden md:block">{{authUser?.name}}</span>
               <UIcon name="octicon:sign-in-16" class="w-5 h-5"/>
             </UButton>
           </nuxt-link>
@@ -119,5 +133,8 @@ const isDark = computed({
 
 .header-item p {
   @apply text-xs
+}
+.header-block {
+  @apply block bg-secColor py-2
 }
 </style>

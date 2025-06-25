@@ -12,7 +12,7 @@
     url(../fonts/Vazir.ttf) format("truetype");
     /* Safari, Android, iOS */
 }
-body {
+* {
     font-family: "Vazir";
     direction: rtl;
 }
