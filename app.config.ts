@@ -1,6 +1,11 @@
 export default defineAppConfig({
     ui: {
-
+        notifications: {
+            // Show toasts at the top right of the screen
+            position: 'bottom-0',
+            background: 'bg-mainColor dark:bg-mainColor',
+            ring: 'ring-1 ring-gray-800 dark:ring-gray-800',
+        },
         primary: 'lime',
         gray: 'neutral',
         card: {

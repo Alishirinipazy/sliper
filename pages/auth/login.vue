@@ -2,6 +2,9 @@
 definePageMeta({
   middleware:'guest'
 })
+useHead({
+  title:"ورود به اکانت"
+})
 const showCheckOTP = ref(false)
 </script>
 <template>

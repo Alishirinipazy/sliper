@@ -17,6 +17,7 @@
     "vue": "latest"
   },
   "dependencies": {
+    "@formkit/nuxt": "^1.6.9",
     "axios": "^1.10.0"
   }
 }

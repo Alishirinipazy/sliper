@@ -1,6 +1,8 @@
 <script setup>
-import {useToast} from 'vue-toastification';
 
+import {apiCheckOTP} from "~/api/auth.js";
+
+const {$request} = useNuxtApp()
 const toast = useToast();
 const {authUser} = useAuth();
 const route = useRoute()
@@ -11,19 +13,18 @@ const otp = ref(null)
 
 async function chechOTP() {
   if (otp?.value === null) {
-    toast.error("کد تایید رو وارد نکردییی😒");
+    toast.add({title:"کد تایید رو وارد نکردییی😒"});
     return
   } else if (!pattern.test(otp.value)) {
-    toast.error("ساختار کد ناخواناست 🤔");
+    toast.add({title:"ساختار کد ناخواناست 🤔"});
     return;
   }
   try {
-
     const data = await $fetch('/api/auth/checkOtp', {
       method: 'POST',
-      body: {otp: otp.value}
+      body: { otp: otp.value }
     })
-    toast.success("شما با موفقیت وارد حساب شده اید")
+    toast.add({title:"شما با موفقیت وارد حساب شده اید"})
     authUser.value = data
     backState.value = "bg-green-800 text-white"
     setTimeout(function () {
@@ -33,7 +34,7 @@ async function chechOTP() {
 
   } catch (error) {
     errorMSG.value = Object.values(error.data.data.message).flat()
-    toast.warning(`${errorMSG.value}`)
+    toast.add({title: `${errorMSG.value}`})
     backState.value = "bg-red-800 text-white"
   } finally {
     loading.value = false

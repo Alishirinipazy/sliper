@@ -5,9 +5,12 @@ useHead({
 })
 </script>
 <template>
-  <UApp>
 
+  <NuxtLoadingIndicator color="#ffbe33" />
   <nuxt-page/>
 
-  </UApp>
+  <UNotifications />
 </template>
+<style>
+
+</style>
