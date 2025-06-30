@@ -1,8 +1,6 @@
 <script setup>
 
 
-import {apiLogin} from "~/api/auth.js";
-
 const toast = useToast()
 const {$request} = useNuxtApp()
 const emit = defineEmits(['showCheckOtpForm'])

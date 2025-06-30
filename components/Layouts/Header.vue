@@ -87,8 +87,8 @@ const isDark = computed({
               <UIcon name="octicon:sign-in-16" class="w-5 h-5"/>
             </UButton>
           </nuxt-link>
-          <nuxt-link to="/profile" v-else :class="{'text-amber-400': $route.path==='/profile  '}">
-            <UButton color="yellow" class="mx-2" :class="{'bg-cosColor': $route.path==='/profile'}" :ui="{ rounded: 'rounded-full' }">
+          <nuxt-link to="/profile/" v-else :class="{'text-amber-400': $route.path.includes('profile')}">
+            <UButton color="yellow" class="mx-2" :class="{'bg-cosColor': $route.path.includes('profile')}" :ui="{ rounded: 'rounded-full' }">
               <span class="hidden md:block">{{authUser?.name}}</span>
               <UIcon name="octicon:sign-in-16" class="w-5 h-5"/>
             </UButton>

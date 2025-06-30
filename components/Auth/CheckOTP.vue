@@ -28,7 +28,7 @@ async function chechOTP() {
     authUser.value = data
     backState.value = "bg-green-800 text-white"
     setTimeout(function () {
-      return navigateTo('/profile')
+      return navigateTo('/profile/')
     }, 2000);
 
 
