@@ -88,16 +88,16 @@ const isDark = computed({
             </UButton>
           </nuxt-link>
           <nuxt-link to="/profile/" v-else :class="{'text-amber-400': $route.path.includes('profile')}">
-            <UButton color="yellow" class="mx-2" :class="{'bg-cosColor': $route.path.includes('profile')}" :ui="{ rounded: 'rounded-full' }">
+            <UButton color="yellow" class="mx-2" :class="{'bg-cosColor': $route.path.includes('profile')  }" :ui="{ rounded: 'rounded-full' }">
               <span class="hidden md:block">{{authUser?.name}}</span>
-              <UIcon name="octicon:sign-in-16" class="w-5 h-5"/>
+              <UIcon name="material-symbols:account-circle" class="w-5 h-5"/>
             </UButton>
           </nuxt-link>
         </div>
       </div>
     </u-container>
     <!------------------the mobile menu slide over------------------->
-    <div class="fixed lg:hidden bottom-2 flex justify-center w-full z-20">
+    <div class="fixed lg:hidden bottom-2 flex justify-center w-full z-20" :class="{'hidden': $route.path.includes('profile')}">
 
 
       <div class=" m-2 bg-secColor flex  text-center  rounded-2xl">
@@ -111,9 +111,17 @@ const isDark = computed({
         <nuxt-link to="/cart" class="header-item" :class="{'text-amber-400': $route.path==='/cart'}">
           <UIcon name="icon-park-solid:buy" class="w-5 h-5"/>
           <p>سبدخرید</p></nuxt-link>
-        <nuxt-link to="/auth/login" class="header-item">
-          <UIcon name="material-symbols:person-2" class="w-5 h-5"/>
-          <p>ورود</p></nuxt-link>
+
+        <nuxt-link to="/auth/login" class="header-item" v-if="!authUser">
+
+            <p >ثبت نام | ورود</p>
+            <UIcon name="octicon:sign-in-16" class="w-5 h-5"/>
+
+        </nuxt-link>
+        <nuxt-link to="/profile/" v-else class="header-item" :class="{'text-amber-400': $route.path.includes('profile')}">
+            <UIcon name="material-symbols:account-circle" class="w-5 h-5"/>
+            <p>{{authUser?.name}}</p>
+        </nuxt-link>
       </div>
     </div>
   </header>

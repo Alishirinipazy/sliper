@@ -1,6 +1,7 @@
 <script setup>
 const toast = useToast();
 const errorMSG = ref([]);
+const {authUser} = useAuth()
 const { data: user } = await useFetch('/api/profile/info', {
   headers: useRequestHeaders(['cookie'])
 })
@@ -20,7 +21,7 @@ async function edit(formData){
 </script>
 <template>
   <div class="m-10 bg-secColor text-white p-10 rounded">
-
+    <h3 class="font-bold">{{ authUser?.name }} عزیز</h3>
   <FormKit type="form" @submit="edit" :incomplete-message="false" :actions="false">
     <div class="lg:grid grid-cols-12 p-6 ">
       <div class="lg:col-span-6 my-2 ">

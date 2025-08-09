@@ -5,10 +5,11 @@ definePageMeta({
 useHead({
   title: 'اکانت'
 })
+
 </script>
 <template>
   <layouts-header :fixed="true"/>
   <nuxt-layout name="profile">
-    <nuxt-page/>
+    <nuxt-page />
   </nuxt-layout>
 </template>

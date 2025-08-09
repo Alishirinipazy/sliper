@@ -1,8 +1,5 @@
 <script setup>
 
-import {apiCheckOTP} from "~/api/auth.js";
-
-const {$request} = useNuxtApp()
 const toast = useToast();
 const {authUser} = useAuth();
 const route = useRoute()

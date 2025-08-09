@@ -2,12 +2,11 @@
 
 
 const toast = useToast()
-const {$request} = useNuxtApp()
 const emit = defineEmits(['showCheckOtpForm'])
 const cellphone = ref(null);
 const pattern = /^(\+98|0)?9\d{9}$/;
 const loading = ref(false);
-const errorMSG = ref([]);
+
 const router = useRouter()
 
 
@@ -57,7 +56,6 @@ async function login() {
         ورود
       </button>
     </form>
-    <p class="text-red-600 fade-in-iamge">{{ errorMSG }}</p>
 
   </div>
 </template>

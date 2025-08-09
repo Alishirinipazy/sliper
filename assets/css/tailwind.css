@@ -23,6 +23,7 @@
 .fade-in-iamge {
     animation: fadeIn 1s;
 }
+
 @keyframes fadeIn {
     0% {
         opacity: 0;
