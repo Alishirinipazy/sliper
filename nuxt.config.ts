@@ -3,7 +3,7 @@ export default defineNuxtConfig({
     devtools: {enabled: true},
     runtimeConfig: {
         public: {
-            apiBase: "http://localhost:8000/api"
+            apiBase: "https://api.sliper.ir/api"
         }
     },
     modules: ["@nuxt/ui", '@nuxthub/core','@formkit/nuxt'],
