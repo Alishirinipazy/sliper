@@ -6,6 +6,9 @@ export default defineNuxtConfig({
             apiBase: "https://api.sliper.ir/api"
         }
     },
+    colorMode: {
+        preference: 'light'
+    },
     modules: ["@nuxt/ui", '@nuxthub/core','@formkit/nuxt'],
     compatibilityDate: "2025-02-12",
     formkit: {

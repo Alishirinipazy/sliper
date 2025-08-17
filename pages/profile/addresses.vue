@@ -3,22 +3,24 @@
 const {data, refresh} = await useFetch('/api/profile/addressess', {
   headers: useRequestHeaders(['cookie'])
 })
+const loading = ref(false)
+const toast = useToast()
 const isOpen = ref(false)
-const editAddress = ref([])
+const dataAddress = ref()
 const address = ref([]);
 data?.value?.addresses?.map((item) => {
   const items = {
-    id:item?.id,
+    id: item?.id,
     title: item?.title,
     cellphone: item?.cellphone,
     postal_code: item?.postal_code,
-    province: item?.province_id+'/'+item?.province_id,
-    address:item?.address
+    province: item?.province_id + '/' + item?.province_id,
+    address: item?.address
   }
   address?.value?.push(items)
 })
-const editData = (items)=>{
-  editAddress.value?.push(items)
+const editData = (items) => {
+  dataAddress.value = items
 }
 const columns = [{
   key: 'id',
@@ -93,77 +95,103 @@ const items = row => [
     icon: 'i-heroicons-trash-20-solid'
   }],
 ]
-function edit(){
 
+
+
+// the send edit address in api
+async function edite(formData) {
+  try {
+    loading.value = true
+    await $fetch('/api/profile/addressess/edite', {
+      method: 'POST',
+      body: {...formData, address_id: dataAddress?.value?.id}
+    })
+    refresh();
+    toast.add({title: "ویرایش آدرس شما با موفقیت انجام شد"})
+  } catch (error) {
+
+    errorMSG.value = Object.values(error.data.data.message).flat()
+    toast.add({title: `${errorMSG.value}`})
+  } finally {
+    loading.value = false
+    isOpen.value = false
+  }
 }
-
 </script>
 
 <template>
-  <UTable  :rows="address" :columns="columns" :ui="{th: {base: 'text-right', },}">
 
+  <UTable :rows="address" :columns="columns" :ui="{th: {base: 'text-right', },}">
 
     <template #actions-data="{ row }">
       <UDropdown :items="items(row)">
-        <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+        <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid"/>
       </UDropdown>
     </template>
   </UTable>
   <UModal v-model="isOpen" :ui="{background:'bg-secColor'}">
+
     <div class="text-white">
-      <FormKit type="form" @submit="edit" #default="{ value }" :incomplete-message="false" :actions="false">
+      <FormKit type="form" @submit="edite" #default="{ value }" :incomplete-message="false" :actions="false">
+
+        <div class="flex flex-wrap text-right mr-3 p-3">
+          <div class="">
+            <FormKit type="text" name="title" id="title" label="عنوان" label-class="form-label"
+                     :value="dataAddress?.title"
+                     input-class="form-control" validation="required"
+                     :validation-messages="{ required: 'کادر عنوان خالی است ' }" message-class="form-text text-danger"
+            />
+          </div>
+          <div class="">
+            <FormKit type="text" name="cellphone" id="cellphone" label="شماره تماس" label-class="form-label"
+                     :value="dataAddress?.cellphone"
+                     input-class="form-control" :validation="[['required'], ['matches', /^(\+98|0)?9\d{9}$/]]"
+                     :validation-messages="{ required: 'کادر شماره تماس خالی است ', 'matches': 'شماره تماس نا معتبر است' }"
+                     message-class="form-text text-danger"/>
+          </div>
 
           <div class="">
-            <div class="col col-md-6">
-              <FormKit type="text" name="title" id="title" label="عنوان" label-class="form-label"
-                       input-class="form-control" validation="required"
-                       :validation-messages="{ required: 'کادر عنوان خالی است ' }" message-class="form-text text-danger"
-                        />
-            </div>
-            <div class="col col-md-6">
-              <FormKit type="text" name="cellphone" id="cellphone" label="شماره تماس" label-class="form-label"
-                       input-class="form-control" :validation="[['required'], ['matches', /^(\+98|0)?9\d{9}$/]]"
-                       :validation-messages="{ required: 'کادر شماره تماس خالی است ', 'matches': 'شماره تماس نا معتبر است' }"
-                       message-class="form-text text-danger"  />
-            </div>
-
-            <div class="col col-md-6">
-              <FormKit type="text" name="postal_code" id="postal_code" label="کد پستی" label-class="form-label"
-                       input-class="form-control" validation="required"
-                       :validation-messages="{ required: 'کادر کد پستی خالی است ' }" message-class="form-text text-danger"
-                        />
-            </div>
-            <ClientOnly fallback-tag="span" fallback="در حال بارگذاری.....">
-              <div class="col col-md-6">
-<!--                <FormKit type="select" name="province_id" id="province_id" label="استان" label-class="form-label"-->
-<!--                         @change="change" input-class="form-select" validation="required"-->
-<!--                         :validation-messages="{ required: 'کادر استان خالی است ' }"-->
-<!--                         message-class="form-text text-danger" :value="props.address.province_id">-->
-<!--                  <option v-for="province in props.provinces" :key="province.id" :value="province.id">{{-->
-<!--                      province.name }}</option>-->
-<!--                </FormKit>-->
-              </div>
-              <div class="col col-md-6">
-<!--                <FormKit type="select" ref="cityEl" name="city_id" id="city_id" label="شهر" label-class="form-label"-->
-<!--                         input-class="form-select" validation="required" :value="props.address.city_id"-->
-<!--                         :validation-messages="{ required: 'کادر شهر خالی است ' }" message-class="form-text text-danger">-->
-<!--                  <option v-for="city in props.cities.filter((item) => item.province_id == value.province_id)"-->
-<!--                          :key="city.id" :value="city.id">{{ city.name }}</option>-->
-<!--                </FormKit>-->
-
-
-              </div>
-            </ClientOnly>
-            <div class="col col-md-12">
-              <FormKit type="textarea" name="address" id="address" label="آدرس" label-class="form-label"
-                       input-class="form-control" validation="required"
-                       :validation-messages="{ required: 'کادر آدرس خالی است ' }" message-class="form-text text-danger" />
-            </div>
+            <FormKit type="text" name="postal_code" id="postal_code" label="کد پستی" label-class="form-label"
+                     :value="dataAddress?.postal_code"
+                     input-class="form-control" validation="required"
+                     :validation-messages="{ required: 'کادر کد پستی خالی است ' }" message-class="form-text text-danger"
+            />
           </div>
-          <div class="flex justify-center mt-4">
-            <button type="submit" class="btn btn-primary">ویرایش</button>
+          <ClientOnly fallback-tag="span" fallback="در حال بارگذاری.....">
+            <div class="">
+              <FormKit type="select" name="province_id" id="province_id" label="استان" label-class=""
+                       @change="change" input-class="bg-mainColor text-secColor" validation="required"
+                       :validation-messages="{ required: 'کادر استان خالی است ' }"
+                       message-class="form-text text-danger" :value="dataAddress.province_id">
+                <option v-for="province in data.provinces" :key="province.id" :value="province.id">{{
+                    province.name
+                  }}
+                </option>
+              </FormKit>
+            </div>
+            <div class="">
+              <FormKit type="select" ref="cityEl" name="city_id" id="city_id" label="شهر" label-class="form-label"
+                       input-class="w-100 rounded bg-mainColor " validation="required" :value="dataAddress.city_id"
+                       :validation-messages="{ required: 'کادر شهر خالی است ' }" message-class="form-text text-danger">
+                <option v-for="city in data.cities.filter((item) => item.province_id == value.province_id)"
+                        :key="city.id" :value="city.id">{{ city.name }}
+                </option>
+              </FormKit>
 
+
+            </div>
+          </ClientOnly>
+          <div>
+            <FormKit type="textarea" name="address" id="address" label="آدرس" label-class="form-label"
+                     input-class="form-control" validation="required"
+                     :validation-messages="{ required: 'کادر آدرس خالی است ' }" message-class="form-text text-danger"
+                     :value="dataAddress?.address"/>
           </div>
+        </div>
+        <div class="flex justify-center m-4">
+          <UButton v-if="loading" loading color="yellow">صبر کن</UButton>
+          <UButton v-else color="yellow" type="submit">ویرایش</UButton>
+        </div>
 
       </FormKit>
     </div>

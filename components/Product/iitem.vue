@@ -4,7 +4,7 @@ const props = defineProps(['product'])
 <template>
   <UCard class="m-2 shadow shadow-gray-700 direction-set-rtl relative bg-secColor text-white">
 
-    <img class="w-full rounded-t-2xl border-none" src="/images/alishah.png" v-img="product?.value?.primary_image" alt="">
+    <img class="w-full rounded-t-2xl border-none" src="/images/preloader.png" v-img="product?.value?.primary_image" alt="">
     <template #footer>
 
       <h4 class="text-center font-bold">{{ product?.value?.name }}</h4>

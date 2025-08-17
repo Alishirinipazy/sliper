@@ -1,13 +1,25 @@
 <script setup lang="ts">
 
 const props = defineProps(['items','h']);
+const carouselRef = ref()
 
+onMounted(() => {
+  setInterval(() => {
+    if (!carouselRef.value) return
+
+    if (carouselRef.value.page === carouselRef.value.pages) {
+      return carouselRef.value.select(0)
+    }
+
+    carouselRef.value.next()
+  }, 3000)
+})
 </script>
 
 <template>
 
   <div class="relative">
-    <UCarousel v-if="Array.isArray(props.items)" v-slot="{ item }" class="h-full w-full" :items="props.items"
+    <UCarousel  ref="carouselRef"  v-if="Array.isArray(props.items)" v-slot="{ item }" class="h-full w-full" :items="props.items"
                :ui="{ item: 'basis-full' }"
                indicators>
       <div class="slider-body justify-center "
