@@ -82,6 +82,22 @@ const people = [{
   role: 'Member'
 }]
 
+async function deleteAddress(idAddress) {
+  try {
+    await $fetch('/api/profile/addressess/delete', {
+      method: 'POST',
+      body: {address_id: idAddress}
+    })
+    props.refresh();
+    toast.add({title: " آدرست با موفقیت حذف شد"})
+  } catch (error) {
+    errorMSG.value = Object.values(error.data.data.message).flat()
+    toast.add({
+      title: `${errorMSG.value}`
+    })
+  }
+}
+
 const items = row => [
   [{
     label: 'ویرایش',
@@ -92,10 +108,12 @@ const items = row => [
     }
   }, {
     label: 'حذف',
-    icon: 'i-heroicons-trash-20-solid'
+    icon: 'i-heroicons-trash-20-solid',
+    click: () => {
+      deleteAddress(row.id)
+    }
   }],
 ]
-
 
 
 // the send edit address in api
@@ -121,7 +139,12 @@ async function edite(formData) {
 
 <template>
 
-  <UTable :rows="address" :columns="columns" :ui="{th: {base: 'text-right', },}">
+  <UTable
+          :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'آدرسی نداری عزیزم'}"
+          loading
+          :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'در حال بررسی...' }"
+          :progress="{ color: 'primary', animation: 'carousel' }"
+          :rows="address" :columns="columns" :ui="{th: {base: 'text-right', },}">
 
     <template #actions-data="{ row }">
       <UDropdown :items="items(row)">
@@ -131,7 +154,7 @@ async function edite(formData) {
   </UTable>
   <UModal v-model="isOpen" :ui="{background:'bg-secColor'}">
 
-    <div class="text-white">
+    <div class="text-white container">
       <FormKit type="form" @submit="edite" #default="{ value }" :incomplete-message="false" :actions="false">
 
         <div class="flex flex-wrap text-right mr-3 p-3">

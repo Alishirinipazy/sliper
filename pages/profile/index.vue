@@ -20,10 +20,10 @@ async function edit(formData){
 }
 </script>
 <template>
-  <div class="m-10 bg-secColor text-white p-10 rounded">
+  <div class="m-10 bg-secColor text-white p-2 lg:p-10 rounded">
     <h3 class="font-bold">{{ authUser?.name }} عزیز</h3>
   <FormKit type="form" @submit="edit" :incomplete-message="false" :actions="false">
-    <div class="lg:grid grid-cols-12 p-6 ">
+    <div class="lg:grid grid-cols-12 lg:p-6 p-2 ">
       <div class="lg:col-span-6 my-2 ">
         <FormKit type="text" name="name" id="name" label="نام و نام خانوادگی" label-class="form-label"
                  input-class="form-control" validation="required"
