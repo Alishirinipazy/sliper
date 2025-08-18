@@ -23,11 +23,11 @@ onMounted(() => {
                :ui="{ item: 'basis-full' }"
                indicators>
       <div class="slider-body justify-center "
-           :style="{ backgroundImage: 'url(' + item.image + ')',height:h}">
+           :style="{ backgroundImage: 'url(https://api.sliper.ir/' + item.image + ')',height:h}">
         <h4 class="slider-title">{{ item.title }}</h4>
 
-        <p class="slider-dis">{{ item.dis }}</p>
-        <nuxt-link to="/product">
+
+        <nuxt-link :to="item.link">
           <UButton class="rounded-full my-2" label="همین الان بخرش" color="yellow"/>
         </nuxt-link>
       </div>
@@ -35,7 +35,7 @@ onMounted(() => {
     <div v-else class="slider-body justify-end "
          style="direction: rtl" :style="{ backgroundImage: 'url(' + items.image + ')',height:h,}">
       <h4 class="slider-title " >{{ items.title }}</h4>
-      <p class="slider-dis">{{ items.dis }}</p>
+
       <nuxt-link v-if="items.link" :to="items.link">
         <UButton class="rounded-full my-2" label="همین الان بخرش" color="yellow"/>
       </nuxt-link>

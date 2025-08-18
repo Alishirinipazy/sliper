@@ -138,20 +138,20 @@ async function edite(formData) {
 </script>
 
 <template>
+  <div class=" border-2 rounded-2xl  mx-3 my-2">
+    <h5 class="font-bold px-2 mt-4 text-xl">آدرس هات</h5>
+    <p class="p-2 border-b">در این صفحه میتونی آدرس هایی که میخوای برات ارسال انجام بشه وارد کنی و یا تغییر بدی.</p>
+    <UTable
+        :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'آدرسی نداری عزیزم'}"
+        :rows="address" :columns="columns" :ui="{th: {base: 'text-right', },}">
 
-  <UTable
-          :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'آدرسی نداری عزیزم'}"
-          loading
-          :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'در حال بررسی...' }"
-          :progress="{ color: 'primary', animation: 'carousel' }"
-          :rows="address" :columns="columns" :ui="{th: {base: 'text-right', },}">
-
-    <template #actions-data="{ row }">
-      <UDropdown :items="items(row)">
-        <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid"/>
-      </UDropdown>
-    </template>
-  </UTable>
+      <template #actions-data="{ row }">
+        <UDropdown :items="items(row)">
+          <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid"/>
+        </UDropdown>
+      </template>
+    </UTable>
+  </div>
   <UModal v-model="isOpen" :ui="{background:'bg-secColor'}">
 
     <div class="text-white container">

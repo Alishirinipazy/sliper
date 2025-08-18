@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const {public: {apiBase}} = useRuntimeConfig();
 const itemsSlider = [{
   image: 'https://www.nouraco.ir/wp-content/uploads/2025/02/%D8%A8%D9%86%D8%B1_%D9%85%D9%84%DB%8C%DA%A9%D8%A7%D8%B3%D8%A8%D8%B2_%D9%85%D8%B2%D9%88%D9%86-%D9%86%D9%88%D8%B1%D8%A7_%D8%AF%D8%B3%DA%A9%D8%AA%D8%A7%D9%BE-scaled.webp',
   title: 'با پولیشی سردی زمستون رو گرم کن!',
@@ -61,14 +62,17 @@ const bannerItemData = ref([{
     link: '/product?search=women',
     class: 'col-bg-temp'
   }])
+const {data: slide, pending: pendingMenu, refresh} = await useFetch(() => `${apiBase}/slides`, {
 
+});
+console.log(slide)
 useHead({
   title: 'خوونه'
 })
 </script>
 <template>
   <LayoutsHeader/>
-  <GlobalSlider :items="itemsSlider" h="90vh"/>
+  <GlobalSlider :items="slide" h="90vh"/>
   <u-container>
     <GlobalProductCard :dataProduct="dataHotProduct"/>
     <br>
