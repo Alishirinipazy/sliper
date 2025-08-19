@@ -19,9 +19,15 @@ onMounted(() => {
 <template>
 
   <div class="relative">
-    <UCarousel  ref="carouselRef"  v-if="Array.isArray(props.items)" v-slot="{ item }" class="h-full w-full" :items="props.items"
-               :ui="{ item: 'basis-full' }"
-               indicators>
+    <UCarousel
+        ref="carouselRef"
+        v-slot="{ item }"
+        :items="props.items"
+        :ui="{ item: 'basis-full' }"
+        class="rounded-lg overflow-hidden"
+        indicators
+        v-if="Array.isArray(props.items)"
+    >
       <div class="slider-body justify-center "
            :style="{ backgroundImage: 'url(https://api.sliper.ir/' + item.image + ')',height:h}">
         <h4 class="slider-title">{{ item.title }}</h4>
