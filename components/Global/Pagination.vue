@@ -1,16 +1,16 @@
 <script setup lang="ts">
 
 const props = defineProps(['pages'])
-
+const route = useRoute()
 const router = useRouter();
-
+console.log(route)
 function sendPageHandler(url){
   const page = new URL(url).searchParams.get("page");
 
 const pages = {page:page}
 
   router.push({
-    path: '/products',
+    path: route?.path,
     query: pages
   })
 }
