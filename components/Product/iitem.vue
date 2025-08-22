@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {numberFormat} from "~/utils/helper";
+
 const props = defineProps(['product'])
 </script>
 <template>
@@ -11,10 +13,10 @@ const props = defineProps(['product'])
 
 
       <div class="flex justify-between w-full items-center mt-2">
-        <p :class="product?.value?.is_sale?'line-through':''">{{product?.value?.price}} تومان</p>
+        <p :class="product?.value?.is_sale?'line-through':''">{{numberFormat(product?.value?.price)}} تومان</p>
         <UButton class="rounded-full mx-1" icon="icon-park-outline:buy" color="yellow"/>
       </div>
-      <p v-if="product?.value?.is_sale" class="text-center"> {{product?.value?.sele_price}} تومان</p>
+      <p v-if="product?.value?.is_sale" class="text-center"> {{numberFormat(product?.value?.sele_price)}} تومان</p>
     </template>
     <div class="product-option" v-if="product?.value?.sale_price">
       {{ (product?.value?.price / product?.value?.sale_price) * 100 }} % تخفیف

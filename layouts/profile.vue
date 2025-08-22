@@ -1,6 +1,16 @@
 <script setup>
 const {authUser} = useAuth()
 const route = useRoute()
+const toast = useToast();
+
+async function logout(){
+  await useFetch("/api/auth/logout",{
+    method:'POST'
+  })
+  authUser.value = null;
+  toast.remove("ناززییی... خروج با موفقیت انجام شد")
+  return navigateTo('/')
+}
 </script>
 <template>
   <section class="lg:grid grid-cols-12">
@@ -26,12 +36,12 @@ const route = useRoute()
 
         </li>
         <li class="list-group-item">
-          <NuxtLink to="/profile/order">
+          <NuxtLink to="/profile/order" :class="{'text-cosColor': route.path==='/profile/order'}">
             <UIcon name="material-symbols:order-approve-rounded" class="w-5 h-5 lg:hidden"/>
             <p>سفارشات</p></NuxtLink>
         </li>
         <li class="list-group-item">
-          <nuxt-link to="/profile/transactions">
+          <nuxt-link to="/profile/transactions" :class="{'text-cosColor': route.path==='/profile/transactions'}">
             <UIcon name="bitcoin-icons:transactions-filled" class="w-5 h-5 lg:hidden"/>
             <p>تراکنش ها</p>
           </nuxt-link>

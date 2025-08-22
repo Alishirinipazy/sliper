@@ -1,55 +1,46 @@
 <script setup>
+import {numberFormat} from "~/utils/helper.js";
+
 const route = useRoute()
 const page = route.path
-const {data, refresh, pending} = await useFetch(() => "/api/profile/transactions", {
+const {data, refresh, pending} = await useFetch(() => "/api/profile/tarnsactions", {
   query: {page},
   headers: useRequestHeaders(['cookie'])
 })
-const orders = ref([]);
 
 
-data?.value?.orders?.map((item) => {
+const transactions = ref([])
+data?.value?.transactions?.map((item) => {
   const items = {
     'شماره سفارش': item?.id,
-    'آدرس': item?.address_title,
+    'مبلغ': numberFormat(item?.amount),
     'وضعیت': item?.status,
-    'وضعیت پرداخت': item?.payment_status,
-    'قیمت کل': item?.paying_amount,
-    'تاریخ': item?.created_at,
+    'شماره پیگیری': item?.payment_status,
+    'تاریخ': item?.trans_id,
 
   }
 
-  orders?.value?.push(items)
+  transactions?.value?.push(items)
 
 
 })
 
 
 
-c
+
 
 
 
 </script>
 <template>
+
   <div class=" border-2 rounded-2xl  mx-3 my-2">
     <h5 class="font-bold px-2 mt-4 text-xl">تراکنش ها</h5>
     <div class="flex justify-between p-2 border-b"><p>در این صفحه میتونی رسید پرداخت هایی که انجام دادی رو مشاهده کنی</p>
 
     </div>
-    <UTable v-model:expand="expand" :rows="orders" :ui="{th: {base: 'text-right', },}">
-      <template #expand="{ row }">
-        <div class="p-4">
+    <UTable  :rows="transactions" :ui="{th: {base: 'text-right', },}"/>
 
-          <template v-for="item in orders_product[row['شماره سفارش']-10 ]">
-            <div class="grid col-span-9  grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-              {{item}}
-
-            </div>
-          </template>
-        </div>
-      </template>
-    </UTable>
   </div>
   <GlobalPagination :pages="data?.meta?.links"/>
 </template>
