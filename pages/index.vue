@@ -1,15 +1,16 @@
 <script setup lang="ts">
 const {public: {apiBase}} = useRuntimeConfig();
-const itemsSlider = [{
-  image: 'https://www.nouraco.ir/wp-content/uploads/2025/02/%D8%A8%D9%86%D8%B1_%D9%85%D9%84%DB%8C%DA%A9%D8%A7%D8%B3%D8%A8%D8%B2_%D9%85%D8%B2%D9%88%D9%86-%D9%86%D9%88%D8%B1%D8%A7_%D8%AF%D8%B3%DA%A9%D8%AA%D8%A7%D9%BE-scaled.webp',
-  title: 'با پولیشی سردی زمستون رو گرم کن!',
-  dis: 'پولیشی های برند پاپا به زیبای تو پات می درخشتن ',
-  link: 'product?search:polish'
+import type { TabsItem } from '@nuxt/ui'
+
+const items = [{
+  slot: 'account',
+  label: 'Account'
 }, {
-  image: 'https://www.nouraco.ir/wp-content/uploads/2024/11/%D8%A8%D9%86%D8%B1_%D9%85%D8%B2%D9%88%D9%86-%D9%86%D9%88%D8%B1%D8%A7_%DA%A9%D8%AA-%D9%85%DA%A9%D8%AA%DB%8C%D9%86_%D9%84%D8%A8%D8%A7%D8%B3-%D8%B2%D9%85%D8%B3%D8%AA%D8%A7%D9%86%DB%8C_%D8%AF%D8%B3%DA%A9%D8%AA%D8%A7%D9%BE-scaled.webp',
-  title: 'با پولیشی سردی زمستون رو گرم کن!',
-  dis: 'پولیشی های برند پاپا به زیبای تو پات می درخشتن ',
-  link: 'product?search:polish'
+  slot: 'password',
+  label: 'Password'
+},{
+  slot: 'ali',
+  label: 'Ali'
 }]
 const dataHotProduct = ref({
   title: 'دمپایی های داغ تابستونی',
@@ -62,7 +63,7 @@ const bannerItemData = ref([{
     link: '/product?search=women',
     class: 'col-bg-temp'
   }])
-const {data: slide, pending: pendingMenu, refresh} = await useFetch(() => `${apiBase}/slides`, {
+const {data: slide, pending, pendingMenu, refresh} = await useFetch(() => `${apiBase}/slides`, {
 
 });
 console.log(slide)
@@ -74,7 +75,7 @@ useHead({
   <LayoutsHeader/>
   <GlobalSlider :items="slide" h="90vh"/>
   <u-container>
-    <GlobalProductCard :dataProduct="dataHotProduct"/>
+  <HomeTab/>
     <br>
     <HomeBanner :dataBanner="bannerItemData"/>
     <GlobalProductCard :dataProduct="dataHotAverg"/>
