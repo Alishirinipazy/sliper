@@ -75,6 +75,7 @@
         <p>تهیه شده با عشق ❤️ توسط
         </p>
         <img class="w-10" src="/images/alishah.png" alt="alishah">
+        علی شیرینی پزی
       </div>
     </u-container>
   </footer>

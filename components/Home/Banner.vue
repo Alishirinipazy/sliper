@@ -3,7 +3,7 @@ const props = defineProps(['dataBanner'])
 </script>
 <template>
 
-  <div class="grid grid-flow-col grid-rows-12   sm:grid-rows-3  lg:grid-rows-3 gap-5 my-5 py-3">
+  <div class="grid grid-flow-col grid-rows-12   sm:grid-rows-3  lg:grid-rows-3 gap-5  py-3">
     <template v-for="(item,index) in dataBanner " :key="index">
 
       <div :class="item.class" :style="{ backgroundImage: `url(${item.image})` }">

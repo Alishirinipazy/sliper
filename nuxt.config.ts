@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     colorMode: {
         preference: 'light'
     },
-    modules: ["@nuxt/ui", '@nuxthub/core','@formkit/nuxt'],
+    modules: ["@nuxt/ui", '@nuxthub/core', '@formkit/nuxt', 'nuxt-swiper','nuxt-swiper'],
     compatibilityDate: "2025-02-12",
     formkit: {
         // Experimental support for auto loading (see note):

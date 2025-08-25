@@ -66,14 +66,14 @@ const bannerItemData = ref([{
 const {data: slide, pending, pendingMenu, refresh} = await useFetch(() => `${apiBase}/slides`, {
 
 });
-console.log(slide)
+
 useHead({
   title: 'خوونه'
 })
 </script>
 <template>
   <LayoutsHeader/>
-  <GlobalSlider :items="slide" h="90vh"/>
+  <GlobalSlider :loading="pending" :items="slide" h="90vh"/>
   <u-container>
   <HomeTab/>
     <br>

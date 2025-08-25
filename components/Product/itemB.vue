@@ -6,7 +6,7 @@ const props = defineProps(['product','loading'])
 </script>
 <template>
   <div v-if="loading" class="w-100 h-[129px] bg-cover rounded-2xl relative">
-    <USkeleton class="h-[129px]"/>
+    <USkeleton class="h-[90vh]"/>
   </div>
   <nuxt-link v-else :to="'/products/'+product?.slug">
     <div class="w-100 h-[129px] bg-cover rounded-2xl relative"
