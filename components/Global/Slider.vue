@@ -8,6 +8,7 @@ const swiper = useSwiper(containerRef, {
   autoplay: {
     delay: 3000,
   },
+
   creativeEffect: {
     prev: {
       shadow: true,
@@ -20,9 +21,7 @@ const swiper = useSwiper(containerRef, {
   },
 })
 
-onMounted(() => {
-  console.log(swiper.instance)
-})
+
 </script>
 
 <template>
@@ -38,7 +37,8 @@ onMounted(() => {
               :key="idx"
           >
             <div class="slider-body justify-center "
-                 :style="{ backgroundImage: 'url(https://api.sliper.ir/' + item.image + ')',height:h}">
+                 :class="h"
+                 :style="{ backgroundImage: 'url(https://api.sliper.ir/' + item.image + ')'}">
               <h4 class="slider-title">{{ item.title }}</h4>
 
 
@@ -66,7 +66,7 @@ onMounted(() => {
 
 <style lang="css">
 .slider-body {
-  @apply w-full rounded lg:px-12 text-center flex flex-col align-sub  bg-no-repeat bg-cover bg-center py-4 text-mainColor font-bold sm:text-right
+    @apply w-full rounded lg:px-12 text-center flex flex-col align-sub  lg:bg-no-repeat bg-cover bg-center py-4 text-mainColor font-bold sm:text-right
 }
 
 .slider-title {
