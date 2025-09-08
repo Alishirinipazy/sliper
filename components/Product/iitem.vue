@@ -8,8 +8,9 @@ const props = defineProps(['product'])
 
     <img class="w-full rounded-t-2xl border-none" src="/images/preloader.png" v-img="product?.value?.primary_image" alt="">
     <template #footer>
-
+      <nuxt-link :to="`/products/${product?.value?.slug}`">
       <h4 class="text-center font-bold">{{ product?.value?.name }}</h4>
+      </nuxt-link>
 
 
       <div class="flex justify-between w-full items-center mt-2">

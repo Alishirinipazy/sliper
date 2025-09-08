@@ -1,14 +1,14 @@
 <script setup lang="ts">
 const containerRef = ref(null)
-const props = defineProps(['items', 'h','loading'])
+const props = defineProps(['items', 'h', 'loading'])
 const slides = ref(Array.from({length: 10}))
 const swiper = useSwiper(containerRef, {
   effect: 'fade',
+
   loop: true,
   autoplay: {
     delay: 3000,
   },
-
   creativeEffect: {
     prev: {
       shadow: true,
@@ -52,7 +52,7 @@ const swiper = useSwiper(containerRef, {
     </template>
     <div v-else class="slider-body justify-end "
          style="direction: rtl" :style="{ backgroundImage: 'url(' + items.image + ')',height:h,}">
-      <h4 class="slider-title " >{{ items.title }}</h4>
+      <h4 class="slider-title ">{{ items.title }}</h4>
 
       <nuxt-link v-if="items.link" :to="items.link">
         <UButton class="rounded-full my-2" label="همین الان بخرش" color="yellow"/>
@@ -66,7 +66,7 @@ const swiper = useSwiper(containerRef, {
 
 <style lang="css">
 .slider-body {
-    @apply w-full rounded lg:px-12 text-center flex flex-col align-sub  lg:bg-no-repeat bg-cover bg-center py-4 text-mainColor font-bold sm:text-right
+  @apply w-full rounded lg:px-12 text-center flex flex-col align-sub  lg:bg-no-repeat bg-cover bg-center py-4 text-mainColor font-bold sm:text-right
 }
 
 .slider-title {
@@ -75,5 +75,14 @@ const swiper = useSwiper(containerRef, {
 
 .slider-dis {
   @apply py-2 text-cosColor
+}
+
+
+.swiper-horizontal > .swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal{
+  position: absolute;
+  bottom: 30px !important;
+}
+.swiper-pagination-bullet-active {
+ background: gold !important;
 }
 </style>

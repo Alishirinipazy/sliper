@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import {useModalStore} from '@/stores/cart'
+
+
+const store = useModalStore()
+
 const isOpen = ref(false)
 const classHeader = ref('header');
 const {authUser} = useAuth();
 const props = defineProps(['fixed'])
-
-if (props?.fixed){
-  classHeader.value ="header-block"
+if (props?.fixed) {
+  classHeader.value = "header-block"
 } else {
   classHeader.value = "header"
   onMounted(() => {
@@ -19,15 +23,7 @@ if (props?.fixed){
     }
   })
 }
-const colorMode = useColorMode()
-const isDark = computed({
-  get() {
-    return colorMode.value === 'dark'
-  },
-  set() {
-    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-  }
-})
+
 </script>
 <template>
   <header class="transition-all text-cyan-50 duration-700 ease-in-out z-110" :class="classHeader">
@@ -65,20 +61,15 @@ const isDark = computed({
         </div>
         <div class=" w-1/3 flex justify-end mx-1">
           <!---->
-          <ClientOnly>
-            <UButton
-                :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
-                color="yellow"
-                @click="isDark = !isDark"
-                class="rounded-full mx-1"
-            />
-          </ClientOnly>
+
           <div class="hidden lg:block">
             <!---->
             <!---->
             <UButton class="rounded-full mx-1" icon="mdi:cards-heart" color="yellow"/>
             <!---->
-            <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart" color="yellow"/>
+            <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart" @click="store?.changeStatusModal()"
+                     color="yellow"/>
+
           </div>
           <UButton class="rounded-full mx-1" icon="material-symbols:search" color="yellow"/>
           <nuxt-link to="/auth/login" v-if="!authUser">
@@ -88,8 +79,9 @@ const isDark = computed({
             </UButton>
           </nuxt-link>
           <nuxt-link to="/profile/" v-else :class="{'text-amber-400': $route.path.includes('profile')}">
-            <UButton color="yellow" class="mx-2" :class="{'bg-cosColor': $route.path.includes('profile')  }" :ui="{ rounded: 'rounded-full' }">
-              <span class="hidden md:block">{{authUser?.name}}</span>
+            <UButton color="yellow" class="mx-2" :class="{'bg-cosColor': $route.path.includes('profile')  }"
+                     :ui="{ rounded: 'rounded-full' }">
+              <span class="hidden md:block">{{ authUser?.name }}</span>
               <UIcon name="material-symbols:account-circle" class="w-5 h-5"/>
             </UButton>
           </nuxt-link>
@@ -97,7 +89,8 @@ const isDark = computed({
       </div>
     </u-container>
     <!------------------the mobile menu slide over------------------->
-    <div class="fixed lg:hidden bottom-2 flex justify-center w-full z-20" :class="{'hidden': $route.path.includes('profile')}">
+    <div class="fixed lg:hidden bottom-2 flex justify-center w-full z-20"
+         :class="{'hidden': $route.path.includes('profile')}">
 
 
       <div class=" m-2 bg-secColor flex  text-center  rounded-2xl">
@@ -114,17 +107,34 @@ const isDark = computed({
 
         <nuxt-link to="/auth/login" class="header-item" v-if="!authUser">
 
-            <p >ثبت نام | ورود</p>
-            <UIcon name="octicon:sign-in-16" class="w-5 h-5"/>
+          <p>ثبت نام | ورود</p>
+          <UIcon name="octicon:sign-in-16" class="w-5 h-5"/>
 
         </nuxt-link>
-        <nuxt-link to="/profile/" v-else class="header-item" :class="{'text-amber-400': $route.path.includes('profile')}">
-            <UIcon name="material-symbols:account-circle" class="w-5 h-5"/>
-            <p>{{authUser?.name}}</p>
+        <nuxt-link to="/profile/" v-else class="header-item"
+                   :class="{'text-amber-400': $route.path.includes('profile')}">
+          <UIcon name="material-symbols:account-circle" class="w-5 h-5"/>
+          <p>{{ authUser?.name }}</p>
+
         </nuxt-link>
       </div>
     </div>
   </header>
+  <USlideover v-model="store.isOpenModal">
+    <div class="p-4 flex-1">
+      <UButton
+          color="gray"
+          variant="ghost"
+          size="sm"
+          icon="i-heroicons-x-mark-20-solid"
+          class="flex sm:hidden absolute end-5 top-5 z-10"
+          square
+          padded
+          @click="isOpen = false"
+      />
+      <Placeholder class="h-full"/>
+    </div>
+  </USlideover>
 </template>
 <style>
 .header {
@@ -142,6 +152,7 @@ const isDark = computed({
 .header-item p {
   @apply text-xs
 }
+
 .header-block {
   @apply block bg-secColor py-2
 }

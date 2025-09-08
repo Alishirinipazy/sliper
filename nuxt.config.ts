@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     colorMode: {
         preference: 'light'
     },
-    modules: ["@nuxt/ui", '@nuxthub/core', '@formkit/nuxt', 'nuxt-swiper','nuxt-swiper'],
+    modules: ["@nuxt/ui", '@nuxthub/core', '@formkit/nuxt', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', 'nuxt-swiper', 'nuxt-swiper'],
     compatibilityDate: "2025-02-12",
     formkit: {
         // Experimental support for auto loading (see note):
@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     app: {
         head: {
             link: [
-                { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+                {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'},
             ]
         },
 
