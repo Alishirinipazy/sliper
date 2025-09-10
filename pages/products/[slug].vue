@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {ref} from 'vue'
 import {Swiper, SwiperSlide} from 'swiper/vue'
 import {Navigation, Thumbs} from 'swiper/modules'
@@ -13,6 +13,7 @@ const setThumbsSwiper = (swiper) => {
   thumbsSwiper.value = swiper
 }
 import {useModalStore} from "@/stores/cart.js";
+import Footer from "~/components/Layouts/Footer.vue";
 
 const route = useRoute();
 const {public: {apiBase}} = useRuntimeConfig();
@@ -20,15 +21,15 @@ const {data: product} = useFetch(`${apiBase}/products/${route.params.slug}`)
 const {data: randomProducts} = useFetch(`${apiBase}/random-products?count=4`)
 const {data: categories} = await useFetch(`${apiBase}/categories`);
 const cart = useModalStore();
+const store = useModalStore();
 const quantity = ref(1)
 const sexual = ref([
-  {icon:"streamline:toilet-women-solid",name:'خانم ها'},
-  {icon:"ic:sharp-man",name:'آقایون'},
-  {icon:"tabler:mood-kid-filled",name:'بچه ها'},
+  {icon: "streamline:toilet-women-solid", name: 'خانم ها'},
+  {icon: "ic:sharp-man", name: 'آقایون'},
+  {icon: "tabler:mood-kid-filled", name: 'بچه ها'},
 ])
-function endTime() {
-  console.log('end')
-}
+
+
 
 function transformSlotProps(props) {
   const formattedProps = {};
@@ -43,25 +44,38 @@ function transformSlotProps(props) {
 const sizes = ref([38, 39, 40, 41, 42, 43])
 
 function addToCart(product) {
+  store?.changeStatusModal()
   cart.remove(product.id);
   cart.addToCart(product, quantity.value);
+  setTimeout(store?.changeStatusModal, 2000)
 }
 
 useHead({
   title: route.params.slug,
 })
+const links = [{
+  label: 'خوونه',
+  to: '/'
+}, {
+  label: 'محصولاتمون',
+  to:'/products'
+}, {
+  label: product?.value?.data?.name,
+
+}]
 </script>
 <template>
   <layouts-header :fixed="true"/>
-  {{ product }}
   <u-container>
-    <div class="grid grid-cols-12 gap-5 my-5">
+    <br>
+    <UBreadcrumb :links="links" :ui="{active:'text-mainColor',base:'font-light'}" />
+    <div class="grid grid-cols-12 gap-5 my-3 ">
       <!--the slider-->
       <div class="col-span-12 lg:col-span-4">
         <div
             class=" rounded my-3 bg-cosColor/35 flex flex-row-reverse items-center justify-between px-3 shadow-2xl box-border">
           <client-only>
-            <vue-countdown :time=" 24 * 60 * 60 * 1000" :transform="transformSlotProps" @end="endTime"
+            <vue-countdown :time=" 24 * 60 * 60 * 1000" :transform="transformSlotProps"
                            v-slot="{hours,minutes, seconds }">
               {{ seconds }} : {{ minutes }} : {{ hours }}
               <icon name="material-symbols:timer"/>
@@ -118,7 +132,7 @@ useHead({
             <ul class="flex justify-center m-1">
               <li v-for="item in sexual" class="border rounded-2xl mx-1 border-mainColor flex items-center p-1">
                 <UIcon :name="item?.icon"/>
-                {{item?.name}}
+                {{ item?.name }}
               </li>
             </ul>
           </li>
@@ -154,17 +168,64 @@ useHead({
 
       </div>
       <!--the price product-->
-      <div class="lg:col-span-3 bg-mainColor/35 rounded-2xl box-border shadow-2xl">
+      <div class="price-details-product">
+        <div class="hidden lg:block">
+          <p class="text-sm">گردآوری با عشق توسط :</p>
+          <div class="flex justify-center"><img src="/images/logo.png" class="w-[130px]" alt=""></div>
+          <ul class="text-sm mt-20">
+            <li class="flex items-center my-2">
+              <Icon name="streamline-plump-color:return-3-flat"/>
+              <h5 class="mr-1">این کالا تا دو روز کاری قابل مرجوعی میباشد</h5>
+            </li>
+            <UDivider size="sm"/>
+            <li class="flex items-center my-2">
+              <h5 class="">🚚 ارسال سریع تا درب خونت</h5>
+            </li>
+            <UDivider size="sm"/>
+            <li class="flex items-center my-2">
+              <h5 class="">✨ کادو پیج مجلسی</h5>
+            </li>
+            <UDivider size="sm"/>
+            <li class="flex items-center my-2">
+              <h5 class="">✨ با ضمانت رویان کالا تا 1 سال </h5>
+            </li>
+          </ul>
+        </div>
+        <div class="lg:mt-8">
+          <div v-if="product?.data?.is_sale" class="mb-3 ">
+            <div class="flex justify-between items-center  relative">
+              <del>{{ numberFormat(product?.data?.price) }} تومان</del>
+              <div class="">
+                {{ numberFormat(product?.data?.sale_price) }}
+                تومان
+                <p class="absolute bottom-5 text-sm -left-2 -rotate-12 bg-cosColor p-1 rounded text-white">
+                  {{ salePercent(product?.data?.price, product?.data?.sale_price) }} %
+                </p>
+              </div>
+            </div>
+          </div>
+          <h5 v-else class="text-left">
+            {{ numberFormat(product?.data?.price) }} تومان
+          </h5>
 
+
+          <u-button color="yellow" block @click="addToCart(product?.data)">افزودن به سبد خرید</u-button>
+
+        </div>
       </div>
     </div>
   </u-container>
+      <LayoutsFooter/>
 </template>
 
 
 <style>
 .mySwiper2 {
   width: 100%;
+}
+
+.price-details-product {
+  @apply lg:col-span-3 fixed left-0 bottom-12 lg:text-secColor text-white w-screen lg:w-auto lg:relative z-20 pt-2 px-2 bg-secColor  lg:bg-mainColor/35 lg:rounded-2xl lg:box-border lg:shadow-2xl lg:bottom-0
 }
 
 .mySwiper {

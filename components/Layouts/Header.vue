@@ -27,7 +27,7 @@ if (props?.fixed) {
 </script>
 <template>
   <header class="transition-all text-cyan-50 duration-700 ease-in-out z-110" :class="classHeader">
-    <u-container class="">
+    <u-container >
       <div class="flex justify-between lg:justify-around md:justify-around items-center w-full">
 
         <div class="hidden  lg:flex w-1/3  justify-center">
@@ -89,26 +89,26 @@ if (props?.fixed) {
       </div>
     </u-container>
     <!------------------the mobile menu slide over------------------->
-    <div class="fixed lg:hidden bottom-2 flex justify-center w-full z-20"
+    <div class="fixed lg:hidden bottom-0 flex justify-center w-screen z-20 bg-secColor"
          :class="{'hidden': $route.path.includes('profile')}">
 
 
-      <div class=" m-2 bg-secColor flex  text-center  rounded-2xl">
+      <div class="   flex  text-center">
         <nuxt-link to="/" class="header-item" :class="{'text-amber-400': $route.path==='/'}">
           <UIcon name="material-symbols:other-houses" class="w-5 h-5"/>
           <p>خوونه</p>
         </nuxt-link>
         <nuxt-link to="/products" class="header-item" :class="{'text-amber-400': $route.path==='/products'}">
           <UIcon name="bxs:category" class="w-5 h-5"/>
-          <p>دسته‌بندی</p></nuxt-link>
+          <p>محصولاتمون</p></nuxt-link>
         <nuxt-link to="/cart" class="header-item" :class="{'text-amber-400': $route.path==='/cart'}">
           <UIcon name="icon-park-solid:buy" class="w-5 h-5"/>
           <p>سبدخرید</p></nuxt-link>
 
         <nuxt-link to="/auth/login" class="header-item" v-if="!authUser">
 
-          <p>ثبت نام | ورود</p>
           <UIcon name="octicon:sign-in-16" class="w-5 h-5"/>
+          <p> ورود</p>
 
         </nuxt-link>
         <nuxt-link to="/profile/" v-else class="header-item"
@@ -132,7 +132,7 @@ if (props?.fixed) {
           padded
           @click="isOpen = false"
       />
-      <Placeholder class="h-full"/>
+      {{store?.card}}
     </div>
   </USlideover>
 </template>

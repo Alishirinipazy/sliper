@@ -28,7 +28,13 @@ const itemsSlider = {
   dis: 'همه محصولات اسلیپر استور رو میتونی از اینجا با جزئیات بیشتر ببینی'
 }
 
-
+const links = [{
+  label: 'خوونه',
+  to: '/'
+}, {
+  label: 'محصولاتمون',
+  to:'/products'
+}]
 
 
 
@@ -42,12 +48,15 @@ useHead({
   <GlobalSlider :items="itemsSlider" h="50vh"/>
 
   <UContainer>
+    <div class="flex justify-between items-center">
 
+    <UBreadcrumb :links="links" :ui="{active:'text-mainColor',base:'font-light'}" />
 
     <button @click="isOpen=true" class="rounded bg-mainColor p-1 lg:hidden mx-2 mt-2">
       <span>فیلتر محصولات</span>
       <UIcon name="material-symbols:filter-alt-sharp"/>
     </button>
+    </div>
 
     <USlideover v-model="isOpen" prevent-close>
       <UCard class="flex flex-col flex-1"
