@@ -67,12 +67,13 @@ if (props?.fixed) {
             <!---->
             <UButton class="rounded-full mx-1" icon="mdi:cards-heart" color="yellow"/>
             <!---->
-            <UChip :text="0" c size="lg" :ui="{variants:{color:'bg-mainColor'}}">
             <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart" @click="store?.changeStatusModal()"
-                     color="yellow"/>
+                     color="yellow">
+            <UChip :text="store?.allItem?.length" v-if="store?.allItem?.length" size="lg" :ui="{background:'bg-secColor' ,}">
             </UChip>
+            </UButton>
           </div>
-          <UButton class="rounded-full mx-1" icon="material-symbols:search" color="yellow"/>
+          <UButton class="rounded-full mx-1 " icon="material-symbols:search" color="yellow"/>
           <nuxt-link to="/auth/login" v-if="!authUser">
             <UButton color="yellow" class="mx-2" :ui="{ rounded: 'rounded-full' }">
               <span class="hidden md:block">ثبت نام | ورود</span>
@@ -102,9 +103,12 @@ if (props?.fixed) {
         <nuxt-link to="/products" class="header-item" :class="{'text-amber-400': $route.path==='/products'}">
           <UIcon name="bxs:category" class="w-5 h-5"/>
           <p>محصولاتمون</p></nuxt-link>
-        <nuxt-link to="/cart" class="header-item" :class="{'text-amber-400': $route.path==='/Cart'}">
+        <nuxt-link @click="store?.changeStatusModal()" class="header-item" >
+          <UChip :text="store?.allItem?.length" v-if="store?.allItem?.length" size="lg" :ui="{background:'bg-amber-400' ,}">
           <UIcon name="icon-park-solid:buy" class="w-5 h-5"/>
-          <p>سبدخرید</p></nuxt-link>
+          </UChip>
+            <p>سبدخرید</p>
+        </nuxt-link>
 
         <nuxt-link to="/auth/login" class="header-item" v-if="!authUser">
 
@@ -115,7 +119,7 @@ if (props?.fixed) {
         <nuxt-link to="/profile/" v-else class="header-item"
                    :class="{'text-amber-400': $route.path.includes('profile')}">
           <UIcon name="material-symbols:account-circle" class="w-5 h-5"/>
-          <p>{{ authUser?.name }}</p>
+          <p>پروفایل</p>
 
         </nuxt-link>
       </div>
