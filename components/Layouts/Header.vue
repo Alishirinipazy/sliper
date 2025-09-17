@@ -27,7 +27,7 @@ if (props?.fixed) {
 </script>
 <template>
   <header class="transition-all text-cyan-50 duration-700 ease-in-out z-110" :class="classHeader">
-    <u-container >
+    <u-container>
       <div class="flex justify-between lg:justify-around md:justify-around items-center w-full">
 
         <div class="hidden  lg:flex w-1/3  justify-center">
@@ -67,9 +67,10 @@ if (props?.fixed) {
             <!---->
             <UButton class="rounded-full mx-1" icon="mdi:cards-heart" color="yellow"/>
             <!---->
+            <UChip :text="0" c size="lg" :ui="{variants:{color:'bg-mainColor'}}">
             <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart" @click="store?.changeStatusModal()"
                      color="yellow"/>
-
+            </UChip>
           </div>
           <UButton class="rounded-full mx-1" icon="material-symbols:search" color="yellow"/>
           <nuxt-link to="/auth/login" v-if="!authUser">
@@ -101,7 +102,7 @@ if (props?.fixed) {
         <nuxt-link to="/products" class="header-item" :class="{'text-amber-400': $route.path==='/products'}">
           <UIcon name="bxs:category" class="w-5 h-5"/>
           <p>محصولاتمون</p></nuxt-link>
-        <nuxt-link to="/cart" class="header-item" :class="{'text-amber-400': $route.path==='/cart'}">
+        <nuxt-link to="/cart" class="header-item" :class="{'text-amber-400': $route.path==='/Cart'}">
           <UIcon name="icon-park-solid:buy" class="w-5 h-5"/>
           <p>سبدخرید</p></nuxt-link>
 
@@ -120,20 +121,9 @@ if (props?.fixed) {
       </div>
     </div>
   </header>
-  <USlideover v-model="store.isOpenModal">
-    <div class="p-4 flex-1">
-      <UButton
-          color="gray"
-          variant="ghost"
-          size="sm"
-          icon="i-heroicons-x-mark-20-solid"
-          class="flex sm:hidden absolute end-5 top-5 z-10"
-          square
-          padded
-          @click="isOpen = false"
-      />
-      {{store?.card}}
-    </div>
+  <USlideover v-model="store.isOpenModal" class="flex flex-col flex-1"
+              :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+    <ProductCart/>
   </USlideover>
 </template>
 <style>

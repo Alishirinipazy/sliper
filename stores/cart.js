@@ -47,6 +47,6 @@ export const useModalStore = defineStore('open', () => {
     return {isOpenModal, changeStatusModal, allItem, totalAmount, card, addToCart, clear, increment, remove, dicrement}
 }, {
     persist: {
-        key: "shopping-cart",
+        key: "shopping-Cart",
     }
 })

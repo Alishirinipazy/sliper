@@ -26,9 +26,9 @@ const swiper = useSwiper(containerRef, {
 
 <template>
   <div v-if="loading">
-    <USkeleton class="h-[90vh]"/>
+    <USkeleton class="h-[90vh]" :ui="{background:'bg-mainColor'}"/>
   </div>
-  <div class="relative">
+  <div v-else class="relative">
     <template v-if="Array.isArray(props.items)">
       <ClientOnly>
         <swiper-container ref="containerRef" :init="false">
