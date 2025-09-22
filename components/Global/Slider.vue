@@ -28,7 +28,7 @@ const swiper = useSwiper(containerRef, {
   <div v-if="loading">
     <USkeleton class="h-[90vh]" :ui="{background:'bg-mainColor'}"/>
   </div>
-  <div v-else class="relative">
+  <div v-else class="relative mx-2 lg:m-0">
     <template v-if="Array.isArray(props.items)">
       <ClientOnly>
         <swiper-container ref="containerRef" :init="false">
@@ -50,8 +50,8 @@ const swiper = useSwiper(containerRef, {
         </swiper-container>
       </ClientOnly>
     </template>
-    <div v-else class="slider-body justify-end "
-         style="direction: rtl" :style="{ backgroundImage: 'url(' + items.image + ')',height:h,}">
+    <div v-else class="slider-body justify-end " :class="h"
+         style="direction: rtl" :style="{ backgroundImage: 'url(' + items.image + ')'}">
       <h4 class="slider-title ">{{ items.title }}</h4>
 
       <nuxt-link v-if="items.link" :to="items.link">
@@ -66,7 +66,7 @@ const swiper = useSwiper(containerRef, {
 
 <style lang="css">
 .slider-body {
-  @apply w-full rounded lg:px-12 text-center flex flex-col align-sub  lg:bg-no-repeat bg-cover bg-center py-4 text-mainColor font-bold sm:text-right
+  @apply w-full lg:rounded  rounded-2xl lg:px-12 text-center flex flex-col align-sub  lg:bg-no-repeat bg-cover bg-center py-4 text-mainColor font-bold sm:text-right
 }
 
 .slider-title {
@@ -78,11 +78,5 @@ const swiper = useSwiper(containerRef, {
 }
 
 
-.swiper-horizontal > .swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal{
-  position: absolute;
-  bottom: 30px !important;
-}
-.swiper-pagination-bullet-active {
- background: gold !important;
-}
+
 </style>

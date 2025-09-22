@@ -12,6 +12,7 @@
     url(../fonts/Vazir.ttf) format("truetype");
     /* Safari, Android, iOS */
 }
+
 * {
     font-family: "Vazir";
     direction: rtl;
@@ -20,9 +21,12 @@
 .direction-set-rtl {
     direction: rtl;
 }
+
 .fade-in-iamge {
     animation: fadeIn 1s;
 }
+
+
 
 @keyframes fadeIn {
     0% {

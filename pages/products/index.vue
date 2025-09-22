@@ -45,14 +45,14 @@ useHead({
 </script>
 <template>
   <LayoutsHeader/>
-  <GlobalSlider :items="itemsSlider" h="50vh"/>
+  <GlobalSlider :items="itemsSlider" h="lg:h-[45vh] h-[25vh]"/>
 
   <UContainer>
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between items-center py-3">
 
     <UBreadcrumb :links="links" :ui="{active:'text-mainColor',base:'font-light'}" />
 
-    <button @click="isOpen=true" class="rounded bg-mainColor p-1 lg:hidden mx-2 mt-2">
+    <button @click="isOpen=true" class="rounded text-sm bg-mainColor p-1 lg:hidden mx-2 ">
       <span>فیلتر محصولات</span>
       <UIcon name="material-symbols:filter-alt-sharp"/>
     </button>
