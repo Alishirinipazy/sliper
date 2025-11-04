@@ -12,7 +12,10 @@
     url(../fonts/Vazir.ttf) format("truetype");
     /* Safari, Android, iOS */
 }
-
+@font-face {
+    font-family: "Pacifico";
+    src: url(../fonts/Pacifico-Regular.ttf);
+}
 * {
     font-family: "Vazir";
     direction: rtl;
