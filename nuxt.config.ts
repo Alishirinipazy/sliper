@@ -3,13 +3,16 @@ export default defineNuxtConfig({
     devtools: {enabled: true},
     runtimeConfig: {
         public: {
-            apiBase: "https://api.sliper.ir/api"
+            apiBase: "http://localhost:8000/api"
         }
     },
     colorMode: {
         preference: 'light'
     },
-    modules: ["@nuxt/ui", '@nuxthub/core', '@formkit/nuxt', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', 'nuxt-swiper', 'nuxt-swiper'],
+    modules: ["@nuxt/ui",
+        '@nuxthub/core',
+        '@formkit/nuxt'
+        , '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', 'nuxt-swiper', 'nuxt-swiper'],
     compatibilityDate: "2025-02-12",
     formkit: {
         // Experimental support for auto loading (see note):

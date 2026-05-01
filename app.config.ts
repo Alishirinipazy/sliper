@@ -1,13 +1,13 @@
 export default defineAppConfig({
     ui: {
+
+        primary: 'yellow',
         notifications: {
             // Show toasts at the top right of the screen
             position: 'bottom-0',
             background: 'bg-mainColor dark:bg-mainColor',
             ring: 'ring-1 ring-gray-800 dark:ring-gray-800',
         },
-        primary: 'lime',
-        gray: 'neutral',
         card: {
             background: 'bg-white dark:bg-gray-900',
             divide: 'divide-y divide-gray-200 dark:divide-gray-800',
@@ -27,6 +27,11 @@ export default defineAppConfig({
                 active: 'bg-mainColor dark:bg-mainColor ',
                 inactive: 'bg-gray-100 dark:bg-gray-100'
             },
+        },
+        theme: {
+            colors: {
+                primary: 'mainColor'
+            }
         },
         accordion: {}
     }

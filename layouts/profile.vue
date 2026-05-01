@@ -3,9 +3,9 @@ const {authUser} = useAuth()
 const route = useRoute()
 const toast = useToast();
 
-async function logout(){
-  await useFetch("/api/auth/logout",{
-    method:'POST'
+async function logout() {
+  await useFetch("/api/auth/logout", {
+    method: 'POST'
   })
   authUser.value = null;
   toast.remove("ناززییی... خروج با موفقیت انجام شد")
@@ -13,9 +13,8 @@ async function logout(){
 }
 </script>
 <template>
-  <section class="lg:grid grid-cols-12">
+  <section class="lg:grid grid-cols-12 gap-3">
     <aside class="profile-aside-header">
-
 
       <ul class="list">
         <li class="list-group-item lg:hidden">
@@ -54,12 +53,8 @@ async function logout(){
         </li>
       </ul>
     </aside>
-    <div class="col-span-9">
-      <div class="vh-70">
-        <div class="row g-4">
-          <slot/>
-        </div>
-      </div>
+    <div class="col-span-10 lg:pl-2 my-2 p-2">
+      <slot/>
     </div>
   </section>
 </template>

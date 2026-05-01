@@ -4,7 +4,6 @@ const props = defineProps(['items', 'h', 'loading'])
 const slides = ref(Array.from({length: 10}))
 const swiper = useSwiper(containerRef, {
   effect: 'fade',
-
   loop: true,
   autoplay: {
     delay: 3000,
@@ -29,7 +28,7 @@ const swiper = useSwiper(containerRef, {
     <USkeleton class="h-[90vh]" :ui="{background:'bg-mainColor'}"/>
   </div>
   <div v-else class="relative mx-2 lg:m-0">
-    <template v-if="Array.isArray(props.items)">
+    <template v-if="Array.isArray(props?.items)">
       <ClientOnly>
         <swiper-container ref="containerRef" :init="false">
           <swiper-slide
@@ -38,11 +37,11 @@ const swiper = useSwiper(containerRef, {
           >
             <div class="slider-body justify-center "
                  :class="h"
-                 :style="{ backgroundImage: 'url(https://api.sliper.ir/' + item.image + ')'}">
+                 :style="{ backgroundImage: 'url( http://127.0.0.1:8000/storage/' + item.file + ')'}">
               <h4 class="slider-title">{{ item.title }}</h4>
 
 
-              <nuxt-link :to="item.link">
+              <nuxt-link :to="item?.link">
                 <UButton class="rounded-full my-2" label="همین الان بخرش" color="yellow"/>
               </nuxt-link>
             </div>
@@ -51,14 +50,14 @@ const swiper = useSwiper(containerRef, {
       </ClientOnly>
     </template>
     <div v-else class="slider-body justify-end " :class="h"
-         style="direction: rtl" :style="{ backgroundImage: 'url(' + items.image + ')'}">
-      <h4 class="slider-title ">{{ items.title }}</h4>
+         style="direction: rtl" :style="{ backgroundImage: 'url(' + items?.image + ')'}">
+      <h4 class="slider-title ">{{ items?.title }}</h4>
 
-      <nuxt-link v-if="items.link" :to="items.link">
+      <nuxt-link v-if="items?.link" :to="items?.link">
         <UButton class="rounded-full my-2" label="همین الان بخرش" color="yellow"/>
       </nuxt-link>
     </div>
-    <div class="absolute hidden lg:block bottom-0 z-10 w-full rounded-t-full bg-white dark:bg-darkColor h-5">
+    <div class="absolute hidden lg:block  bottom-0 z-10 w-full rounded-t-full bg-slate-200   00 h-5">
 
     </div>
   </div>

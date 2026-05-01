@@ -63,8 +63,10 @@ const links = [{
   label: product?.value?.data?.name,
 
 }]
+
 </script>
 <template>
+
   <layouts-header :fixed="true"/>
   <u-container>
     <br>

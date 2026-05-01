@@ -58,13 +58,12 @@ const bannerItemData = ref([{
     link: 'https://www.nouraco.ir/',
     class: 'col-bg-temp'
   }, {
-    image: 'https://www.nouraco.ir/wp-content/uploads/2025/02/%D8%A8%D9%86%D8%B1_%D9%85%D9%84%DB%8C%DA%A9%D8%A7%D8%B3%D8%A8%D8%B2_%D9%85%D8%B2%D9%88%D9%86-%D9%86%D9%88%D8%B1%D8%A7_%D8%AF%D8%B3%DA%A9%D8%AA%D8%A7%D9%BE-scaled.webp',
+    image: 'https://gapgpt.app/media/server_files/42c7ef01-fc2e-4ae0-874d-4144aef244dc.webp',
     dis: 'دمپایی های ناز دخترونه',
     link: '/product?search=women',
     class: 'col-bg-temp'
   }])
-const {data: slide, pending, pendingMenu, refresh} = await useFetch(() => `${apiBase}/slides`, {
-
+const {data: slide, pending, pendingMenu, refresh} = await useFetch(() => `${apiBase}/sliders`, {
 });
 
 useHead({
@@ -73,7 +72,7 @@ useHead({
 </script>
 <template>
   <LayoutsHeader/>
-  <GlobalSlider :loading="pending" :items="slide" h="lg:h-[90vh] h-[40vh] "/>
+  <GlobalSlider :loading="pendingMenu" :items="bannerItemData[4]" h="lg:h-[90vh] h-[40vh] "/>
   <u-container>
   <HomeTab/>
     <br>

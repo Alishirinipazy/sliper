@@ -4,13 +4,9 @@
 
 @font-face {
     font-family: "Vazir";
-    src: url(../fonts/Vazir.eot);
-    /* IE9 Compat Modes */
-    src: url(../fonts/Vazir.eot) format("embedded-opentype"),
-    url(../fonts/Vazir.woff2) format("woff2"),
-    url(../fonts/Vazir.woff) format("woff"),
-    url(../fonts/Vazir.ttf) format("truetype");
-    /* Safari, Android, iOS */
+    src: url('../fonts/vazirmatn/Vazirmatn[wght].woff2') format('woff2');
+    font-display: swap;
+
 }
 @font-face {
     font-family: "Pacifico";
