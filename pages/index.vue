@@ -72,7 +72,7 @@ useHead({
 </script>
 <template>
   <LayoutsHeader/>
-  <GlobalSlider :loading="pendingMenu" :items="bannerItemData[4]" h="lg:h-[90vh] h-[40vh] "/>
+  <GlobalSlider :loading="pendingMenu" :items="slide" h="lg:h-[90vh] h-[40vh] "/>
   <u-container>
   <HomeTab/>
     <br>

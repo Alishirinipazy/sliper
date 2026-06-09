@@ -13,6 +13,16 @@ const items = [{
   defaultOpen: true,
   slot: 'categoury'
 }, {
+  label: 'سایز',
+  icon: 'i-categoury-information-circle',
+  defaultOpen: true,
+  slot: 'size'
+}, {
+  label: 'رنگ',
+  icon: 'i-categoury-information-circle',
+  defaultOpen: true,
+  slot: 'color'
+},{
   label: 'مرتب سازی',
   icon: 'i-sort',
   defaultOpen: false,
@@ -81,7 +91,7 @@ function handleFilter(filter) {
   }}">
       <template #categoury>
         <ul class="m-0  my-1 ">
-          <template v-if="!pendingCategories" v-for="(value,index) in categories?.data">
+          <template v-if="!pendingCategories" v-for="(value,index) in categories?.data?.categories">
             <li
                 class="px-4 py-1 rounded-2xl mx-1  cursor-pointer"
                 :class="route?.query?.category== value?.id ?'text-mainColor':'text-secColor'"
@@ -131,7 +141,21 @@ function handleFilter(filter) {
 
         </form>
       </template>
-
+      <template #size>
+        <ul class="m-0  my-1 ">
+          <template v-if="!pendingCategories" v-for="(value,index) in categories?.data?.sizes">
+            <li
+                class="px-4 py-1 rounded-2xl mx-1  cursor-pointer"
+                :class="route?.query?.size== value ?'text-mainColor':'text-secColor'"
+                @click="router.push({query:{size:value}})">
+              <UCheckbox :model-value="route?.query?.size=== value" :label="value" />
+            </li>
+          </template>
+          <li v-else class=" rounded-2xl mx-1  cursor-pointer">
+            <USkeleton class="h-4 w-[400px]"/>
+          </li>
+        </ul>
+      </template>
     </UAccordion>
 
 

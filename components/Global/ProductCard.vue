@@ -32,7 +32,7 @@ onMounted(() => {
         />
       </nuxt-link>
     </div>
-    <UCarousel class="py-1" ref="carouselRef"
+    <UCarousel class="py-1" ref="carouselRef" dir="rtl"
                v-slot="{ item }" :items="props.dataProduct.product"
                :ui="{ item: 'basis-full basis-1/2 md:basis-1/2 lg:basis-1/4' }" arrows>
       <ProductIitem :product="item"/>

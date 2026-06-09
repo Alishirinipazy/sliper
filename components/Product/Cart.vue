@@ -109,7 +109,7 @@ const copun = reactive({
 
         </ul>
         <div v-else class="flex-col flex justify-center items-center">
-          <img src="https://www.digikala.com/statics/img/svg/empty-cart.svg" alt="">
+          <img src="/images/cart-svgrepo-com.png" alt="">
           <p> سبد خریدت خالیه عزیزم</p>
         </div>
       </div>

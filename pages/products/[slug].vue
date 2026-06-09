@@ -123,7 +123,7 @@ const links = [{
         <ul class="list-disc gap-1 list-outside px-4 my-3 ">
           <li class="my-1">دسته بندی : <span
               class="text-amber-500"> {{
-              categories?.data?.find(item => item?.id === product?.data?.category_id)?.name
+
             }} </span>
           </li>
           <li class="my-1">نوع محصول :

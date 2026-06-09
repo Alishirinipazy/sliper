@@ -71,23 +71,33 @@ useHead({
           <ProductFilter :menu="menu" />
         </UCard>
       </USlideover>
-      <div class="grid lg:grid-cols-12 gap-4 ">
-        <div class="hidden lg:block lg:col-span-3  my-2">
+      <div class="grid lg:grid-cols-12 gap-4 items-start">
+        <!-- بخش فیلتر -->
+        <div class="hidden lg:block lg:col-span-3 my-2">
           <ProductFilter :menu="menu" />
         </div>
-        <div v-if="menu?.data?.products?.length"
-          class="grid col-span-9  grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-          <template v-if="!pendingMenu" v-for="(item, index) in menu?.data?.products">
 
-            <ProductIitem :product="computed(() => item)" />
+        <!-- بخش محصولات -->
+        <div
+            v-if="menu?.data?.products?.length"
+            class="grid col-span-12 lg:col-span-9 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2"
+        >
+
+          <!-- حالت نمایش محصولات -->
+          <template v-if="!pendingMenu">
+            <ProductIitem
+                v-for="item in menu.data.products"
+                :key="item.id"
+                :product="item"
+            />
           </template>
-          <template v-else v-for="(item, index) in 8">
-            <GlobalLoaderMenu />
+
+          <!-- حالت لودینگ -->
+          <template v-else>
+            <GlobalLoaderMenu v-for="n in 8" :key="n" />
           </template>
         </div>
-        <div v-else class="flex justify-center items-center col-span-9">
-          نااازییی... محصولی که میخوایی رو پیداا نکردیم!..
-        </div>
+        
       </div>
       <GlobalPagination :pages="menu?.data?.meta?.links" />
     </UContainer>
