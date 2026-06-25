@@ -131,7 +131,7 @@ const links = [
 
               </div>
             </div>
-          </li>
+          </li>npm install -D wrangler
 
           <!-- انتخاب سایز -->
           <li class="my-3">
