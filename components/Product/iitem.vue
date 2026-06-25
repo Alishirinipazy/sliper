@@ -11,13 +11,14 @@ const sizeRange = computed(() => {
 
   return firstSize === lastSize ? `سایز ${firstSize}` : `از سایز ${firstSize} تا ${lastSize}`;
 });
-
 </script>
 <template>
+
   <!-- کانتینر اصلی کارت با حاشیه سفید و گوشه‌های گرد -->
 
   <div
-      class="relative max-w-[400px]   rounded-[2.5rem] border-[5px] overflow-hidden shadow-lg shadow-gray-400 bg-gradient-to-b from-[#f9e6e6] to-[rgba(۳۴,۴۰,۴۹,0.49)] text-white font-sans"
+      class="relative max-w-[400px]   rounded-[2.5rem] border-[5px] overflow-hidden shadow-lg shadow-gray-400 bg-gradient-to-b from-[#f9e6e6] to-[rgba(۳۴,۴۰,۴cls
+      ۹,0.49)] text-white font-sans"
       :class="product?.is_sale?'border-cosColor':'border-white'">
     <!-- آیکون قلب (پس‌زمینه شیشه‌ای) -->
     <button
@@ -58,11 +59,10 @@ const sizeRange = computed(() => {
 
 
     </div>
-    <button
-        class=" bg-white text-gray-900 font-bold rounded-tr-full hover:bg-gray-100 transition shadow-sm px-8 absolute -left-7 text-right bottom-0"
+    <UButton disabled class=" bg-white text-gray-900 font-bold rounded-tr-full hover:bg-gray-100 transition shadow-sm px-8 absolute -left-4 text-right bottom-0"
         align="left">
-      <UIcon name="iconamoon:shopping-card-add-bold"/>
-    </button>
+      <UIcon name="iconamoon:shopping-card-add-bold" class="text-xl"/>
+    </UButton>
 
     <!-- تگ تخفیف (اختیاری - اگه خواستی نگهش داری) -->
     <div v-if="product?.is_sale"
