@@ -1,8 +1,8 @@
 export default defineNuxtConfig({
-    devtools: {enabled: true},
+    devtools: {enabled: false},
     runtimeConfig: {
         public: {
-            apiBase: "http://localhost:8000/api"
+            apiBase: "http://api.slipperpaz,ir/api"
         }
     },
     colorMode: {

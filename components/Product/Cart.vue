@@ -1,177 +1,170 @@
 <script setup lang="ts">
-import {useModalStore} from "~/stores/cart";
+import { useModalStore } from "~/stores/cart"
 
-const {authUser} = useAuth()
+const { authUser } = useAuth()
 const toast = useToast()
 const store = useModalStore()
+const { public: { apiBase } } = useRuntimeConfig()
+
+const allCard    = computed(() => store?.allItem)
+const totalItems = computed(() => allCard.value?.reduce((s, i) => s + i.qty, 0) ?? 0)
+
+// روش ارسال
+const { data: shippingMethods } = await useFetch(`${apiBase}/shipping-methods`)
+const selectedShipping = ref(null)
+watch(shippingMethods, (v) => {
+    if (v?.data?.length && !selectedShipping.value) selectedShipping.value = v.data[0]
+}, { immediate: true })
+
+const shippingPrice  = computed(() => selectedShipping.value?.price ?? 0)
+const subTotal       = computed(() => store.totalAmount)
+const couponDiscount = computed(() => Math.round((subTotal.value * coupon.percent) / 100))
+const finalTotal     = computed(() => subTotal.value - couponDiscount.value + shippingPrice.value)
+
+const coupon = reactive({ code: '', percent: 0 })
 const addressId = ref(null)
-const allCard = computed(() => store?.allItem)
 
-function removeFromCard(id) {
-  store.remove(id.id)
-  toast.add({title: `${id.name} با موفقیت پاک شد`})
-
+function removeFromCart(item) {
+    store.remove(item._key)
+    toast.add({ title: `${item.name} حذف شد`, color: 'red', timeout: 2000 })
 }
-
-
-const totalAmount = computed(() => store.totalAmount)
-const copun = reactive({
-  code: '',
-  percent: 0
-})
 </script>
 
 <template>
   <ClientOnly>
-    <UCard
-        class="flex flex-col flex-1"
-        :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }"
-    >
+    <UCard class="flex flex-col flex-1 h-full"
+           :ui="{ body: { base: 'flex-1 overflow-y-auto' }, ring: '', divide: 'divide-y divide-gray-100' }">
+
+      <!-- هدر -->
       <template #header>
         <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-            سبد خرید
-            <p v-if="store?.card?.length" class="text-sm font-light text-mainColor">{{ store?.card?.length }} مرسوله</p>
-
-          </h3>
-          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
-                   @click="store?.changeStatusModal()"/>
+          <div>
+            <h3 class="font-bold text-base text-secColor">سبد خرید</h3>
+            <p v-if="totalItems" class="text-xs text-mainColor">{{ totalItems }} محصول</p>
+          </div>
+          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"
+                   @click="store.changeStatusModal()"/>
         </div>
       </template>
 
+      <!-- لیست محصولات -->
+      <div class="flex flex-col h-full">
+        <ul v-if="allCard?.length" class="divide-y divide-gray-100 overflow-y-auto max-h-[40vh]">
+          <li v-for="item in allCard" :key="item._key"
+              class="flex gap-3 py-3 px-1 hover:bg-gray-50 transition">
 
-      <div class="flex justify-center m-3 text-sm">
+            <!-- تصویر -->
+            <img :src="item.selectedColor?.image || item.primary_image || '/images/preloader.png'"
+                 class="w-16 h-16 rounded-xl object-cover flex-shrink-0 border border-gray-100"/>
 
-        <ul v-if="store?.card?.length" class="h-[18rem] w-screen overflow-y-scroll overscroll-none snap-none">
+            <!-- اطلاعات -->
+            <div class="flex-1 min-w-0">
+              <p class="font-bold text-sm text-secColor truncate">{{ item.name }}</p>
 
-          <li class="bg-secColor/20 fade-in-iamge flex justify-between rounded my-1 w-11/12"
-              v-for="item in store?.allItem"
-              :key="item.id">
-
-
-            <img src="/images/preloader.png" width="120" height="120"
-                 class="rounded-r" v-img="item.primary_image" :alt="item.name"/>
-            <div class="px-1 py-1 flex flex-col justify-between">
-              <h5 class="font-extrabold ">{{ item.name }}
-              </h5>
-              <div class="flex">
-                <p class="rounded-2xl text-center  w-5 h-5 text-amber-50 bg-gray-500 ">
-                  10
-                </p>
-                <p class="w-5 mx-1 h-5 rounded-full bg-red-500 "></p>
+              <!-- رنگ و سایز -->
+              <div class="flex items-center gap-2 mt-1">
+                <span v-if="item.selectedColor"
+                      class="w-4 h-4 rounded-full border border-gray-300 flex-shrink-0"
+                      :style="{ background: item.selectedColor.color_code }"
+                      :title="item.selectedColor.name">
+                </span>
+                <span v-if="item.selectedColor" class="text-xs text-gray-500">{{ item.selectedColor.name }}</span>
+                <span v-if="item.selectedSize"
+                      class="text-xs bg-secColor text-mainColor px-2 py-0.5 rounded-full font-bold">
+                  {{ item.selectedSize.size }}
+                </span>
               </div>
-              <span v-if="item.is_sale">
-                                                            {{ numberFormat(item.sale_price) }}
-                                                        </span>
-              <span v-else>
-                                                            {{ numberFormat(item.price) }}
-                                                            تومان
-                                                        </span>
-              <div class="text-red-600" v-if="item.is_sale">
-                {{ salePercent(item.price, item.sale_price) }} %
+
+              <!-- تعداد + قیمت -->
+              <div class="flex items-center justify-between mt-2">
+                <div class="flex items-center gap-1 bg-gray-100 rounded-full px-1">
+                  <button @click="item.qty > 1 && store.dicrement(item._key)"
+                          class="w-6 h-6 rounded-full hover:bg-mainColor hover:text-white text-lg font-bold flex items-center justify-center transition">−</button>
+                  <span class="w-6 text-center text-sm font-bold">{{ item.qty }}</span>
+                  <button @click="store.increment(item._key)"
+                          class="w-6 h-6 rounded-full hover:bg-mainColor hover:text-white text-lg font-bold flex items-center justify-center transition">+</button>
+                </div>
+                <span class="text-sm font-bold text-secColor">
+                  {{ numberFormat(item.selectedPrice * item.qty) }} تومان
+                </span>
               </div>
             </div>
-            <div class=" flex flex-col-reverse justify-around items-end w-100">
-              <div>
 
-
-                <div class="flex border-gray-400 rounded-full justify-center text-xl">
-                                                        <span class=" cursor-pointer"
-                                                              @click="() => item.quantity > item.qty && store?.increment(item.id)">
-                                                            +
-                                                        </span>
-                  <div class="bg-mainColor text-secColor p-1 mx-1 text-sm rounded-full">{{ item.qty }}</div>
-                  <span class="minus-btn cursor-pointer"
-                        @click="() => item.qty > 1 && store?.dicrement(item.id)">
--
-                                                        </span>
-                </div>
-
-                <div class="px-3">
-                      <span v-if="item.is_sale" class="bg-cosColor text-white rounded">
-                                                        {{ numberFormat(item.sale_price * item.qty) }} تومان
-
-                                                    </span>
-                  <span v-else>
-                                                        {{ numberFormat(item.price * item.qty) }} تومان
-
-                                                    </span>
-                </div>
-              </div>
-              <div class=" ">
-
-                <UButton color="gray" size="xs" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
-                         @click="removeFromCard(item)"/>
-              </div>
-            </div>
+            <!-- حذف -->
+            <button @click="removeFromCart(item)"
+                    class="text-gray-300 hover:text-cosColor self-start mt-1 transition">
+              <UIcon name="i-heroicons-x-mark-20-solid" class="w-4 h-4"/>
+            </button>
           </li>
-
-
         </ul>
-        <div v-else class="flex-col flex justify-center items-center">
-          <img src="/images/cart-svgrepo-com.png" alt="">
-          <p> سبد خریدت خالیه عزیزم</p>
+
+        <!-- خالی بودن سبد -->
+        <div v-else class="flex flex-col items-center justify-center py-10 gap-3">
+          <img src="/images/cart-svgrepo-com.png" class="w-24 opacity-40" alt=""/>
+          <p class="text-gray-400 text-sm">سبد خریدت خالیه 🥲</p>
         </div>
       </div>
 
+      <!-- فوتر -->
+      <template #footer v-if="allCard?.length">
 
-      <template #footer>
-
-        <nuxt-link v-if="!authUser && store?.card?.length" to="/auth/login">
-          <u-button color="yellow" block>
-            بریم مرحله بعدی
-          </u-button>
-        </nuxt-link>
-
-        <div class="grid grid-cols-12" v-else v-if="store?.card?.length">
-          <div class="col-span-7 mt-2 flex">
-            <h5 class=" font-extrabold flex-none py-2">مجموع سبد خرید</h5>
-          </div>
-
-
-          <div class=" col-span-8  ">
-            <CartCoupon :coupon="copun"/>
-            <ul class="bg-secColor rounded-2xl text-white price_list">
-              <li class="">
-                <div>مجموع قیمت :</div>
+        <!-- روش ارسال -->
+        <div class="py-2">
+          <p class="text-xs font-bold text-secColor mb-2">روش ارسال:</p>
+          <div class="space-y-1">
+            <label v-for="method in shippingMethods?.data" :key="method.id"
+                   class="flex items-center justify-between p-2 rounded-xl border cursor-pointer transition"
+                   :class="selectedShipping?.id === method.id ? 'border-mainColor bg-mainColor/10' : 'border-gray-200 hover:border-gray-300'">
+              <div class="flex items-center gap-2">
+                <input type="radio" :value="method.id" :checked="selectedShipping?.id === method.id"
+                       @change="selectedShipping = method" class="accent-yellow-400"/>
                 <div>
-                  {{ numberFormat(totalAmount) }}تومان
+                  <p class="text-xs font-bold">{{ method.name }}</p>
+                  <p class="text-xs text-gray-400">{{ method.delivery_days }} روز کاری</p>
                 </div>
-              </li>
-              <UDivider size="sm"/>
-              <li class="">
-                <div>تخفیف :
-                  <span class="bg-cosColor  p-1 ">{{ copun.percent }}%</span>
-
-                </div>
-                <div class="text-danger">
-                  {{ numberFormat((totalAmount * copun.percent) / 100) }}تومان
-                </div>
-              </li>
-              <UDivider size="sm"/>
-              <li class="">
-                <div>قیمت پرداختی :</div>
-                <div>
-                  {{ numberFormat(totalAmount - ((totalAmount * copun.percent) / 100)) }}تومان
-                </div>
-              </li>
-            </ul>
+              </div>
+              <span class="text-xs font-bold" :class="method.price === 0 ? 'text-green-500' : 'text-secColor'">
+                {{ method.price === 0 ? 'رایگان' : numberFormat(method.price) + ' ت' }}
+              </span>
+            </label>
           </div>
+        </div>
 
-          <div class="col-span-4 flex flex-col justify-end text-center px-1">
-            <CartAddress @set-address-id="(id)=>addressId = id"/>
-            <div class="grow h-full">
-              <CartPayment :coupon="copun" :addressId="addressId" :cart="allCard"/>
-            </div>
-          </div>
+        <!-- کوپن -->
+        <CartCoupon :coupon="coupon"/>
+
+        <!-- محاسبه قیمت -->
+        <ul class="bg-secColor rounded-2xl text-white text-sm divide-y divide-white/10 overflow-hidden my-2">
+          <li class="flex justify-between px-3 py-2">
+            <span>جمع کالاها</span>
+            <span>{{ numberFormat(subTotal) }} تومان</span>
+          </li>
+          <li v-if="coupon.percent" class="flex justify-between px-3 py-2 text-cosColor">
+            <span>تخفیف {{ coupon.percent }}٪</span>
+            <span>- {{ numberFormat(couponDiscount) }} تومان</span>
+          </li>
+          <li class="flex justify-between px-3 py-2">
+            <span>هزینه ارسال</span>
+            <span :class="shippingPrice === 0 ? 'text-green-400' : ''">
+              {{ shippingPrice === 0 ? 'رایگان' : numberFormat(shippingPrice) + ' تومان' }}
+            </span>
+          </li>
+          <li class="flex justify-between px-3 py-2 font-bold text-mainColor">
+            <span>مبلغ نهایی</span>
+            <span>{{ numberFormat(finalTotal) }} تومان</span>
+          </li>
+        </ul>
+
+        <!-- آدرس و پرداخت -->
+        <div class="grid grid-cols-2 gap-2 mt-2">
+          <CartAddress @set-address-id="(id) => addressId = id"/>
+          <CartPayment
+              :coupon="coupon"
+              :addressId="addressId"
+              :cart="allCard"
+              :shippingMethodId="selectedShipping?.id"/>
         </div>
       </template>
     </UCard>
   </ClientOnly>
 </template>
-
-<style scoped>
-.price_list li {
-  @apply flex p-1 justify-between
-}
-</style>

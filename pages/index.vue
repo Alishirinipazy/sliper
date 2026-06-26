@@ -1,85 +1,88 @@
 <script setup lang="ts">
-const {public: {apiBase}} = useRuntimeConfig();
-import type { TabsItem } from '@nuxt/ui'
+const { public: { apiBase } } = useRuntimeConfig()
 
-const items = [{
-  slot: 'account',
-  label: 'Account'
-}, {
-  slot: 'password',
-  label: 'Password'
-},{
-  slot: 'ali',
-  label: 'Ali'
-}]
-const dataHotProduct = ref({
-  title: 'دمپایی های داغ تابستونی',
-  link: '/product?hots',
-  product: [
-    'https://picsum.photos/600/600?random=1',
-    'https://picsum.photos/600/600?random=2',
-    'https://picsum.photos/600/600?random=3',
-    'https://picsum.photos/600/600?random=4',
-    'https://picsum.photos/600/600?random=5',
-    'https://picsum.photos/600/600?random=6'
-  ]
-})
-const dataHotAverg = ref({
-  title: 'دمپایی های زنانه با تخفیفات بالا',
-  link: '/product?hots',
-  product: [
-    'https://picsum.photos/600/600?random=7',
-    'https://picsum.photos/600/600?random=8',
-    'https://picsum.photos/600/600?random=9',
-    'https://picsum.photos/600/600?random=10',
-    'https://picsum.photos/600/600?random=5',
-    'https://picsum.photos/600/600?random=6'
-  ]
-})
-const bannerItemData = ref([{
-  image: 'https://www.nouraco.ir/wp-content/uploads/2024/11/%D8%A8%D9%86%D8%B1_%D9%85%D8%B2%D9%88%D9%86-%D9%86%D9%88%D8%B1%D8%A7_%DA%A9%D8%AA-%D9%85%DA%A9%D8%AA%DB%8C%D9%86_%D9%84%D8%A8%D8%A7%D8%B3-%D8%B2%D9%85%D8%B3%D8%AA%D8%A7%D9%86%DB%8C_%D8%AF%D8%B3%DA%A9%D8%AA%D8%A7%D9%BE-scaled.webp',
-  dis: 'کفش های زنانه',
-  link: '/product?title:women',
-  class: 'row-bg-temp'
-}, {
-  image: 'https://www.nouraco.ir/wp-content/uploads/2024/11/%D8%A8%D9%86%D8%B1_%D9%85%D8%B2%D9%88%D9%86-%D9%86%D9%88%D8%B1%D8%A7_%DA%A9%D8%AA-%D9%85%DA%A9%D8%AA%DB%8C%D9%86_%D9%84%D8%A8%D8%A7%D8%B3-%D8%B2%D9%85%D8%B3%D8%AA%D8%A7%D9%86%DB%8C_%D8%AF%D8%B3%DA%A9%D8%AA%D8%A7%D9%BE-scaled.webp',
-  dis: 'کیف های مدرن',
-  link: '/product?title:buy',
-  class: 'row-bg-temp'
-},
-  {
-    image: 'https://www.nouraco.ir/wp-content/uploads/2024/11/%D8%A8%D9%86%D8%B1_%D9%85%D8%B2%D9%88%D9%86-%D9%86%D9%88%D8%B1%D8%A7_%DA%A9%D8%AA-%D9%85%DA%A9%D8%AA%DB%8C%D9%86_%D9%84%D8%A8%D8%A7%D8%B3-%D8%B2%D9%85%D8%B3%D8%AA%D8%A7%D9%86%DB%8C_%D8%AF%D8%B3%DA%A9%D8%AA%D8%A7%D9%BE-scaled.webp',
-    dis: 'مانتو های بهاره درسص',
-    link: 'https://www.nouraco.ir/',
-    class: 'col-bg-temp'
-  }, {
-    image: 'https://www.nouraco.ir/wp-content/uploads/2024/11/%D8%A8%D9%86%D8%B1_%D9%85%D8%B2%D9%88%D9%86-%D9%86%D9%88%D8%B1%D8%A7_%DA%A9%D8%AA-%D9%85%DA%A9%D8%AA%DB%8C%D9%86_%D9%84%D8%A8%D8%A7%D8%B3-%D8%B2%D9%85%D8%B3%D8%AA%D8%A7%D9%86%DB%8C_%D8%AF%D8%B3%DA%A9%D8%AA%D8%A7%D9%BE-scaled.webp',
-    dis: 'کیف صندل ست مهراناز',
-    link: 'https://www.nouraco.ir/',
-    class: 'col-bg-temp'
-  }, {
-    image: 'https://gapgpt.app/media/server_files/42c7ef01-fc2e-4ae0-874d-4144aef244dc.webp',
-    dis: 'دمپایی های ناز دخترونه',
-    link: '/product?search=women',
-    class: 'col-bg-temp'
-  }])
-const {data: slide, pending, pendingMenu, refresh} = await useFetch(() => `${apiBase}/sliders`, {
-});
+const { data: slide }    = await useFetch(`${apiBase}/sliders`)
+const { data: stories }  = await useFetch(`${apiBase}/stories`)
+const { data: tabs }     = await useFetch(`${apiBase}/products/products-tabs`)
 
-useHead({
-  title: 'خوونه'
-})
+const bannerItemData = ref([
+    {
+        image: '/images/img_1.png',
+        dis: 'دمپایی‌های زنانه', link: '/products?category=women', class: 'row-bg-temp'
+    },
+    {
+        image: '/images/img_2.png',
+        dis: 'دمپایی‌های مردانه', link: '/products?category=men', class: 'row-bg-temp'
+    },
+    {
+        image: '/images/img_3.png',
+        dis: 'مدل‌های بچگانه', link: '/products?category=kids', class: 'col-bg-temp'
+    },
+    {
+        image: '/images/img_4.png',
+        dis: 'پیشنهاد ویژه', link: '/products', class: 'col-bg-temp'
+    },
+    {
+        image: '/images/img_5.png',
+        dis: 'تازه‌واردها', link: '/products', class: 'col-bg-temp'
+    }
+])
+
+// viewer استوری
+const viewerOpen  = ref(false)
+const viewerIndex = ref(0)
+function openStory(i) { viewerIndex.value = i; viewerOpen.value = true }
+
+useHead({ title: 'خوونه | فروشگاه دمپایی' })
 </script>
+
 <template>
   <LayoutsHeader/>
-  <GlobalSlider :loading="pendingMenu" :items="slide" h="lg:h-[90vh] h-[40vh] "/>
+
+  <!-- اسلایدر اصلی -->
+  <GlobalSlider :items="slide" h="lg:h-[90vh] h-[40vh]"/>
+
+  <!-- استوری‌ها -->
+  <div v-if="stories?.data?.length" class="bg-white border-b shadow-sm">
+    <u-container>
+      <div class="flex gap-4 overflow-x-auto py-4" style="scrollbar-width:none">
+        <div v-for="(story, i) in stories.data" :key="story.id"
+             @click="openStory(i)"
+             class="flex flex-col items-center gap-1 cursor-pointer flex-shrink-0 group">
+          <!-- حلقه گرادیانت -->
+          <div class="p-[2px] rounded-full"
+               style="background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)">
+            <div class="w-14 h-14 rounded-full border-2 border-white overflow-hidden bg-gray-100">
+              <img v-if="story.type === 'image'" :src="story.file"
+                   class="w-full h-full object-cover group-hover:scale-110 transition"/>
+              <img v-else-if="story.thumbnail" :src="story.thumbnail"
+                   class="w-full h-full object-cover group-hover:scale-110 transition"/>
+              <div v-else class="w-full h-full bg-secColor flex items-center justify-center">
+                <UIcon name="material-symbols:play-arrow" class="text-mainColor w-6 h-6"/>
+              </div>
+            </div>
+          </div>
+          <span class="text-[10px] text-gray-600 truncate max-w-[56px] text-center">
+            {{ story.title || 'استوری' }}
+          </span>
+        </div>
+      </div>
+    </u-container>
+  </div>
+
   <u-container>
-  <HomeTab/>
+    <HomeTab/>
     <br>
     <HomeBanner :dataBanner="bannerItemData"/>
-    <GlobalProductCard :dataProduct="dataHotAverg"/>
   </u-container>
+
   <LayoutsFooter/>
+
+  <!-- viewer استوری -->
+  <ClientOnly>
+    <StoryViewer v-if="viewerOpen"
+                 :stories="stories?.data ?? []"
+                 :start-index="viewerIndex"
+                 @close="viewerOpen = false"/>
+  </ClientOnly>
 </template>
-
-
