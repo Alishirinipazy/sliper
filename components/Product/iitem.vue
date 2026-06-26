@@ -11,6 +11,7 @@ const sizeRange = computed(() => {
 
   return firstSize === lastSize ? `سایز ${firstSize}` : `از سایز ${firstSize} تا ${lastSize}`;
 });
+console.log(props.product)
 </script>
 <template>
 
