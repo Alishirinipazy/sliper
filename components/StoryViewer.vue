@@ -21,26 +21,28 @@
             </div>
 
             <!-- هدر -->
-            <div class="story-header d-flex align-items-center justify-content-between px-3 pt-2">
-                <div class="d-flex align-items-center gap-2">
-                    <div class="rounded-circle bg-white overflow-hidden"
-                        style="width:36px;height:36px;flex-shrink:0">
-                        <img v-if="current?.thumbnail || current?.type === 'image'"
-                            :src="current.thumbnail || current.file"
-                            style="width:100%;height:100%;object-fit:cover" />
-                        <div v-else class="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center">
-                            <i class="bi bi-play-fill text-white small"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="text-white fw-bold small">{{ current?.title || 'استوری' }}</div>
-                    </div>
+          <div class="story-header flex items-center justify-between  px-3 pt-2">
+            <div class="flex items-center gap-2">
+              <div class="rounded-circle bg-white overflow-hidden"
+                   style="width:36px;height:36px;flex-shrink:0">
+                <img v-if="current?.thumbnail || current?.type === 'image'"
+                     :src="current.thumbnail || current.file"
+                     style="width:100%;height:100%;object-fit:cover" />
+                <div v-else class="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center">
+                  <i class="bi bi-play-fill text-white small"></i>
                 </div>
-                <button class="btn btn-sm text-white" @click="$emit('close')" style="font-size:1.4rem;line-height:1">
-                    &times;
-                </button>
+              </div>
+              <div>
+                <div class="text-white fw-bold small">{{ current?.title || 'استوری' }}</div>
+              </div>
             </div>
+            <UButton  class="rounded-full text-white text-lg" @click="$emit('close')" icon="material-symbols:cancel-outline"  square
+                        :padded="false"
+                      color="yellow"
+                      variant="link">
 
+            </UButton>
+          </div>
             <!-- محتوا -->
             <div class="story-content" @click="handleContentClick">
 
@@ -275,16 +277,17 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 /* متن */
 .story-caption {
     position: absolute;
-    bottom: 90px;
+    bottom: 0px;
     left: 0;
     right: 0;
-    padding: 16px 20px 8px;
-    background: linear-gradient(transparent, rgba(0,0,0,0.55));
+    padding: 30px 20px 15px;
+    background: linear-gradient(transparent, #ffbe33);
     color: #fff;
     font-size: 15px;
     text-align: center;
     white-space: pre-line;
     z-index: 6;
+
 }
 
 /* دکمه لینک */

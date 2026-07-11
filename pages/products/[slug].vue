@@ -12,7 +12,7 @@ const setThumbsSwiper = (swiper) => { thumbsSwiper.value = swiper }
 
 const route = useRoute()
 const { public: { apiBase } } = useRuntimeConfig()
-const { data: productData } = await useFetch(`${apiBase}/products/${route.params.slug}`)
+const { data: productData, pending } = await useFetch(`${apiBase}/products/${route.params.slug}`)
 const { data: randomProducts } = useFetch(`${apiBase}/random-products?count=4`)
 const cart = useModalStore()
 const toast = useToast()
@@ -25,11 +25,12 @@ const selectedSize  = ref(null)
 const quantity      = ref(1)
 
 // وقتی رنگ عوض می‌شه، سایز ریست بشه
-watch(selectedColor, () => { selectedSize.value = null })
+watch(selectedColor, () => { selectedSize.value = null; quantity.value = 1 })
+watch(selectedSize, () => { quantity.value = 1 })
 
 // وقتی محصول لود شد اولین رنگ رو انتخاب کن
 watch(product, (p) => {
-    if (p?.colors?.length) selectedColor.value = p.colors[0]
+  if (p?.colors?.length) selectedColor.value = p.colors[0]
 }, { immediate: true })
 
 const availableSizes = computed(() => selectedColor.value?.sizes ?? [])
@@ -37,35 +38,35 @@ const currentPrice   = computed(() => selectedSize.value?.price ?? product.value
 
 // تصاویر: عکس رنگ انتخاب‌شده + تصاویر اضافی
 const displayImages = computed(() => {
-    const imgs = []
-    if (selectedColor.value?.image) imgs.push({ image: selectedColor.value.image })
-    if (product.value?.images?.length) imgs.push(...product.value.images)
-    return imgs.length ? imgs : [{ image: product.value?.primary_image }]
+  const imgs = []
+  if (selectedColor.value?.image) imgs.push({ image: selectedColor.value.image })
+  if (product.value?.images?.length) imgs.push(...product.value.images)
+  return imgs.length ? imgs : [{ image: product.value?.primary_image }]
 })
 
 function transformSlotProps(props) {
-    const r = {}
-    Object.entries(props).forEach(([k, v]) => { r[k] = v < 10 ? `0${v}` : String(v) })
-    return r
+  const r = {}
+  Object.entries(props).forEach(([k, v]) => { r[k] = v < 10 ? `0${v}` : String(v) })
+  return r
 }
 
 function addToCart() {
-    if (!selectedColor.value) { toast.add({ title: 'رنگ رو انتخاب کن', color: 'red' }); return }
-    if (!selectedSize.value)  { toast.add({ title: 'سایز رو انتخاب کن',  color: 'red' }); return }
-    if (selectedSize.value.quantity < 1) { toast.add({ title: 'این سایز موجود نیست', color: 'red' }); return }
+  if (!selectedColor.value) { toast.add({ title: 'رنگ رو انتخاب کن', color: 'red' }); return }
+  if (!selectedSize.value)  { toast.add({ title: 'سایز رو انتخاب کن',  color: 'red' }); return }
+  if (selectedSize.value.quantity < 1) { toast.add({ title: 'این سایز موجود نیست', color: 'red' }); return }
 
-    cart.addToCart(product.value, quantity.value, selectedColor.value, selectedSize.value)
-    toast.add({ title: `${product.value.name} به سبد خرید اضافه شد 🛒`, color: 'green' })
-    cart.changeStatusModal()
-    setTimeout(cart.changeStatusModal, 2500)
+  cart.addToCart(product.value, quantity.value, selectedColor.value, selectedSize.value)
+  toast.add({ title: `${product.value.name} به سبد خرید اضافه شد 🛒`, color: 'green' })
+  cart.changeStatusModal()
+  setTimeout(cart.changeStatusModal, 1500)
 }
 
 useHead({ title: route.params.slug })
 
 const links = [
-    { label: 'خوونه', to: '/' },
-    { label: 'محصولاتمون', to: '/products' },
-    { label: product.value?.name },
+  { label: 'خونه', to: '/' },
+  { label: 'محصولاتمون', to: '/products' },
+  { label: product.value?.name },
 ]
 </script>
 
@@ -73,135 +74,154 @@ const links = [
   <layouts-header :fixed="true"/>
   <u-container>
     <br>
-    <UBreadcrumb :links="links" :ui="{ active: 'text-mainColor', base: 'font-light' }"/>
+    <UBreadcrumb :links="links" dir="rtl" :ui="{ active: 'text-mainColor font-semibold', base: 'font-light text-gray-400' }"/>
 
-    <div class="grid grid-cols-12 gap-5 my-3">
+    <!-- اسکلت لودینگ -->
+    <div v-if="pending" class="grid grid-cols-12 gap-6 my-6 animate-pulse">
+      <div class="col-span-12 lg:col-span-5">
+        <div class="rounded-3xl bg-gray-100 aspect-square w-full"/>
+      </div>
+      <div class="col-span-12 lg:col-span-4 space-y-4">
+        <div class="h-8 bg-gray-100 rounded-lg w-3/4"/>
+        <div class="h-4 bg-gray-100 rounded-lg w-full"/>
+        <div class="h-4 bg-gray-100 rounded-lg w-5/6"/>
+      </div>
+      <div class="col-span-12 lg:col-span-3">
+        <div class="h-64 bg-gray-100 rounded-3xl w-full"/>
+      </div>
+    </div>
+
+    <div v-else class="grid grid-cols-12 gap-6 my-6">
 
       <!-- اسلایدر تصاویر -->
-      <div class="col-span-12 lg:col-span-4">
-        <div class="rounded my-3 bg-cosColor/35 flex flex-row-reverse items-center justify-between px-3 shadow-2xl">
-          <client-only>
-            <vue-countdown :time="24 * 60 * 60 * 1000" :transform="transformSlotProps"
-                           v-slot="{ hours, minutes, seconds }">
-              {{ seconds }} : {{ minutes }} : {{ hours }}
-              <icon name="material-symbols:timer"/>
-            </vue-countdown>
-          </client-only>
-          <img src="/images/special_title_box.png" class="w-5/12" alt=""/>
+      <div class="col-span-12 lg:col-span-5">
+        <div class="relative rounded-3xl overflow-hidden shadow-lg shadow-mainColor/5 ring-1 ring-black/5">
+          <Swiper :space-between="10" :thumbs="{ swiper: thumbsSwiper }"
+                  :modules="[Thumbs, Navigation]" navigation :loop="true" class="mySwiper2">
+            <SwiperSlide v-for="(img, i) in displayImages" :key="i">
+              <img :src="img.image||img.primary_image" class="w-full object-cover aspect-square"/>
+            </SwiperSlide>
+          </Swiper>
+
+          <span v-if="product?.discount_percent"
+                class="absolute top-4 right-4 z-10 bg-mainColor text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+            {{ product.discount_percent }}٪ تخفیف
+          </span>
         </div>
 
-        <Swiper :space-between="10" :thumbs="{ swiper: thumbsSwiper }"
-                :modules="[Thumbs, Navigation]" navigation :loop="true" class="mySwiper2">
+        <Swiper @swiper="setThumbsSwiper" :space-between="12" :slides-per-view="4"
+                :watch-slides-progress="true" :modules="[Thumbs]" class="mySwiper mt-3">
           <SwiperSlide v-for="(img, i) in displayImages" :key="i">
-            <img :src="img.image" class="rounded-xl w-full object-cover aspect-square"/>
-          </SwiperSlide>
-        </Swiper>
-
-        <Swiper @swiper="setThumbsSwiper" :space-between="10" :slides-per-view="4"
-                :watch-slides-progress="true" :modules="[Thumbs]" class="mySwiper mt-4">
-          <SwiperSlide v-for="(img, i) in displayImages" :key="i">
-            <img :src="img.image" class="rounded-md cursor-pointer opacity-70 hover:opacity-100 object-cover aspect-square"/>
+            <img :src="img.image||img.primary_image"
+                 class="rounded-xl cursor-pointer border-2 border-transparent opacity-60 hover:opacity-100 transition-all duration-200 object-cover aspect-square"/>
           </SwiperSlide>
         </Swiper>
       </div>
 
       <!-- جزئیات محصول -->
-      <div class="col-span-12 lg:col-span-5">
-        <h4 class="text-3xl text-mainColor py-2 font-extrabold">{{ product?.name }}</h4>
-        <p class="text-sm text-gray-600 leading-relaxed">{{ product?.description }}</p>
+      <div class="col-span-12 lg:col-span-4">
+        <p class="text-xs font-semibold text-mainColor/70 tracking-wide mb-1">{{ product?.category }}</p>
+        <h1 class="text-2xl md:text-3xl text-secColor py-1 font-extrabold leading-snug">{{ product?.name }}</h1>
 
-        <ul class="list-disc gap-1 list-outside px-4 my-4">
-          <li class="my-2">دسته‌بندی:
-            <span class="text-mainColor font-semibold">{{ product?.category }}</span>
-          </li>
 
-          <!-- انتخاب رنگ -->
-          <li class="my-3">
-            رنگ: <span class="text-mainColor font-semibold">{{ selectedColor?.name }}</span>
-            <div class="flex gap-3 mt-2 flex-wrap">
-              <button v-for="color in product?.colors" :key="color.id"
-                      @click="selectedColor = color"
-                      :title="color.name"
-                      class="relative w-9 h-9 rounded-full border-2 transition-all duration-200 hover:scale-110"
-                      :class="selectedColor?.id === color.id ? 'border-mainColor scale-110 shadow-lg' : 'border-gray-300'"
-                      :style="{ background: color.color_code }">
-                <span v-if="selectedColor?.id === color.id"
-                      class="absolute inset-0 flex items-center justify-center text-white text-xs font-bold drop-shadow">✓</span>
-              </button>
+        <div class="h-px bg-gray-100 my-5"/>
+
+        <!-- انتخاب رنگ -->
+        <div class="mb-6">
+          <p class="text-sm font-bold text-secColor mb-3">
+            رنگ <span class="text-mainColor font-normal">· {{ selectedColor?.name }}</span>
+          </p>
+          <div class="flex gap-3 flex-wrap">
+            <button v-for="color in product?.colors" :key="color.id"
+                    @click="selectedColor = color"
+                    :title="color.name"
+                    type="button"
+                    class="relative w-10 h-10 rounded-full border-2 transition-all duration-200 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-mainColor focus-visible:ring-offset-2"
+                    :class="selectedColor?.id === color.id ? 'border-mainColor scale-110 shadow-md shadow-mainColor/20' : 'border-gray-200'"
+                    :style="{ background: color.color_code }">
+              <span v-if="selectedColor?.id === color.id"
+                    class="absolute inset-0 flex items-center justify-center text-white text-xs font-bold drop-shadow">✓</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- انتخاب سایز -->
+        <div class="mb-6">
+          <p class="text-sm font-bold text-secColor mb-3">
+            سایز <span v-if="selectedSize" class="text-mainColor font-normal">· {{ selectedSize.size }}</span>
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <button v-for="size in availableSizes" :key="size.id"
+                    @click="selectedSize = size"
+                    :disabled="size.quantity < 1"
+                    type="button"
+                    class="min-w-[46px] h-11 px-3 rounded-2xl text-sm font-bold border-2 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-mainColor focus-visible:ring-offset-2"
+                    :class="[
+                      size.quantity < 1 ? 'opacity-40 cursor-not-allowed line-through border-gray-200 text-gray-400' :
+                      selectedSize?.id === size.id
+                        ? 'bg-mainColor text-white border-mainColor scale-105 shadow-md shadow-mainColor/25'
+                        : 'bg-white text-secColor border-gray-200 hover:border-mainColor hover:scale-105'
+                    ]">
+              {{ size.size }}
+            </button>
+          </div>
+          <p v-if="!selectedColor" class="text-xs text-red-400 mt-2">ابتدا رنگ رو انتخاب کن</p>
+        </div>
+
+        <!-- تعداد -->
+        <div>
+          <p class="text-sm font-bold text-secColor mb-3">تعداد</p>
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-1 bg-gray-50 rounded-2xl p-1 border border-gray-100">
+              <button @click="quantity > 1 && quantity--" type="button"
+                      class="w-9 h-9 rounded-xl bg-white shadow-sm hover:bg-mainColor hover:text-white font-bold transition-colors">−</button>
+              <span class="w-10 text-center font-bold text-secColor">{{ quantity }}</span>
+              <button @click="selectedSize && quantity < selectedSize.quantity && quantity++" type="button"
+                      class="w-9 h-9 rounded-xl bg-white shadow-sm hover:bg-mainColor hover:text-white font-bold transition-colors">+</button>
             </div>
-          </li>
-
-          <!-- انتخاب سایز -->
-          <li class="my-3">
-            سایز:
-            <span v-if="selectedSize" class="text-mainColor font-semibold">{{ selectedSize.size }}</span>
-            <div class="flex flex-wrap gap-2 mt-2">
-              <button v-for="size in availableSizes" :key="size.id"
-                      @click="selectedSize = size"
-                      :disabled="size.quantity < 1"
-                      class="min-w-[44px] h-11 px-2 rounded-xl text-sm font-bold border-2 transition-all duration-200"
-                      :class="[
-                        size.quantity < 1 ? 'opacity-40 cursor-not-allowed line-through border-gray-200 text-gray-400' :
-                        selectedSize?.id === size.id
-                          ? 'bg-secColor text-mainColor border-mainColor scale-105 shadow-md'
-                          : 'bg-white text-secColor border-gray-300 hover:border-mainColor hover:scale-105'
-                      ]">
-                {{ size.size }}
-                <div v-if="size.quantity < 1" class="text-xs font-normal">ناموجود</div>
-              </button>
-            </div>
-            <p v-if="!selectedColor" class="text-xs text-red-400 mt-1">ابتدا رنگ انتخاب کن</p>
-          </li>
-
-          <!-- تعداد -->
-          <li class="my-3">
-            تعداد:
-            <div class="flex items-center gap-3 mt-2">
-              <button @click="quantity > 1 && quantity--"
-                      class="w-8 h-8 rounded-full bg-gray-200 hover:bg-mainColor hover:text-white font-bold transition">−</button>
-              <span class="w-8 text-center font-bold text-lg">{{ quantity }}</span>
-              <button @click="selectedSize && quantity < selectedSize.quantity && quantity++"
-                      class="w-8 h-8 rounded-full bg-gray-200 hover:bg-mainColor hover:text-white font-bold transition">+</button>
-              <span v-if="selectedSize" class="text-xs text-gray-400">({{ selectedSize.quantity }} عدد موجود)</span>
-            </div>
-          </li>
-        </ul>
+            <span v-if="selectedSize" class="text-xs text-gray-400">{{ selectedSize.quantity }} عدد موجود</span>
+          </div>
+        </div>
       </div>
 
       <!-- قیمت و خرید -->
       <div class="price-details-product">
         <div class="hidden lg:block">
-          <p class="text-sm">گردآوری با عشق توسط:</p>
-          <div class="flex justify-center"><img src="/images/logo.png" class="w-[130px]" alt=""/></div>
-          <ul class="text-sm mt-10 space-y-2">
-            <li class="flex items-center gap-1"><Icon name="streamline-plump-color:return-3-flat"/> مرجوعی تا ۲ روز کاری</li>
-            <UDivider size="sm"/>
-            <li>🚚 ارسال سریع تا درب خونت</li>
-            <UDivider size="sm"/>
-            <li>✨ کادو پیج مجلسی</li>
-            <UDivider size="sm"/>
-            <li>✨ ضمانت رویان کالا تا ۱ سال</li>
+          <div class="flex justify-center mb-4">
+            <img src="/images/logo.png" class="w-[150px]" alt=""/>
+          </div>
+          <ul class="text-sm space-y-3 text-secColor/80">
+            <li class="flex items-center gap-2">
+              <Icon name="streamline-plump-color:return-3-flat" class="text-lg"/> مرجوعی تا 5 روز کاری
+            </li>
+            <li class="flex items-center gap-2">🚚 ارسال سریع تا درب خونت</li>
+            <li class="flex items-center gap-2">✨ کادو‌پیچ مجلسی</li>
+            <li class="flex items-center gap-2">🛡️ ضمانت اصالت کالا تا ۱ سال</li>
           </ul>
+          <div class="h-px bg-mainColor/10 my-5"/>
         </div>
 
-        <div class="lg:mt-6 px-1">
+        <div class="px-1">
           <!-- قیمت -->
-          <div class="text-left mb-3">
-            <p v-if="selectedSize" class="text-2xl font-extrabold text-mainColor">
-              {{ numberFormat(selectedSize.price) }} تومان
+          <div class="text-center lg:text-right mb-3">
+            <p v-if="selectedSize" class="text-2xl lg:text-3xl font-extrabold text-mainColor">
+              {{ numberFormat(selectedSize.price) }}
+              <span class="text-sm font-medium text-secColor/60">تومان</span>
             </p>
-            <p v-else-if="product?.min_price" class="text-lg font-bold text-gray-600">
+            <p v-else-if="product?.min_price" class="text-lg font-bold text-secColor/70">
               از {{ numberFormat(product.min_price) }} تومان
             </p>
           </div>
 
           <!-- اخطار انتخاب نشده -->
           <div v-if="!selectedColor || !selectedSize"
-               class="text-xs text-center text-amber-200 bg-amber-600/30 rounded-lg px-2 py-1 mb-2">
+               class="text-xs text-center text-amber-100 bg-amber-500/90 lg:bg-amber-600/30 lg:text-amber-200 rounded-xl px-3 py-2 mb-3 font-medium">
             {{ !selectedColor ? 'رنگ رو انتخاب کن' : 'سایز رو انتخاب کن' }}
           </div>
 
-          <u-button color="yellow" block @click="addToCart"
+          <u-button color="yellow" block size="lg"
+                    class="font-bold rounded-2xl shadow-lg shadow-mainColor/20 transition-transform active:scale-95"
+                    @click="addToCart"
                     :disabled="!selectedColor || !selectedSize || selectedSize?.quantity < 1">
             🛒 افزودن به سبد خرید
           </u-button>
@@ -210,30 +230,55 @@ const links = [
     </div>
 
     <!-- محصولات مشابه -->
-    <div v-if="randomProducts?.data?.length" class="my-10">
-      <h3 class="text-xl font-bold text-secColor mb-4">محصولات مشابه</h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <NuxtLink v-for="p in randomProducts.data" :key="p.id" :to="`/products/${p.slug}`">
-          <div class="rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition">
-            <img :src="p.primary_image" class="w-full aspect-square object-cover"/>
-            <div class="p-2">
-              <p class="text-sm font-bold truncate">{{ p.name }}</p>
-              <p class="text-mainColor text-sm">از {{ numberFormat(p.min_price) }} تومان</p>
+    <div v-if="randomProducts?.data?.length" class="my-14">
+      <div class="flex items-center gap-3 mb-6">
+        <h3 class="text-xl font-extrabold text-secColor">محصولات مشابه</h3>
+        <div class="h-px flex-1 bg-gray-100"/>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+        <NuxtLink v-for="p in randomProducts.data" :key="p.id" :to="`/products/${p.slug}`" class="group">
+          <div class="rounded-2xl overflow-hidden border border-gray-100 hover:border-mainColor/30 hover:shadow-xl hover:shadow-mainColor/5 transition-all duration-300">
+            <div class="overflow-hidden">
+              <img :src="p.primary_image"
+                   class="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-500"/>
+            </div>
+            <div class="p-3">
+              <p class="text-sm font-bold text-secColor truncate">{{ p.name }}</p>
+              <p class="text-mainColor text-sm font-semibold mt-1">از {{ numberFormat(p.min_price) }} تومان</p>
             </div>
           </div>
         </NuxtLink>
       </div>
     </div>
+    <p class="text-sm text-gray-500 leading-relaxed my-5">{{ product?.description }}</p>
   </u-container>
   <LayoutsFooter/>
 </template>
 
 <style>
 .mySwiper2 { width: 100%; }
+
 .price-details-product {
-  @apply lg:col-span-3 fixed left-0 bottom-12 lg:text-secColor text-white w-screen lg:w-auto lg:relative z-20 pt-2 px-2 bg-secColor lg:bg-mainColor/35 lg:rounded-2xl lg:shadow-2xl lg:bottom-0
+  @apply lg:col-span-3 fixed left-0 bottom-0 lg:text-secColor text-white w-screen lg:w-auto lg:relative z-20 pt-3 pb-4 lg:pb-5 px-4 lg:px-5 bg-white/95 backdrop-blur border-t border-gray-100 lg:border-t-0 lg:bg-white lg:rounded-3xl lg:shadow-xl lg:shadow-mainColor/5 lg:ring-1 lg:ring-black/5 lg:sticky lg:top-24 lg:self-start;
 }
+
 .mySwiper { @apply box-border; }
-.swiper-button-next, .swiper-button-prev { @apply text-mainColor }
-.mySwiper img { @apply object-cover }
+
+.swiper-button-next,
+.swiper-button-prev {
+  @apply text-mainColor;
+  --swiper-navigation-size: 20px;
+}
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  @apply bg-white/90 rounded-full shadow-md;
+  padding: 20px;
+  font-size: 14px !important;
+}
+
+.mySwiper .swiper-slide-thumb-active img {
+  @apply border-mainColor opacity-100;
+}
+
+.mySwiper img { @apply object-cover; }
 </style>
