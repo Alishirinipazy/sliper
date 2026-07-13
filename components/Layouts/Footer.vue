@@ -67,8 +67,7 @@
           <br>
           <a class="py-2" href="tel:+989372396496">09372396496</a>
           <br>
-          <a class="py-2" href="tel:+989120511489">09120511489</a>
-            <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=750792&Code=GoRi5buccvfa9mqRpxLEH6k5ok8Ev3R2'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=750792&Code=GoRi5buccvfa9mqRpxLEH6k5ok8Ev3R2' alt='' style='cursor:pointer' code='GoRi5buccvfa9mqRpxLEH6k5ok8Ev3R2'></a>
+          <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=757872&Code=9SusUtg4rQNafCupVeleyP41vSE0QE2d'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=757872&Code=9SusUtg4rQNafCupVeleyP41vSE0QE2d' alt='' style='cursor:pointer' code='9SusUtg4rQNafCupVeleyP41vSE0QE2d'>ali</a>
         </div>
 
       </div>
