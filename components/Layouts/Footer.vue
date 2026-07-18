@@ -67,7 +67,7 @@
           <br>
           <a class="py-2" href="tel:+989372396496">09372396496</a>
           <br>
-          <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=757872&Code=9SusUtg4rQNafCupVeleyP41vSE0QE2d'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=757872&Code=9SusUtg4rQNafCupVeleyP41vSE0QE2d' alt='' style='cursor:pointer' code='9SusUtg4rQNafCupVeleyP41vSE0QE2d'>ali</a>
+          <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=757872&Code=9SusUtg4rQNafCupVeleyP41vSE0QE2d'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=757872&Code=9SusUtg4rQNafCupVeleyP41vSE0QE2d' alt='' style='cursor:pointer' code='9SusUtg4rQNafCupVeleyP41vSE0QE2d'></a>
         </div>
 
       </div>

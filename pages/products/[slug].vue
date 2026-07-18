@@ -253,6 +253,11 @@ const links = [
     <p class="text-sm text-gray-500 leading-relaxed my-5">{{ product?.description }}</p>
   </u-container>
   <LayoutsFooter/>
+  <!-- چت‌بات با context محصول -->
+
+  <ClientOnly>
+    <ChatBot :product="product"/>
+  </ClientOnly>
 </template>
 
 <style>

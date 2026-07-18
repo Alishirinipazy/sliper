@@ -2,14 +2,13 @@ export default defineNuxtConfig({
     devtools: { enabled: false },
 
     runtimeConfig: {
+        gapgptApiKey: process.env.GAPGPT_API_KEY || '',
         public: {
-            apiBase: process.env.NUXT_PUBLIC_API_BASE
+            apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8000/api'
         }
     },
 
-    colorMode: {
-        preference: 'light'
-    },
+    colorMode: { preference: 'light' },
 
     modules: [
         '@nuxt/ui',
@@ -19,30 +18,19 @@ export default defineNuxtConfig({
         'nuxt-swiper',
     ],
 
-    compatibilityDate: '2025-02-12',
-
-
     ssr: true,
 
     nitro: {
         preset: 'node-server'
     },
 
-    formkit: {
-        autoImport: true
-    },
+    compatibilityDate: '2025-02-12',
+
+    formkit: { autoImport: true },
 
     app: {
         head: {
-            link: [
-                { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-            ]
-        }
-    },
-
-    vite: {
-        optimizeDeps: {
-            include: ['vue3-tabs-component']
+            link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
         }
     }
 })

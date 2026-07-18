@@ -28,9 +28,7 @@ const bannerItemData = ref([
     }
 ])
 
-
-
-useHead({ title: 'خوونه | فروشگاه دمپایی' })
+useHead({ title: 'خوونه ' })
 </script>
 
 <template>
