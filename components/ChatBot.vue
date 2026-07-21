@@ -1,5 +1,5 @@
 <script setup>
-import { useModalStore } from "~/stores/cart"
+import {useModalStore} from "~/stores/cart"
 
 const props = defineProps({
   product: {type: Object, default: null}
@@ -99,18 +99,23 @@ function clearChat() {
   <div dir="rtl">
 
     <!-- دکمه -->
-    <button @click="isOpen = !isOpen"
-            class="fixed bottom-6 left-6 z-50 w-14 h-14 bg-secColor rounded-2xl shadow-xl flex items-center justify-center hover:scale-110 transition-all duration-300">
-      <Transition name="icon-swap" mode="out-in">
-        <UIcon v-if="isOpen" key="close" name="i-heroicons-x-mark" class="w-6 h-6 text-mainColor"/>
-        <div v-else key="open" class="relative">
-          <UIcon name="i-heroicons-chat-bubble-left-right" class="w-6 h-6 text-mainColor"/>
-          <span
-              class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-secColor animate-pulse"></span>
-        </div>
-      </Transition>
-    </button>
-
+    <UTooltip text="شروع مجدد">
+      <button @click="isOpen = !isOpen"
+              class="fixed bottom-6 left-6 z-50 w-14 h-14 bg-secColor rounded-full shadow-xl flex items-center justify-center hover:scale-110 transition-all duration-300">
+        <Transition name="icon-swap" mode="out-in">
+          <UIcon v-if="isOpen" key="close" name="i-heroicons-x-mark" class="w-6 h-6 text-mainColor"/>
+          <div v-else key="open" class="relative">
+            <UAvatar
+                size="xl"
+                src="/images/pazy.png"
+                alt="پازی"
+            />
+            <span
+                class="absolute -top-0 -right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-secColor animate-pulse"></span>
+          </div>
+        </Transition>
+      </button>
+    </UTooltip>
     <!-- پنجره چت -->
     <Transition name="chat-slide">
 
@@ -120,21 +125,29 @@ function clearChat() {
 
         <!-- هدر -->
         <div class="bg-secColor px-4 py-3 flex items-center gap-3 flex-shrink-0">
-          <div class="w-9 h-9 bg-mainColor rounded-xl flex items-center justify-center">
-            <UIcon name="i-heroicons-sparkles" class="w-5 h-5 text-secColor"/>
-          </div>
+
+          <UAvatar
+              size="lg"
+              src="/images/pazy.png"
+              alt="پازی"
+          />
+
           <div class="flex-1">
 
-            <p class="text-white font-bold text-sm">پازی، دستیار هوشمند</p>
-            <div class="flex items-center gap-1.5">
+            <p class="text-white font-bold text-sm">پازی،</p>
+            <div class="flex items-center gap-1.5 py-1">
               <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-              <p class="text-white/60 text-xs">آنلاین • دستیار سایز و محصول</p>
+              <p v-if="!loading" class="text-white/60 text-xs">
+                آنلاین</p>
+              <p v-else class="text-white/60 text-xs">در حال نوشتن...</p>
             </div>
           </div>
-          <button @click="clearChat" title="شروع مجدد"
-                  class="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition">
-            <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5 text-white/70"/>
-          </button>
+          <UTooltip text="شروع مجدد">
+            <button @click="clearChat"
+                    class="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition">
+              <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5 text-white/70"/>
+            </button>
+          </UTooltip>
         </div>
 
         <!-- بنر محصول -->
