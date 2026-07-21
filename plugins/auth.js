@@ -7,6 +7,12 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         })
 
         authUser.value = user;
+
+        if (user && process.client) {
+            const { useModalStore } = await import('~/stores/cart');
+            const cart = useModalStore();
+            await cart.migrateGuestCartToServer();
+        }
     } catch (error) {
         authUser.value = null;
     }

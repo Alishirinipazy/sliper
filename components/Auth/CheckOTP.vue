@@ -1,7 +1,9 @@
 <script setup>
+import { useModalStore } from "~/stores/cart"
 
 const toast = useToast();
 const {authUser} = useAuth();
+const cart = useModalStore();
 const route = useRoute()
 const backState = ref("")
 const errorMSG = ref({})
@@ -24,6 +26,7 @@ async function chechOTP() {
     toast.add({title:"شما با موفقیت وارد حساب شده اید"})
     authUser.value = data
     backState.value = "bg-green-800 text-white"
+    cart.migrateGuestCartToServer()
     setTimeout(function () {
       return navigateTo('/profile/')
     }, 2000);

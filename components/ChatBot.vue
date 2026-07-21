@@ -1,4 +1,6 @@
 <script setup>
+import { useModalStore } from "~/stores/cart"
+
 const props = defineProps({
   product: {type: Object, default: null}
 })
@@ -6,11 +8,14 @@ const isOpen = ref(false)
 const loading = ref(false)
 const input = ref('')
 const messagesEl = ref(null)
+const cart = useModalStore()
+const toast = useToast()
 
 const messages = ref([
   {
     role: 'assistant',
-    content: 'سلام! 👋 من پازی هستم.\nمی‌تونم تو انتخاب سایز و محصول کمکت کنم 👟'
+    content: 'سلام! 👋 من پازی هستم.\nمی‌تونم تو انتخاب سایز و محصول کمکت کنم 👟',
+    products: [],
   }
 ])
 
@@ -21,16 +26,9 @@ const quickReplies = [
   'دمپایی بچگانه چه سایزی دارید؟',
 ]
 
-const productContext = computed(() => {
-  if (!props.product) return null
-  const colors = props.product.colors?.map(c =>
-      `رنگ ${c.name}: سایزهای ${c.sizes?.map(s =>
-          `${s.size}(${s.quantity > 0 ? 'موجود' : 'ناموجود'})`
-      ).join('، ')}`
-  ).join('\n')
-  return `نام: ${props.product.name}\nدسته: ${props.product.category}\n${colors ?? ''}`
-})
-console.log(productContext?.value)
+function numberFormat(n) {
+  return new Intl.NumberFormat('fa-IR').format(n ?? 0)
+}
 
 async function sendMessage(text = null) {
   const msg = text ?? input.value.trim()
@@ -42,22 +40,31 @@ async function sendMessage(text = null) {
   loading.value = true
   scrollToBottom()
 
-
   try {
-    const {reply} = await $fetch('/api/chat', {
+    const result = await $fetch('/api/chat', {
       method: 'POST',
       body: {
         messages: messages.value.slice(-8).map(m => ({
           role: m.role, content: m.content
         })),
-        productContext: productContext?.value
+        productSlug: props.product?.slug ?? null,
       }
     })
-    messages.value.push({role: 'assistant', content: reply})
+    messages.value.push({
+      role: 'assistant',
+      content: result.reply,
+      products: result.products ?? [],
+    })
+
+    if (result.cart_updated) {
+      await cart.fetchFromServer()
+      toast.add({title: 'سبد خریدت به‌روز شد 🛒', color: 'green'})
+    }
   } catch {
     messages.value.push({
       role: 'assistant',
-      content: 'متأسفم، مشکلی پیش اومد. دوباره امتحان کن 🙏'
+      content: 'متأسفم، مشکلی پیش اومد. دوباره امتحان کن 🙏',
+      products: [],
     })
   } finally {
     loading.value = false
@@ -82,7 +89,8 @@ function onKeydown(e) {
 function clearChat() {
   messages.value = [{
     role: 'assistant',
-    content: 'سلام! 👋 چطور می‌تونم کمکت کنم؟'
+    content: 'سلام! 👋 چطور می‌تونم کمکت کنم؟',
+    products: [],
   }]
 }
 </script>
@@ -117,7 +125,7 @@ function clearChat() {
           </div>
           <div class="flex-1">
 
-            <p class="text-white font-bold text-sm">راهنمای هوشمند</p>
+            <p class="text-white font-bold text-sm">پازی، دستیار هوشمند</p>
             <div class="flex items-center gap-1.5">
               <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
               <p class="text-white/60 text-xs">آنلاین • دستیار سایز و محصول</p>
@@ -144,24 +152,40 @@ function clearChat() {
              class="flex-1 overflow-y-auto p-4 space-y-3"
              style="min-height:0">
 
-          <div v-for="(msg, i) in messages" :key="i"
-               class="flex gap-2"
-               :class="msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'">
+          <div v-for="(msg, i) in messages" :key="i">
+            <div class="flex gap-2"
+                 :class="msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'">
 
-            <div class="w-7 h-7 rounded-xl flex items-center justify-center mt-0.5 flex-shrink-0"
-                 :class="msg.role === 'assistant' ? 'bg-secColor' : 'bg-mainColor'">
-              <UIcon :name="msg.role === 'assistant' ? 'i-heroicons-sparkles' : 'i-heroicons-user'"
-                     class="w-3.5 h-3.5"
-                     :class="msg.role === 'assistant' ? 'text-mainColor' : 'text-secColor'"/>
+              <div class="w-7 h-7 rounded-xl flex items-center justify-center mt-0.5 flex-shrink-0"
+                   :class="msg.role === 'assistant' ? 'bg-secColor' : 'bg-mainColor'">
+                <UIcon :name="msg.role === 'assistant' ? 'i-heroicons-sparkles' : 'i-heroicons-user'"
+                       class="w-3.5 h-3.5"
+                       :class="msg.role === 'assistant' ? 'text-mainColor' : 'text-secColor'"/>
+              </div>
+
+              <div class="max-w-[78%]">
+                <div class="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-line"
+                     :class="msg.role === 'user'
+                       ? 'bg-secColor text-mainColor rounded-tl-sm'
+                       : 'bg-gray-100 text-gray-800 rounded-tr-sm'">
+                  {{ msg.content }}
+                </div>
+              </div>
             </div>
 
-            <div class="max-w-[78%]">
-              <div class="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-line"
-                   :class="msg.role === 'user'
-                     ? 'bg-secColor text-mainColor rounded-tl-sm'
-                     : 'bg-gray-100 text-gray-800 rounded-tr-sm'">
-                {{ msg.content }}
-              </div>
+            <!-- کارت‌های محصول پیشنهادی -->
+            <div v-if="msg.products?.length" class="flex gap-2 overflow-x-auto mt-2 mr-9 pb-1">
+              <NuxtLink v-for="p in msg.products" :key="p.id" :to="`/products/${p.slug}`"
+                        class="flex-shrink-0 w-28 rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden hover:shadow-md transition">
+                <img :src="p.image || '/images/preloader.png'" class="w-full h-20 object-cover"/>
+                <div class="p-1.5">
+                  <p class="text-[10px] font-bold text-secColor truncate">{{ p.name }}</p>
+                  <p class="text-[10px] text-mainColor font-bold mt-0.5">{{ numberFormat(p.min_price) }} ت</p>
+                  <p class="text-[9px] mt-0.5" :class="p.in_stock ? 'text-green-500' : 'text-red-400'">
+                    {{ p.in_stock ? 'موجود' : 'ناموجود' }}
+                  </p>
+                </div>
+              </NuxtLink>
             </div>
           </div>
 

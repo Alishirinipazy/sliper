@@ -18,12 +18,6 @@ async function payment() {
         const data = await $fetch('/api/payment/send', {
             method: 'POST',
             body: {
-                cart: props.cart.map(item => ({
-                    id:       item.id,
-                    qty:      item.qty,
-                    color_id: item.selectedColor?.id,
-                    size_id:  item.selectedSize?.id,
-                })),
                 coupon:             props.coupon.code,
                 address_id:         props.addressId,
                 shipping_method_id: props.shippingMethodId,
