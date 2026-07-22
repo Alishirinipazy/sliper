@@ -107,7 +107,7 @@ function clearChat() {
           <div v-else key="open" class="relative">
             <UAvatar
                 size="xl"
-                src="/images/pazy.jpg"
+                src="/images/pazy.png"
                 alt="پازی"
             />
             <span
@@ -128,7 +128,7 @@ function clearChat() {
 
           <UAvatar
               size="lg"
-              src="/images/pazy.jpg"
+              src="/images/pazy.png"
               alt="پازی"
           />
 

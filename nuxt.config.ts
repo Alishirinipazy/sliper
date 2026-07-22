@@ -1,4 +1,4 @@
-const apiBase = process.env.NUXT_PUBLIC_API_BASE || 'NUXT_PUBLIC_API_BASE'
+const apiBase = process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8000/api'
 // backend origin without the /api/v1 suffix, e.g. http://localhost:8000 -
 // used to proxy /storage/** (product/category/etc images) through to FastAPI,
 // since the backend returns relative paths like "/storage/images/products/x.jpg"
@@ -21,7 +21,7 @@ export default defineNuxtConfig({
         '@formkit/nuxt',
         '@pinia/nuxt',
         'pinia-plugin-persistedstate/nuxt',
-        'nuxt-swiper','@nuxt/image'
+        'nuxt-swiper',
     ],
 
     ssr: true,

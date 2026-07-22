@@ -99,13 +99,7 @@ const links = [
           <Swiper :space-between="10" :thumbs="{ swiper: thumbsSwiper }"
                   :modules="[Thumbs, Navigation]" navigation :loop="true" class="mySwiper2">
             <SwiperSlide v-for="(img, i) in displayImages" :key="i">
-
-              <NuxtImg
-                  :src="img.image||img.primary_image" class="w-full object-cover aspect-square"
-                  width="200"
-                  format="avif"
-                  quality="100"
-              />
+              <img :src="img.image||img.primary_image" class="w-full object-cover aspect-square"/>
             </SwiperSlide>
           </Swiper>
 
@@ -118,14 +112,8 @@ const links = [
         <Swiper @swiper="setThumbsSwiper" :space-between="12" :slides-per-view="4"
                 :watch-slides-progress="true" :modules="[Thumbs]" class="mySwiper mt-3">
           <SwiperSlide v-for="(img, i) in displayImages" :key="i">
-
-            <NuxtImg
-                :src="img.image||img.primary_image"
-                class="rounded-xl cursor-pointer border-2 border-transparent opacity-60 hover:opacity-100 transition-all duration-200 object-cover aspect-square"
-                width="200"
-                format="avif"
-                quality="100"
-            />
+            <img :src="img.image||img.primary_image"
+                 class="rounded-xl cursor-pointer border-2 border-transparent opacity-60 hover:opacity-100 transition-all duration-200 object-cover aspect-square"/>
           </SwiperSlide>
         </Swiper>
       </div>
