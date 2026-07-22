@@ -3,8 +3,8 @@
     <u-container>
       <div class="flex flex-wrap justify-center lg:grid lg:grid-flow-col py-5 grid-cols-3 sm:grid-rows-3">
         <div class="row-span-5">
-          <img src="/images/logo.png" alt="اسلیپر استور" class="w-6/12">
-          <h6 class="text-amber-400 px-5">با عشق زیر پاهاتیم</h6>
+          <img src="/images/logo.avif" alt="اسلیپر استور" class="w-6/12">
+          <h6 class="text-amber-400 px-5">با عشـــ❤️ــق پیش قدماتیم</h6>
           <p class="py-2 px-5">نخستین پلتفرم فروش انواع دمپایی و مد استایل </p>
         </div>
         <div class="row-span-3 flex lg:justify-around justify-center ">

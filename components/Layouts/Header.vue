@@ -56,7 +56,7 @@ if (props?.fixed) {
         </div>
         <div class="w-1/3 flex justify-center">
           <nuxt-link to="/">
-            <img src="/images/logo.png" class="w-[130px]" alt="">
+            <img src="/images/logo.avif" class="w-[130px]" alt="">
           </nuxt-link>
         </div>
         <div class=" w-1/3 flex justify-end mx-1">
