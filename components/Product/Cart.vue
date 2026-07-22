@@ -53,10 +53,14 @@ function removeFromCart(item) {
           <li v-for="item in allCard" :key="item._key"
               class="flex gap-3 py-3 px-1 hover:bg-gray-50 transition">
 
-            <!-- تصویر -->
-            <img :src="item.selectedColor?.image || item.primary_image || '/images/preloader.png'"
-                 class="w-16 h-16 rounded-xl object-cover flex-shrink-0 border border-gray-100"/>
 
+            <NuxtImg
+                :src="item.selectedColor?.image || item.primary_image || '/images/preloader.png'"
+                class="w-16 h-16 rounded-xl object-cover flex-shrink-0 border border-gray-100"
+                width="200"
+                format="avif"
+                quality="100"
+            />
             <!-- اطلاعات -->
             <div class="flex-1 min-w-0">
               <p class="font-bold text-sm text-secColor truncate">{{ item.name }}</p>
@@ -100,7 +104,11 @@ function removeFromCart(item) {
 
         <!-- خالی بودن سبد -->
         <div v-else class="flex flex-col items-center justify-center py-10 gap-3">
-          <img src="/images/cart-svgrepo-com.png" class="w-24 opacity-40" alt=""/>
+          <NuxtImg
+              src="/images/cart-svgrepo-com.png"
+              width="96"
+              height="96"
+          />
           <p class="text-gray-400 text-sm">سبد خریدت خالیه 🥲</p>
         </div>
       </div>

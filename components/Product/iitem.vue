@@ -28,8 +28,14 @@ console.log(props.product)
     </button>
 
     <!-- عکس محصول -->
-    <img class="w-full h-[230px] object-cover mix-blend-multiply" src="/images/preloader.png"
-         v-img="product?.primary_image" alt="">
+
+    <NuxtImg
+        class="w-full h-[230px] object-cover mix-blend-multiply" src="/images/preloader.png"
+        v-img="product?.primary_image" alt=""
+        width="200"
+        format="webp"
+        quality="100"
+    />
     <!-- بخش متن و قیمت (محتوای پایین کارت) -->
     <div class="relative w-full  pt-2 bg-transparent p-4">
 
