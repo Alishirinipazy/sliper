@@ -72,11 +72,12 @@
 
       </div>
     </u-container>
-    <div class="absolute -bottom-8">
+    <div class="absolute -bottom-14 left-1 w-full">
 
-      <img src="/images/alipaz.png" alt="">
+      <img src="/images/alipaz.png" alt="alipazco" class="w-full">
     </div>
   </footer>
+    <div class="bg-black h-[3rem] w-full"></div>
 </template>
 <script setup lang="ts">
 </script>
