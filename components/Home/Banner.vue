@@ -20,11 +20,11 @@ const props = defineProps(['dataBanner'])
 </template>
 <style>
 .col-bg-temp {
-  @apply bg-cover  h-[129px] col-span-1 rounded-2xl bg-center  relative
+  @apply bg-cover  col-span-1 rounded-2xl bg-center  relative
 }
 
 .row-bg-temp {
-  @apply relative row-span-3  bg-no-repeat bg-cover bg-center rounded-2xl
+  @apply relative row-span-3  h-[250px] bg-no-repeat bg-cover bg-center rounded-2xl
 }
 
 .banner-dis {

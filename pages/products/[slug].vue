@@ -188,7 +188,7 @@ const links = [
       <div class="price-details-product">
         <div class="hidden lg:block">
           <div class="flex justify-center mb-4">
-            <img src="/images/logo.png" class="w-[150px]" alt=""/>
+            <img src="/images/logo.avif" class="w-[150px]" alt=""/>
           </div>
           <ul class="text-sm space-y-3 text-secColor/80">
             <li class="flex items-center gap-2">

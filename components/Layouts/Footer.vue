@@ -71,13 +71,11 @@
         </div>
 
       </div>
-      <div class="aliShahGroups bg-blue-400 rounded-t-full flex justify-center items-center absolute w-full bottom-0 right-0 ">
-        <p>تهیه شده با عشق ❤️ توسط
-        </p>
-        <img class="w-10" src="/images/alishah.png" alt="alishah">
-        علی شیرینی پزی
-      </div>
     </u-container>
+    <div class="absolute -bottom-8">
+
+      <img src="/images/alipaz.png" alt="">
+    </div>
   </footer>
 </template>
 <script setup lang="ts">

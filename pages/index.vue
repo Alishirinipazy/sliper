@@ -7,24 +7,16 @@ const { data: tabs }     = await useFetch(`${apiBase}/products/products-tabs`)
 
 const bannerItemData = ref([
     {
-        image: '/images/img_1.png',
-        dis: 'دمپایی‌های زنانه', link: '/products?category=women', class: 'row-bg-temp'
+        image: '/images/women.webp',
+        dis: 'ست های خانومانه', link: '/products?category=women', class: 'row-bg-temp'
     },
     {
-        image: '/images/img_2.png',
-        dis: 'دمپایی‌های مردانه', link: '/products?category=men', class: 'row-bg-temp'
+        image: '/images/men.webp',
+        dis: 'ست های پسرونه', link: '/products?category=men', class: 'row-bg-temp'
     },
     {
-        image: '/images/img_3.png',
-        dis: 'مدل‌های بچگانه', link: '/products?category=kids', class: 'col-bg-temp'
-    },
-    {
-        image: '/images/img_4.png',
-        dis: 'پیشنهاد ویژه', link: '/products', class: 'col-bg-temp'
-    },
-    {
-        image: '/images/img_5.png',
-        dis: 'تازه‌واردها', link: '/products', class: 'col-bg-temp'
+        image: '/images/child.webp',
+        dis: 'کالکشن های بچگونه', link: '/products?category=kids', class: 'row-bg-temp'
     }
 ])
 
