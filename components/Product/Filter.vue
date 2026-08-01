@@ -6,7 +6,10 @@ const query = ref({});
 const toast = useToast()
 const {public: {apiBase}} = useRuntimeConfig();
 defineProps(['menu'])
-const {data: categories, pending: pendingCategories} = await useFetch(`${apiBase}/categories`);
+// /categories only returns a flat list of categories (no sizes/colors/price
+// range), but the template below reads categories.data.categories and
+// categories.data.sizes - that shape only exists on /filter-options.
+const {data: categories, pending: pendingCategories} = await useFetch(`${apiBase}/filter-options`);
 const items = [{
   label: 'دسته بندی',
   icon: 'i-categoury-information-circle',
@@ -70,7 +73,7 @@ function handleFilter(filter) {
   if (query.value.hasOwnProperty('page')) {
     delete query.value.page
   }
-  query.value['sortBy'] = `${filter}`;
+  query.value['sort_by'] = `${filter}`;
 
   router.push({
     path: '/products',
@@ -108,7 +111,7 @@ function handleFilter(filter) {
         <form class="px-3">
           <div class="form-check my-2">
             <input class="form-check-input" @click="handleFilter('max')"
-                   :checked="route.query.hasOwnProperty('sortBy') && route.query.sortBy == 'max'"
+                   :checked="route.query.hasOwnProperty('sort_by') && route.query.sort_by == 'max'"
                    type="radio" name="flexRadioDefault" id="flexRadioDefault1">
             <label class="form-check-label cursor-pointer" for="flexRadioDefault1">
               بیشترین قیمت
@@ -116,7 +119,7 @@ function handleFilter(filter) {
           </div>
           <div class="form-check my-2">
             <input class="form-check-input" @click="handleFilter( 'min' )"
-                   :checked="route.query.hasOwnProperty('sortBy') && route.query.sortBy == 'min'"
+                   :checked="route.query.hasOwnProperty('sort_by') && route.query.sort_by == 'min'"
                    type="radio" name="flexRadioDefault" id="flexRadioDefault2">
             <label class="form-check-label cursor-pointer" for="flexRadioDefault2">
               کمترین قیمت
@@ -124,7 +127,7 @@ function handleFilter(filter) {
           </div>
           <div class="form-check my-2">
             <input class="form-check-input" @click="handleFilter( 'bestseller' )"
-                   :checked="route.query.hasOwnProperty('sortBy') && route.query.sortBy == 'bestseller'"
+                   :checked="route.query.hasOwnProperty('sort_by') && route.query.sort_by == 'bestseller'"
                    type="radio" name="flexRadioDefault" id="flexRadioDefault3">
             <label class="form-check-label cursor-pointer" for="flexRadioDefault3">
               پرفروش ترین
@@ -132,7 +135,7 @@ function handleFilter(filter) {
           </div>
           <div class="form-check my-2">
             <input class="form-check-input" @click="handleFilter( 'sale' )"
-                   :checked="route.query.hasOwnProperty('sortBy') && route.query.sortBy == 'sale'"
+                   :checked="route.query.hasOwnProperty('sort_by') && route.query.sort_by == 'sale'"
                    type="radio" name="flexRadioDefault" id="flexRadioDefault4">
             <label class="form-check-label cursor-pointer" for="flexRadioDefault4">
               با تخفیف
@@ -147,7 +150,7 @@ function handleFilter(filter) {
             <li
                 class="px-4 py-1 rounded-2xl mx-1  cursor-pointer"
                 :class="route?.query?.size== value ?'text-mainColor':'text-secColor'"
-                @click="router.push({query:{size:value}})">
+                @click="router.push({query:{...route.query, size:value}})">
               <UCheckbox :model-value="route?.query?.size=== value" :label="value" />
             </li>
           </template>
@@ -159,14 +162,14 @@ function handleFilter(filter) {
     </UAccordion>
 
 
-<!--    <div class="  flex  bg-secColor text-white p-1 rounded relative py-2">-->
-<!--      <form @submit.prevent="searchQueryHandler">-->
-<!--        <input type="text" v-model="searchQuery" class=" bg-secColor  text-white "-->
-<!--               placeholder="چیزی که میخوای اینجا پیدا کن ...">-->
-<!--        <UButton type="submit" class="rounded-full  absolute left-2 top-1"-->
-<!--                 icon="material-symbols:search" color="yellow"/>-->
-<!--      </form>-->
-<!--    </div>-->
+    <!--    <div class="  flex  bg-secColor text-white p-1 rounded relative py-2">-->
+    <!--      <form @submit.prevent="searchQueryHandler">-->
+    <!--        <input type="text" v-model="searchQuery" class=" bg-secColor  text-white "-->
+    <!--               placeholder="چیزی که میخوای اینجا پیدا کن ...">-->
+    <!--        <UButton type="submit" class="rounded-full  absolute left-2 top-1"-->
+    <!--                 icon="material-symbols:search" color="yellow"/>-->
+    <!--      </form>-->
+    <!--    </div>-->
   </div>
 
 
