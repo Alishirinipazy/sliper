@@ -32,6 +32,27 @@ const items = [{
   slot: 'sort'
 }]
 
+// Flattens the parent/child category list into tree order (each parent
+// immediately followed by its children) with a depth used for indentation.
+const orderedCategories = computed(() => {
+  const list = categories.value?.data?.categories ?? []
+  const byParent = {}
+  for (const c of list) {
+    const key = c.parent_id ?? 'root'
+    if (!byParent[key]) byParent[key] = []
+    byParent[key].push(c)
+  }
+  const result = []
+  function walk(parentKey, depth) {
+    for (const c of byParent[parentKey] ?? []) {
+      result.push({...c, depth})
+      walk(c.id, depth + 1)
+    }
+  }
+  walk('root', 0)
+  return result
+})
+
 function searchQueryHandler() {
   if (searchQuery.value) {
 
@@ -94,9 +115,10 @@ function handleFilter(filter) {
   }}">
       <template #categoury>
         <ul class="m-0  my-1 ">
-          <template v-if="!pendingCategories" v-for="(value,index) in categories?.data?.categories">
+          <template v-if="!pendingCategories" v-for="(value,index) in orderedCategories">
             <li
                 class="px-4 py-1 rounded-2xl mx-1  cursor-pointer"
+                :style="{ paddingRight: `${1 + value.depth * 1.25}rem` }"
                 :class="route?.query?.category== value?.id ?'text-mainColor':'text-secColor'"
                 @click="categoriesHandel(value?.id)">{{ value?.name }}
             </li>
@@ -162,14 +184,14 @@ function handleFilter(filter) {
     </UAccordion>
 
 
-    <!--    <div class="  flex  bg-secColor text-white p-1 rounded relative py-2">-->
-    <!--      <form @submit.prevent="searchQueryHandler">-->
-    <!--        <input type="text" v-model="searchQuery" class=" bg-secColor  text-white "-->
-    <!--               placeholder="چیزی که میخوای اینجا پیدا کن ...">-->
-    <!--        <UButton type="submit" class="rounded-full  absolute left-2 top-1"-->
-    <!--                 icon="material-symbols:search" color="yellow"/>-->
-    <!--      </form>-->
-    <!--    </div>-->
+<!--    <div class="  flex  bg-secColor text-white p-1 rounded relative py-2">-->
+<!--      <form @submit.prevent="searchQueryHandler">-->
+<!--        <input type="text" v-model="searchQuery" class=" bg-secColor  text-white "-->
+<!--               placeholder="چیزی که میخوای اینجا پیدا کن ...">-->
+<!--        <UButton type="submit" class="rounded-full  absolute left-2 top-1"-->
+<!--                 icon="material-symbols:search" color="yellow"/>-->
+<!--      </form>-->
+<!--    </div>-->
   </div>
 
 
