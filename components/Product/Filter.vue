@@ -184,14 +184,14 @@ function handleFilter(filter) {
     </UAccordion>
 
 
-<!--    <div class="  flex  bg-secColor text-white p-1 rounded relative py-2">-->
-<!--      <form @submit.prevent="searchQueryHandler">-->
-<!--        <input type="text" v-model="searchQuery" class=" bg-secColor  text-white "-->
-<!--               placeholder="چیزی که میخوای اینجا پیدا کن ...">-->
-<!--        <UButton type="submit" class="rounded-full  absolute left-2 top-1"-->
-<!--                 icon="material-symbols:search" color="yellow"/>-->
-<!--      </form>-->
-<!--    </div>-->
+    <!--    <div class="  flex  bg-secColor text-white p-1 rounded relative py-2">-->
+    <!--      <form @submit.prevent="searchQueryHandler">-->
+    <!--        <input type="text" v-model="searchQuery" class=" bg-secColor  text-white "-->
+    <!--               placeholder="چیزی که میخوای اینجا پیدا کن ...">-->
+    <!--        <UButton type="submit" class="rounded-full  absolute left-2 top-1"-->
+    <!--                 icon="material-symbols:search" color="yellow"/>-->
+    <!--      </form>-->
+    <!--    </div>-->
   </div>
 
 

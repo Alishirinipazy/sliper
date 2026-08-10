@@ -44,7 +44,7 @@ async function login() {
 <template>
   <div class="p-8 border-2 border-mainColor bg-secColor text-white rounded-2xl flex flex-col items-center">
 
-    <img src="/images/logo.avif" alt="اسلیپر استور" class="w-5/5">
+    <img src="/images/logo.avif" alt="اسلیپر پاز" class="w-5/5">
     <p class="text-xl mt-3 mb-4">ورود و ثبت نام</p>
     <p class="text-center">شماره تماست برای ما بفرست که یک کدی رو برات بفرستیم</p>
 

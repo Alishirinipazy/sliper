@@ -20,11 +20,13 @@ watch(route, () => {
   refresh()
 })
 // -----------------------------------
-const itemsSlider = {
+const itemsSlider = computed(() => ({
   image: '/images/img_2.png',
-  title: 'محصولاتمون',
-  dis: 'همه محصولات اسلیپر استور رو میتونی از اینجا با جزئیات بیشتر ببینی'
-}
+  title: selectedCategoryName.value || 'محصولاتمون',
+  dis: selectedCategoryName.value
+      ? `مشاهده و خرید آنلاین ${selectedCategoryName.value} از اسلیپر پاز`
+      : 'همه محصولات اسلیپر پاز رو میتونی از اینجا با جزئیات بیشتر ببینی'
+}))
 
 const links = [{
   label: 'خوونه',
@@ -36,13 +38,39 @@ const links = [{
 
 
 
+const { data: categoriesList } = await useFetch(`${apiBase}/categories`)
+const selectedCategoryName = computed(() => {
+  const id = Number(route.query.category)
+  return categoriesList.value?.data?.find(c => c.id === id)?.name
+})
+const pageTitle = computed(() =>
+    selectedCategoryName.value
+        ? `${selectedCategoryName.value} `
+        : 'محصولات | اسلیپر پاز'
+)
+const pageDescription = computed(() =>
+    selectedCategoryName.value
+        ? `خرید آنلاین ${selectedCategoryName.value} با بهترین قیمت و ارسال سریع از اسلیپر پاز.`
+        : 'مشاهده و خرید آنلاین همه‌ی محصولات اسلیپر پاز: دمپایی و کفش راحتی زنانه، مردانه و بچگانه.'
+)
+
+useSeoMeta({
+  title: pageTitle,
+  description: pageDescription,
+  ogTitle: pageTitle,
+  ogDescription: pageDescription,
+  twitterCard: 'summary_large_image',
+})
 useHead({
-  title: 'محصولاتمون'
+  // Canonical strips filter/sort/pagination query params - those variants
+  // shouldn't be indexed as separate pages (duplicate content risk).
+  link: [{ rel: 'canonical', href: 'https://slipperpaz.ir/products' }],
 })
 
 </script>
 <template>
   <LayoutsHeader />
+  <h1 class="sr-only">{{ pageTitle }}</h1>
   <GlobalSlider :items="itemsSlider" h="lg:h-[45vh] h-[25vh]" />
   <div class="">
     <UContainer>

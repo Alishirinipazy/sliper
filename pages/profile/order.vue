@@ -1,20 +1,20 @@
 <script setup>
 const { data, pending } = await useFetch('/api/profile/orders', {
-    headers: useRequestHeaders(['cookie'])
+  headers: useRequestHeaders(['cookie'])
 })
 
 const orders = computed(() => data.value?.orders ?? [])
 const expanded = ref(null)
 
 const statusMap = {
-    0: { label: 'در انتظار پرداخت', color: 'bg-gray-400',    icon: '🕐' },
-    1: { label: 'پرداخت شده',        color: 'bg-blue-400',    icon: '💳' },
-    2: { label: 'در حال پردازش',     color: 'bg-yellow-400',  icon: '⚙️' },
-    3: { label: 'آماده ارسال',        color: 'bg-indigo-400',  icon: '📦' },
-    4: { label: 'ارسال شد',           color: 'bg-cyan-500',    icon: '🚚' },
-    5: { label: 'تحویل داده شد',      color: 'bg-green-500',   icon: '✅' },
-    6: { label: 'لغو شد',             color: 'bg-red-500',     icon: '❌' },
-    7: { label: 'مرجوع شد',           color: 'bg-gray-700',    icon: '↩️' },
+  0: { label: 'در انتظار پرداخت', color: 'bg-gray-400',    icon: '🕐' },
+  1: { label: 'پرداخت شده',        color: 'bg-blue-400',    icon: '💳' },
+  2: { label: 'در حال پردازش',     color: 'bg-yellow-400',  icon: '⚙️' },
+  3: { label: 'آماده ارسال',        color: 'bg-indigo-400',  icon: '📦' },
+  4: { label: 'ارسال شد',           color: 'bg-cyan-500',    icon: '🚚' },
+  5: { label: 'تحویل داده شد',      color: 'bg-green-500',   icon: '✅' },
+  6: { label: 'لغو شد',             color: 'bg-red-500',     icon: '❌' },
+  7: { label: 'مرجوع شد',           color: 'bg-gray-700',    icon: '↩️' },
 }
 </script>
 
@@ -100,7 +100,7 @@ const statusMap = {
             <div v-for="item in order.order_items" :key="item.id"
                  class="flex gap-3 bg-white rounded-xl p-2 border border-gray-100">
               <img :src="item.color?.image || item.product_primary_image"
-                   class="w-12 h-12 rounded-lg object-cover flex-shrink-0"/>
+                   :alt="item.product_name" class="w-12 h-12 rounded-lg object-cover flex-shrink-0"/>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-bold truncate">{{ item.product_name }}</p>
                 <div class="flex items-center gap-2 mt-0.5">

@@ -72,9 +72,9 @@ function openStory(i) { viewerIndex.value = i; viewerOpen.value = true }
               <div class="p-[2px] rounded-full"
                    style="background: linear-gradient(15deg, #ffbe33, #222831);">
                 <div class="w-14 h-14 rounded-full border-2 border-white overflow-hidden bg-gray-100">
-                  <img v-if="story.type === 'image'" :src="story.file"
+                  <img v-if="story.type === 'image'" :src="story.file" :alt="story.title || 'استوری'"
                        class="w-full h-full object-cover group-hover:scale-110 transition"/>
-                  <img v-else-if="story.thumbnail" :src="story.thumbnail"
+                  <img v-else-if="story.thumbnail" :src="story.thumbnail" :alt="story.title || 'استوری'"
                        class="w-full h-full object-cover group-hover:scale-110 transition"/>
                   <div v-else class="w-full h-full bg-secColor flex items-center justify-center">
                     <UIcon name="material-symbols:play-arrow" class="text-mainColor w-6 h-6"/>
@@ -96,7 +96,7 @@ function openStory(i) { viewerIndex.value = i; viewerOpen.value = true }
       </ClientOnly>
     </div>
   </div>
-      <br><br><br>
+  <br><br><br>
 </template>
 
 <style lang="css">

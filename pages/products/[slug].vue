@@ -19,6 +19,46 @@ const toast = useToast()
 
 const product = computed(() => productData.value?.data)
 
+// توضیحات محصول به‌صورت متن خام با \n بین پاراگراف/نکات و **متن** برای
+// پررنگ ذخیره شده؛ نمایش با {{ }} همه‌چیز رو یک بلوک بهم‌چسبیده می‌کرد.
+// این تابع خطوطی که با * شروع می‌شن رو به یک لیست تبدیل می‌کنه، بقیه‌ی
+// خطوط رو پاراگراف جدا می‌سازه، و **...** رو به <strong> تبدیل می‌کنه -
+// بدون این‌که به بخش‌های پررنگ دست بزنه.
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+function applyBold(line) {
+  return escapeHtml(line).replace(/\*\*(.+?)\*\*/g, '<strong class="font-bold text-secColor">$1</strong>')
+}
+const formattedDescription = computed(() => {
+  const raw = product.value?.description
+  if (!raw) return ''
+
+  const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(l => l.length)
+  const html = []
+  let listBuffer = []
+
+  const flushList = () => {
+    if (listBuffer.length) {
+      html.push(`<ul class="list-disc pr-5 space-y-1 my-3">${listBuffer.map(li => `<li>${applyBold(li)}</li>`).join('')}</ul>`)
+      listBuffer = []
+    }
+  }
+
+  for (const line of lines) {
+    const bulletMatch = line.match(/^\*\s*(.+)$/)
+    if (bulletMatch) {
+      listBuffer.push(bulletMatch[1])
+    } else {
+      flushList()
+      html.push(`<p class="mb-3">${applyBold(line)}</p>`)
+    }
+  }
+  flushList()
+
+  return html.join('')
+})
+
 // انتخاب رنگ و سایز
 const selectedColor = ref(null)
 const selectedSize  = ref(null)
@@ -61,7 +101,47 @@ function addToCart() {
   setTimeout(cart.changeStatusModal, 1500)
 }
 
-useHead({ title: route.params.slug })
+const seoDescription = computed(() => {
+  const raw = product.value?.description?.replace(/\*\*/g, '').replace(/\s*\n\s*/g, ' ').trim()
+  if (!raw) return `خرید آنلاین ${product.value?.name || ''} از اسلیپر پاز با ارسال سریع و ضمانت اصالت کالا.`
+  return raw.length > 160 ? raw.slice(0, 157) + '…' : raw
+})
+const productUrl = computed(() => `https://slipperpaz.ir/products/${route.params.slug}`)
+
+useSeoMeta({
+  title: () => product.value ? `${product.value.name} | اسلیپر پاز` : 'در حال بارگذاری… | اسلیپر پاز',
+  description: seoDescription,
+  ogTitle: () => product.value?.name,
+  ogDescription: seoDescription,
+  ogImage: () => product.value?.primary_image,
+  ogType: 'product',
+  ogUrl: productUrl,
+  twitterCard: 'summary_large_image',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: productUrl }],
+  script: [{
+    type: 'application/ld+json',
+    innerHTML: computed(() => JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: product.value?.name,
+      description: seoDescription.value,
+      image: product.value?.primary_image ? [product.value.primary_image] : undefined,
+      category: product.value?.category,
+      offers: {
+        '@type': 'Offer',
+        url: productUrl.value,
+        priceCurrency: 'IRR',
+        price: product.value?.min_price,
+        availability: product.value?.total_quantity > 0
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+      },
+    })),
+  }],
+})
 
 const links = [
   { label: 'خونه', to: '/' },
@@ -99,7 +179,7 @@ const links = [
           <Swiper :space-between="10" :thumbs="{ swiper: thumbsSwiper }"
                   :modules="[Thumbs, Navigation]" navigation :loop="true" class="mySwiper2">
             <SwiperSlide v-for="(img, i) in displayImages" :key="i">
-              <img :src="img.image||img.primary_image" class="w-full object-cover aspect-square"/>
+              <img :src="img.image||img.primary_image" :alt="`${product?.name} - تصویر ${i + 1}`" class="w-full object-cover aspect-square"/>
             </SwiperSlide>
           </Swiper>
 
@@ -112,7 +192,7 @@ const links = [
         <Swiper @swiper="setThumbsSwiper" :space-between="12" :slides-per-view="4"
                 :watch-slides-progress="true" :modules="[Thumbs]" class="mySwiper mt-3">
           <SwiperSlide v-for="(img, i) in displayImages" :key="i">
-            <img :src="img.image||img.primary_image"
+            <img :src="img.image||img.primary_image" :alt="`${product?.name} - تصویر کوچک ${i + 1}`"
                  class="rounded-xl cursor-pointer border-2 border-transparent opacity-60 hover:opacity-100 transition-all duration-200 object-cover aspect-square"/>
           </SwiperSlide>
         </Swiper>
@@ -188,7 +268,7 @@ const links = [
       <div class="price-details-product">
         <div class="hidden lg:block">
           <div class="flex justify-center mb-4">
-            <img src="/images/logo.avif" class="w-[150px]" alt=""/>
+            <img src="/images/logo.avif" class="w-[150px]" alt="اسلیپر پاز"/>
           </div>
           <ul class="text-sm space-y-3 text-secColor/80">
             <li class="flex items-center gap-2">
@@ -229,17 +309,23 @@ const links = [
       </div>
     </div>
 
+
+    <div class="flex items-center gap-3 mb-6">
+      <h3 class="text-xl font-extrabold text-mainColor">توضیحات</h3>
+      <div class="h-px flex-1 bg-secColor/50"/>
+    </div>
+    <div class="text-sm text-gray-500 leading-loose my-5" v-html="formattedDescription"/>
     <!-- محصولات مشابه -->
     <div v-if="randomProducts?.data?.length" class="my-14">
       <div class="flex items-center gap-3 mb-6">
-        <h3 class="text-xl font-extrabold text-secColor">محصولات مشابه</h3>
-        <div class="h-px flex-1 bg-gray-100"/>
+        <h3 class="text-xl font-extrabold text-mainColor">محصولات مشابه</h3>
+        <div class="h-px flex-1 bg-secColor/50"/>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
         <NuxtLink v-for="p in randomProducts.data" :key="p.id" :to="`/products/${p.slug}`" class="group">
           <div class="rounded-2xl overflow-hidden border border-gray-100 hover:border-mainColor/30 hover:shadow-xl hover:shadow-mainColor/5 transition-all duration-300">
             <div class="overflow-hidden">
-              <img :src="p.primary_image"
+              <img :src="p.primary_image" :alt="p.name"
                    class="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-500"/>
             </div>
             <div class="p-3">
@@ -250,7 +336,6 @@ const links = [
         </NuxtLink>
       </div>
     </div>
-    <p class="text-sm text-gray-500 leading-relaxed my-5">{{ product?.description }}</p>
   </u-container>
   <LayoutsFooter/>
   <!-- چت‌بات با context محصول -->
@@ -264,7 +349,7 @@ const links = [
 .mySwiper2 { width: 100%; }
 
 .price-details-product {
-  @apply lg:col-span-3 fixed left-0 bottom-0 lg:text-secColor text-white w-screen lg:w-auto lg:relative z-20 pt-3 pb-4 lg:pb-5 px-4 lg:px-5 bg-white/95 backdrop-blur border-t border-gray-100 lg:border-t-0 lg:bg-white lg:rounded-3xl lg:shadow-xl lg:shadow-mainColor/5 lg:ring-1 lg:ring-black/5 lg:sticky lg:top-24 lg:self-start;
+  @apply lg:col-span-3 fixed left-0 bottom-12 lg:text-secColor text-white w-screen lg:w-auto lg:relative z-20 pt-3 pb-4 lg:pb-5 px-4 lg:px-5 bg-white/95 backdrop-blur border-t border-gray-100 lg:border-t-0 lg:bg-white lg:rounded-3xl lg:shadow-xl lg:shadow-mainColor/5 lg:ring-1 lg:ring-black/5 lg:sticky lg:top-24 lg:self-start;
 }
 
 .mySwiper { @apply box-border; }

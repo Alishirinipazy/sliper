@@ -1,7 +1,5 @@
 <script setup>
-useHead({
-  titleTemplate: '%s |اسلیپر پـ.ـاز',
-})
+
 </script>
 
 <template>

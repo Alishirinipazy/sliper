@@ -153,7 +153,7 @@ function clearChat() {
         <!-- بنر محصول -->
         <div v-if="product"
              class="bg-mainColor/15 px-4 py-2 flex items-center gap-2 flex-shrink-0 border-b border-mainColor/10">
-          <img :src="product.primary_image" class="w-8 h-8 rounded-lg object-cover flex-shrink-0"/>
+          <img :src="product.primary_image" :alt="product.name" class="w-8 h-8 rounded-lg object-cover flex-shrink-0"/>
           <div class="min-w-0">
             <p class="text-xs font-bold text-secColor truncate">{{ product.name }}</p>
             <p class="text-[10px] text-gray-500">درباره این محصول سوال بپرس</p>
@@ -190,7 +190,7 @@ function clearChat() {
             <div v-if="msg.products?.length" class="flex gap-2 overflow-x-auto mt-2 mr-9 pb-1">
               <NuxtLink v-for="p in msg.products" :key="p.id" :to="`/products/${p.slug}`"
                         class="flex-shrink-0 w-28 rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden hover:shadow-md transition">
-                <img :src="p.image || '/images/preloader.png'" class="w-full h-20 object-cover"/>
+                <img :src="p.image || '/images/preloader.png'" :alt="p.name" class="w-full h-20 object-cover"/>
                 <div class="p-1.5">
                   <p class="text-[10px] font-bold text-secColor truncate">{{ p.name }}</p>
                   <p class="text-[10px] text-mainColor font-bold mt-0.5">{{ numberFormat(p.min_price) }} ت</p>

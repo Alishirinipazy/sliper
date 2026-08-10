@@ -29,7 +29,7 @@ console.log(props.product)
 
     <!-- عکس محصول -->
     <img class="w-full h-[230px] object-cover mix-blend-multiply" src="/images/preloader.png"
-         v-img="product?.primary_image" alt="">
+         v-img="product?.primary_image" :alt="product?.name || 'محصول اسلیپر پاز'">
     <!-- بخش متن و قیمت (محتوای پایین کارت) -->
     <div class="relative w-full  pt-2 bg-transparent p-4">
 
@@ -56,12 +56,12 @@ console.log(props.product)
 
       </div>
 
-        <p class="text-cosColor text-sm">{{ sizeRange }}</p>
+      <p class="text-cosColor text-sm">{{ sizeRange }}</p>
 
 
     </div>
     <UButton disabled class=" bg-white text-gray-900 font-bold rounded-tr-full hover:bg-gray-100 transition shadow-sm px-8 absolute -left-4 text-right bottom-0"
-        align="left">
+             align="left">
       <UIcon name="iconamoon:shopping-card-add-bold" class="text-xl"/>
     </UButton>
 

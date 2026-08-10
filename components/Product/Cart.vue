@@ -13,7 +13,7 @@ const totalItems = computed(() => allCard.value?.reduce((s, i) => s + i.qty, 0) 
 const { data: shippingMethods } = await useFetch(`${apiBase}/shipping-methods`)
 const selectedShipping = ref(null)
 watch(shippingMethods, (v) => {
-    if (v?.data?.length && !selectedShipping.value) selectedShipping.value = v.data[0]
+  if (v?.data?.length && !selectedShipping.value) selectedShipping.value = v.data[0]
 }, { immediate: true })
 
 const shippingPrice  = computed(() => selectedShipping.value?.price ?? 0)
@@ -25,8 +25,8 @@ const coupon = reactive({ code: '', percent: 0 })
 const addressId = ref(null)
 
 function removeFromCart(item) {
-    store.remove(item._key)
-    toast.add({ title: `${item.name} حذف شد`, color: 'red', timeout: 2000 })
+  store.remove(item._key)
+  toast.add({ title: `${item.name} حذف شد`, color: 'red', timeout: 2000 })
 }
 </script>
 
@@ -55,7 +55,7 @@ function removeFromCart(item) {
 
             <!-- تصویر -->
             <img :src="item.selectedColor?.image || item.primary_image || '/images/preloader.png'"
-                 class="w-16 h-16 rounded-xl object-cover flex-shrink-0 border border-gray-100"/>
+                 :alt="item.name" class="w-16 h-16 rounded-xl object-cover flex-shrink-0 border border-gray-100"/>
 
             <!-- اطلاعات -->
             <div class="flex-1 min-w-0">

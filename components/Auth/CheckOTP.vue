@@ -43,7 +43,7 @@ async function chechOTP() {
 </script>
 <template>
   <div class="p-10 border border-mainColor bg-secColor text-white rounded-2xl flex flex-col items-center  border-2 ">
-    <img src="/images/logo.avif" alt="اسلیپر استور" class="w-30 h-40">
+    <img src="/images/logo.avif" alt="اسلیپر پاز" class="w-30 h-40">
     <br>
     <p>بچه ها به شماره <span class="text-mainColor "> {{ route?.query?.cellphone }} </span> کد 6 رقمی ارسال کردند</p>
     <p class="text-right mt-5 w-full">کد تایید به حساب کاربری</p>

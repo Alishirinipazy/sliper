@@ -56,7 +56,7 @@ if (props?.fixed) {
         </div>
         <div class="w-1/3 flex justify-center">
           <nuxt-link to="/">
-            <img src="/images/logo.avif" class="w-[130px]" alt="">
+            <img src="/images/logo.avif" class="w-[130px]" alt="اسلیپر پاز">
           </nuxt-link>
         </div>
         <div class=" w-1/3 flex justify-end mx-1">
@@ -69,8 +69,8 @@ if (props?.fixed) {
             <!---->
             <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart" @click="store?.changeStatusModal()"
                      color="yellow">
-            <UChip :text="store?.allItem?.length" v-if="store?.allItem?.length" size="lg" :ui="{background:'bg-secColor' ,}">
-            </UChip>
+              <UChip :text="store?.allItem?.length" v-if="store?.allItem?.length" size="lg" :ui="{background:'bg-secColor' ,}">
+              </UChip>
             </UButton>
           </div>
           <UButton class="rounded-full mx-1 " icon="material-symbols:search" color="yellow"/>
@@ -105,9 +105,9 @@ if (props?.fixed) {
           <p>محصولاتمون</p></nuxt-link>
         <nuxt-link @click="store?.changeStatusModal()" class="header-item" >
           <UChip :text="store?.allItem?.length" v-if="store?.allItem?.length" size="lg" :ui="{background:'bg-amber-400' ,}">
-          <UIcon name="icon-park-solid:buy" class="w-5 h-5"/>
           </UChip>
-            <p>سبدخرید</p>
+            <UIcon name="icon-park-solid:buy" class="w-5 h-5"/>
+          <p>سبدخرید</p>
         </nuxt-link>
 
         <nuxt-link to="/auth/login" class="header-item" v-if="!authUser">
