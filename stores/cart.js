@@ -113,13 +113,14 @@ export const useModalStore = defineStore('open', () => {
         if (existing) {
             existing.qty += count
         } else {
+            const unitPrice = product.on_sale ? product.sale_price : (size?.price ?? product.min_price ?? product.price ?? 0)
             card?.value?.push({
                 ...product,
                 _key: key,
                 qty: count,
                 selectedColor: color,
                 selectedSize: size,
-                selectedPrice: size?.price ?? product.price ?? 0,
+                selectedPrice: unitPrice,
             })
         }
         return true

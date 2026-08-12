@@ -25,7 +25,7 @@ const items = [{
   icon: 'i-categoury-information-circle',
   defaultOpen: true,
   slot: 'color'
-},{
+}, {
   label: 'مرتب سازی',
   icon: 'i-sort',
   defaultOpen: false,
@@ -43,12 +43,14 @@ const orderedCategories = computed(() => {
     byParent[key].push(c)
   }
   const result = []
+
   function walk(parentKey, depth) {
     for (const c of byParent[parentKey] ?? []) {
       result.push({...c, depth})
       walk(c.id, depth + 1)
     }
   }
+
   walk('root', 0)
   return result
 })
@@ -117,7 +119,7 @@ function handleFilter(filter) {
         <ul class="m-0  my-1 ">
           <template v-if="!pendingCategories" v-for="(value,index) in orderedCategories">
             <li
-                class="px-4 py-1 rounded-2xl mx-1  cursor-pointer"
+                class="px-4 py-1 rounded-2xl mx-1  cursor-pointer decoration-dotted"
                 :style="{ paddingRight: `${1 + value.depth * 1.25}rem` }"
                 :class="route?.query?.category== value?.id ?'text-mainColor':'text-secColor'"
                 @click="categoriesHandel(value?.id)">{{ value?.name }}
@@ -173,7 +175,22 @@ function handleFilter(filter) {
                 class="px-4 py-1 rounded-2xl mx-1  cursor-pointer"
                 :class="route?.query?.size== value ?'text-mainColor':'text-secColor'"
                 @click="router.push({query:{...route.query, size:value}})">
-              <UCheckbox :model-value="route?.query?.size=== value" :label="value" />
+              <UCheckbox :model-value="route?.query?.size=== value" :label="value"/>
+            </li>
+          </template>
+          <li v-else class=" rounded-2xl mx-1  cursor-pointer">
+            <USkeleton class="h-4 w-[400px]"/>
+          </li>
+        </ul>
+      </template>
+      <template #color>
+        <ul class="m-0  my-1 ">
+          <template v-if="!pendingCategories" v-for="(value,index) in orderedCategories">
+            <li
+                class="px-4 py-1 rounded-2xl mx-1  cursor-pointer decoration-dotted"
+                :style="{ paddingRight: `${1 + value.depth * 1.25}rem` }"
+                :class="route?.query?.category== value?.id ?'text-mainColor':'text-secColor'"
+                @click="categoriesHandel(value?.id)">{{ value?.name }}
             </li>
           </template>
           <li v-else class=" rounded-2xl mx-1  cursor-pointer">

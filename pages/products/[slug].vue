@@ -74,7 +74,23 @@ watch(product, (p) => {
 }, { immediate: true })
 
 const availableSizes = computed(() => selectedColor.value?.sizes ?? [])
-const currentPrice   = computed(() => selectedSize.value?.price ?? product.value?.min_price ?? 0)
+const maxQuantity = computed(() => product.value?.has_variants ? (selectedSize.value?.quantity ?? 0) : (product.value?.total_quantity ?? 0))
+
+// قیمت عادی (بر اساس سایز انتخاب‌شده یا کمترین قیمت محصول) و قیمت نهایی
+// (اگر تخفیف فعال باشه، sale_price؛ وگرنه همون قیمت عادی). is_on_sale از
+// بک‌اند میاد و با توجه به تاریخ شروع/پایان حراجی محاسبه شده - وقتی زمان
+// تخفیف تموم بشه، خودش false می‌شه و اینجا خودکار به قیمت اصلی برمی‌گرده.
+const saleTimerExpired = ref(false)
+watch(product, () => { saleTimerExpired.value = false }) // reset when a different product loads
+const isOnSale = computed(() => !!product.value?.on_sale && !saleTimerExpired.value)
+const regularPrice = computed(() => selectedSize.value?.price ?? product.value?.min_price ?? 0)
+const currentPrice = computed(() => isOnSale.value ? product.value?.sale_price : regularPrice.value)
+// شمارش معکوس تا پایان حراجی
+const saleEndTime = computed(() => {
+  if (!isOnSale.value || !product.value?.date_on_sale_to) return 0
+  const end = new Date(product.value.date_on_sale_to + 'Z').getTime() // بک‌اند UTC بدون timezone می‌فرسته
+  return Math.max(0, end - Date.now())
+})
 
 // تصاویر: عکس رنگ انتخاب‌شده + تصاویر اضافی
 const displayImages = computed(() => {
@@ -91,9 +107,13 @@ function transformSlotProps(props) {
 }
 
 function addToCart() {
-  if (!selectedColor.value) { toast.add({ title: 'رنگ رو انتخاب کن', color: 'red' }); return }
-  if (!selectedSize.value)  { toast.add({ title: 'سایز رو انتخاب کن',  color: 'red' }); return }
-  if (selectedSize.value.quantity < 1) { toast.add({ title: 'این سایز موجود نیست', color: 'red' }); return }
+  if (product.value?.has_variants) {
+    if (!selectedColor.value) { toast.add({ title: 'رنگ رو انتخاب کن', color: 'red' }); return }
+    if (!selectedSize.value)  { toast.add({ title: 'سایز رو انتخاب کن',  color: 'red' }); return }
+    if (selectedSize.value.quantity < 1) { toast.add({ title: 'این سایز موجود نیست', color: 'red' }); return }
+  } else if ((product.value?.total_quantity ?? 0) < 1) {
+    toast.add({ title: 'این محصول موجود نیست', color: 'red' }); return
+  }
 
   cart.addToCart(product.value, quantity.value, selectedColor.value, selectedSize.value)
   toast.add({ title: `${product.value.name} به سبد خرید اضافه شد 🛒`, color: 'green' })
@@ -103,13 +123,13 @@ function addToCart() {
 
 const seoDescription = computed(() => {
   const raw = product.value?.description?.replace(/\*\*/g, '').replace(/\s*\n\s*/g, ' ').trim()
-  if (!raw) return `خرید آنلاین ${product.value?.name || ''} از اسلیپر پاز با ارسال سریع و ضمانت اصالت کالا.`
+  if (!raw) return `خرید آنلاین ${product.value?.name || ''} از اسلیپر استور با ارسال سریع و ضمانت اصالت کالا.`
   return raw.length > 160 ? raw.slice(0, 157) + '…' : raw
 })
 const productUrl = computed(() => `https://slipperpaz.ir/products/${route.params.slug}`)
 
 useSeoMeta({
-  title: () => product.value ? `${product.value.name} | اسلیپر پاز` : 'در حال بارگذاری… | اسلیپر پاز',
+  title: () => product.value ? `${product.value.name} | اسلیپر استور` : 'در حال بارگذاری… | اسلیپر استور',
   description: seoDescription,
   ogTitle: () => product.value?.name,
   ogDescription: seoDescription,
@@ -134,7 +154,7 @@ useHead({
         '@type': 'Offer',
         url: productUrl.value,
         priceCurrency: 'IRR',
-        price: product.value?.min_price,
+        price: product.value?.on_sale ? product.value?.sale_price : product.value?.min_price,
         availability: product.value?.total_quantity > 0
             ? 'https://schema.org/InStock'
             : 'https://schema.org/OutOfStock',
@@ -175,7 +195,7 @@ const links = [
 
       <!-- اسلایدر تصاویر -->
       <div class="col-span-12 lg:col-span-5">
-        <div class="relative rounded-3xl overflow-hidden shadow-lg shadow-mainColor/5 ring-1 ring-black/5">
+        <div class="relative rounded-3xl overflow-hidden shadow-lg shadow-mainColor/5 ring-1 ring-black/5 ">
           <Swiper :space-between="10" :thumbs="{ swiper: thumbsSwiper }"
                   :modules="[Thumbs, Navigation]" navigation :loop="true" class="mySwiper2">
             <SwiperSlide v-for="(img, i) in displayImages" :key="i">
@@ -184,7 +204,8 @@ const links = [
           </Swiper>
 
           <span v-if="product?.discount_percent"
-                class="absolute top-4 right-4 z-10 bg-mainColor text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+                class="absolute top-4 right-4 z-10 bg-cosColor text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+
             {{ product.discount_percent }}٪ تخفیف
           </span>
         </div>
@@ -207,7 +228,7 @@ const links = [
         <div class="h-px bg-gray-100 my-5"/>
 
         <!-- انتخاب رنگ -->
-        <div class="mb-6">
+        <div v-if="product?.has_variants" class="mb-6">
           <p class="text-sm font-bold text-secColor mb-3">
             رنگ <span class="text-mainColor font-normal">· {{ selectedColor?.name }}</span>
           </p>
@@ -226,9 +247,9 @@ const links = [
         </div>
 
         <!-- انتخاب سایز -->
-        <div class="mb-6">
+        <div v-if="product?.has_variants" class="mb-6">
           <p class="text-sm font-bold text-secColor mb-3">
-            سایز <span v-if="selectedSize" class="text-mainColor font-normal">· {{ selectedSize.size }}</span>
+            سایز <span v-if="selectedSize" class="text-mainColor font-normal">: {{ selectedSize.size }}</span>
           </p>
           <div class="flex flex-wrap gap-2">
             <button v-for="size in availableSizes" :key="size.id"
@@ -256,10 +277,12 @@ const links = [
               <button @click="quantity > 1 && quantity--" type="button"
                       class="w-9 h-9 rounded-xl bg-white shadow-sm hover:bg-mainColor hover:text-white font-bold transition-colors">−</button>
               <span class="w-10 text-center font-bold text-secColor">{{ quantity }}</span>
-              <button @click="selectedSize && quantity < selectedSize.quantity && quantity++" type="button"
+              <button @click="quantity < maxQuantity && quantity++" type="button"
                       class="w-9 h-9 rounded-xl bg-white shadow-sm hover:bg-mainColor hover:text-white font-bold transition-colors">+</button>
             </div>
-            <span v-if="selectedSize" class="text-xs text-gray-400">{{ selectedSize.quantity }} عدد موجود</span>
+            <span v-if="product?.has_variants ? selectedSize : product?.total_quantity" class="text-xs text-gray-400">
+              {{ product?.has_variants ? selectedSize?.quantity : product.total_quantity }} عدد موجود
+            </span>
           </div>
         </div>
       </div>
@@ -268,15 +291,15 @@ const links = [
       <div class="price-details-product">
         <div class="hidden lg:block">
           <div class="flex justify-center mb-4">
-            <img src="/images/logo.avif" class="w-[150px]" alt="اسلیپر پاز"/>
+            <img src="/images/logo.avif" class="w-[150px]" alt="اسلیپر استور"/>
           </div>
           <ul class="text-sm space-y-3 text-secColor/80">
             <li class="flex items-center gap-2">
-              <Icon name="streamline-plump-color:return-3-flat" class="text-lg"/> مرجوعی تا 5 روز کاری
+              <Icon name="streamline-plump-color:return-3-flat" class="text-lg"/> مرجوعی تا 5 روز
             </li>
-            <li class="flex items-center gap-2">🚚 ارسال سریع تا درب خونت</li>
+            <li class="flex items-center gap-2">🚚 ارسال سریع تا درب منزل</li>
             <li class="flex items-center gap-2">✨ کادو‌پیچ مجلسی</li>
-            <li class="flex items-center gap-2">🛡️ ضمانت اصالت کالا تا ۱ سال</li>
+            <li class="flex items-center gap-2">🛡️ پشتیبانی 247 اختصاصی اسلیپر پاز</li>
           </ul>
           <div class="h-px bg-mainColor/10 my-5"/>
         </div>
@@ -284,42 +307,60 @@ const links = [
         <div class="px-1">
           <!-- قیمت -->
           <div class="text-center lg:text-right mb-3">
-            <p v-if="selectedSize" class="text-2xl lg:text-3xl font-extrabold text-mainColor">
-              {{ numberFormat(selectedSize.price) }}
-              <span class="text-sm font-medium text-secColor/60">تومان</span>
-            </p>
-            <p v-else-if="product?.min_price" class="text-lg font-bold text-secColor/70">
-              از {{ numberFormat(product.min_price) }} تومان
-            </p>
+            <template v-if="isOnSale">
+              <p class="text-sm text-gray-400 line-through">
+                {{ numberFormat(regularPrice) }} <span class="text-[10px]"> تومان</span>
+              </p>
+              <p class="text-2xl lg:text-3xl font-extrabold text-cosColor">
+                {{ numberFormat(currentPrice) }}
+                <span class="text-sm font-medium text-secColor/60">تومان</span>
+              </p>
+              <ClientOnly>
+                <VueCountdown v-if="saleEndTime > 0" :time="saleEndTime" v-slot="{ days, hours, minutes, seconds }"
+                              @end="saleTimerExpired = true">
+                  <p class="text-xs font-bold text-red-500 mt-1">
+                    ⏳ پایان تخفیف: {{ days > 0 ? `${days} روز و ` : '' }}{{ String(hours).padStart(2,'0') }}:{{ String(minutes).padStart(2,'0') }}:{{ String(seconds).padStart(2,'0') }}
+                  </p>
+                </VueCountdown>
+              </ClientOnly>
+            </template>
+            <template v-else>
+              <p v-if="selectedSize" class="text-2xl lg:text-3xl font-extrabold text-mainColor">
+                {{ numberFormat(selectedSize.price) }}
+                <span class="text-sm font-medium text-secColor/60">تومان</span>
+              </p>
+              <p v-else-if="product?.min_price" class="text-lg font-bold text-secColor/70">
+                از {{ numberFormat(product.min_price) }} تومان
+              </p>
+            </template>
           </div>
 
           <!-- اخطار انتخاب نشده -->
-          <div v-if="!selectedColor || !selectedSize"
+          <div v-if="product?.has_variants && (!selectedColor || !selectedSize)"
                class="text-xs text-center text-amber-100 bg-amber-500/90 lg:bg-amber-600/30 lg:text-amber-200 rounded-xl px-3 py-2 mb-3 font-medium">
             {{ !selectedColor ? 'رنگ رو انتخاب کن' : 'سایز رو انتخاب کن' }}
           </div>
 
-          <u-button color="yellow" block size="lg"
+          <u-button  block size="lg" :class="isOnSale?'bg-cosColor':'bg-mainColor'"
                     class="font-bold rounded-2xl shadow-lg shadow-mainColor/20 transition-transform active:scale-95"
                     @click="addToCart"
-                    :disabled="!selectedColor || !selectedSize || selectedSize?.quantity < 1">
+                    :disabled="product?.has_variants ? (!selectedColor || !selectedSize || selectedSize?.quantity < 1) : (product?.total_quantity ?? 0) < 1">
             🛒 افزودن به سبد خرید
           </u-button>
         </div>
       </div>
     </div>
-
-
+<!--    توضیحات تکمیلی-->
     <div class="flex items-center gap-3 mb-6">
-      <h3 class="text-xl font-extrabold text-mainColor">توضیحات</h3>
-      <div class="h-px flex-1 bg-secColor/50"/>
+      <h3 class="text-xl font-extrabold text-secColor">درباره {{ product?.name}}</h3>
+      <div class="h-px flex-1 bg-gray-100"/>
     </div>
     <div class="text-sm text-gray-500 leading-loose my-5" v-html="formattedDescription"/>
     <!-- محصولات مشابه -->
     <div v-if="randomProducts?.data?.length" class="my-14">
       <div class="flex items-center gap-3 mb-6">
-        <h3 class="text-xl font-extrabold text-mainColor">محصولات مشابه</h3>
-        <div class="h-px flex-1 bg-secColor/50"/>
+        <h3 class="text-xl font-extrabold text-secColor">محصولات مشابه</h3>
+        <div class="h-px flex-1 bg-gray-100"/>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
         <NuxtLink v-for="p in randomProducts.data" :key="p.id" :to="`/products/${p.slug}`" class="group">
@@ -336,6 +377,7 @@ const links = [
         </NuxtLink>
       </div>
     </div>
+
   </u-container>
   <LayoutsFooter/>
   <!-- چت‌بات با context محصول -->
@@ -349,7 +391,7 @@ const links = [
 .mySwiper2 { width: 100%; }
 
 .price-details-product {
-  @apply lg:col-span-3 fixed left-0 bottom-12 lg:text-secColor text-white w-screen lg:w-auto lg:relative z-20 pt-3 pb-4 lg:pb-5 px-4 lg:px-5 bg-white/95 backdrop-blur border-t border-gray-100 lg:border-t-0 lg:bg-white lg:rounded-3xl lg:shadow-xl lg:shadow-mainColor/5 lg:ring-1 lg:ring-black/5 lg:sticky lg:top-24 lg:self-start;
+  @apply lg:col-span-3 fixed left-0 bottom-0 lg:text-secColor text-white w-screen lg:w-auto lg:relative z-20 pt-3 pb-4 lg:pb-5 px-4 lg:px-5 bg-white/95 backdrop-blur border-t border-gray-100 lg:border-t-0 lg:bg-white lg:rounded-3xl lg:shadow-xl lg:shadow-mainColor/5 lg:ring-1 lg:ring-black/5 lg:sticky lg:top-24 lg:self-start;
 }
 
 .mySwiper { @apply box-border; }
