@@ -5,6 +5,26 @@ import {useModalStore} from '@/stores/cart'
 const store = useModalStore()
 
 const isOpen = ref(false)
+const searchOpen = ref(false)
+const searchTerm = ref('')
+const router = useRouter()
+
+const searchSuggestions = computed(() => {
+  const value = searchTerm.value.trim()
+  if (!value) return ['اسلیپر پاز', 'دمپایی', 'کفش راحتی']
+  if (value === 'اسلیپر' || value === 'اسلیپر پاز') return ['اسلیپر پاز']
+  return []
+})
+
+function submitSearch(term = searchTerm.value) {
+  const value = String(term || '').trim()
+  if (!value) return
+
+  const normalized = value === 'اسلیپر' ? 'اسلیپر پاز' : value
+  searchTerm.value = normalized
+  searchOpen.value = false
+  router.push({ path: '/products', query: { search: normalized } })
+}
 const classHeader = ref('header');
 const {authUser} = useAuth();
 const props = defineProps(['fixed'])
@@ -73,7 +93,13 @@ if (props?.fixed) {
               </UChip>
             </UButton>
           </div>
-          <UButton class="rounded-full mx-1 " icon="material-symbols:search" color="yellow"/>
+          <UButton
+              class="rounded-full mx-1"
+              icon="material-symbols:search"
+              color="yellow"
+              aria-label="جستجوی محصولات"
+              @click="searchOpen = true"
+          />
           <nuxt-link to="/auth/login" v-if="!authUser">
             <UButton color="yellow" class="mx-2" :ui="{ rounded: 'rounded-full' }">
               <span class="hidden md:block">ثبت نام | ورود</span>
@@ -125,6 +151,38 @@ if (props?.fixed) {
       </div>
     </div>
   </header>
+
+  <USlideover v-model="searchOpen" side="top">
+    <div dir="rtl" class="p-5 bg-white">
+      <form @submit.prevent="submitSearch()" class="max-w-2xl mx-auto">
+        <label for="site-search" class="block text-sm font-bold text-secColor mb-2">جستجوی اسلیپر پاز</label>
+        <div class="flex gap-2">
+          <UInput
+            id="site-search"
+            v-model="searchTerm"
+            autofocus
+            icon="material-symbols:search"
+            placeholder="مثلاً اسلیپر، دمپایی یا کفش راحتی"
+            class="flex-1"
+          />
+          <UButton type="submit" color="yellow" label="جستجو" />
+        </div>
+
+        <div v-if="searchSuggestions.length" class="mt-3 flex flex-wrap gap-2">
+          <button
+            v-for="suggestion in searchSuggestions"
+            :key="suggestion"
+            type="button"
+            class="px-3 py-1.5 rounded-full bg-slate-100 text-sm text-secColor hover:bg-mainColor transition"
+            @click="submitSearch(suggestion)"
+          >
+            {{ suggestion }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </USlideover>
+
   <USlideover v-model="store.isOpenModal" class="flex flex-col flex-1"
               :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
     <ProductCart/>

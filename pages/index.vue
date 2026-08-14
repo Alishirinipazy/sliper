@@ -35,7 +35,7 @@ useHead({
 
 <template>
   <LayoutsHeader/>
-  <h1 class="sr-only">اسلیپر پاز | خرید آنلاین دمپایی و کفش راحتی زنانه، مردانه و بچگانه کیف کفش کتونی</h1>
+  <h1 class="sr-only">اسلیپر پاز؛ خرید آنلاین دمپایی و کفش راحتی زنانه، مردانه و بچگانه</h1>
 
   <!-- اسلایدر اصلی -->
   <GlobalSlider :items="slide" h="lg:h-[90vh] h-[40vh]" :stories="stories"/>

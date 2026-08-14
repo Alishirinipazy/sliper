@@ -1,4 +1,5 @@
-const apiBase = process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8000/api'
+const apiBase = process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8000/api/v1'
+const siteUrl = (process.env.NUXT_PUBLIC_SITE_URL || 'https://slipperpaz.ir').replace(/\/$/, '')
 // backend origin without the /api/v1 suffix, e.g. http://localhost:8000 -
 // used to proxy /storage/** (product/category/etc images) through to FastAPI,
 // since the backend returns relative paths like "/storage/images/products/x.jpg"
@@ -10,7 +11,8 @@ export default defineNuxtConfig({
 
     runtimeConfig: {
         public: {
-            apiBase
+            apiBase,
+            siteUrl
         }
     },
 
@@ -31,7 +33,10 @@ export default defineNuxtConfig({
     },
 
     routeRules: {
-        '/storage/**': { proxy: `${apiOrigin}/storage/**` }
+        '/storage/**': { proxy: `${apiOrigin}/storage/**` },
+        '/profile/**': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
+        '/auth/**': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
+        '/payment/**': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } }
     },
 
     compatibilityDate: '2025-02-12',

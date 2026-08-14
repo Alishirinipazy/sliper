@@ -122,45 +122,103 @@ function addToCart() {
 }
 
 const seoDescription = computed(() => {
-  const raw = product.value?.description?.replace(/\*\*/g, '').replace(/\s*\n\s*/g, ' ').trim()
-  if (!raw) return `خرید آنلاین ${product.value?.name || ''} از اسلیپر استور با ارسال سریع و ضمانت اصالت کالا.`
-  return raw.length > 160 ? raw.slice(0, 157) + '…' : raw
+  const raw = product.value?.description
+    ?.replace(/\*\*/g, '')
+    ?.replace(/\s*\n\s*/g, ' ')
+    ?.trim()
+
+  const fallback = product.value?.name
+    ? `خرید ${product.value.name} از اسلیپر پاز با مشاهده قیمت، مشخصات و تصاویر محصول.`
+    : 'خرید آنلاین دمپایی و کفش راحتی از اسلیپر پاز با ارسال سریع.'
+
+  if (!raw) return fallback
+  return raw.length > 160 ? `${raw.slice(0, 157)}…` : raw
 })
-const productUrl = computed(() => `https://slipperpaz.ir/products/${route.params.slug}`)
+
+const productUrl = computed(() => `https://slipperpaz.ir/products/${encodeURIComponent(String(route.params.slug))}`)
+
+const absoluteImage = (image) => {
+  if (!image) return undefined
+  if (/^https?:\/\//i.test(image)) return image
+  return `https://slipperpaz.ir${image.startsWith('/') ? '' : '/'}${image}`
+}
+
+const schemaPrice = computed(() => {
+  const value = isOnSale.value ? product.value?.sale_price : regularPrice.value
+  if (value == null || value === '') return undefined
+  // The storefront displays prices in تومان; Schema.org uses IRR (ریال).
+  const numeric = Number(value)
+  return Number.isFinite(numeric) ? numeric * 10 : undefined
+})
+
+const productSchema = computed(() => ({
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  '@id': `${productUrl.value}#product`,
+  name: product.value?.name || 'محصول اسلیپر پاز',
+  description: seoDescription.value,
+  image: displayImages.value.map((item) => absoluteImage(item.image || item.primary_image)).filter(Boolean),
+  url: productUrl.value,
+  brand: {
+    '@type': 'Brand',
+    name: 'اسلیپر پاز'
+  },
+  sku: product.value?.sku || product.value?.id ? String(product.value?.sku || product.value?.id) : undefined,
+  category: product.value?.category || undefined,
+  offers: {
+    '@type': 'Offer',
+    url: productUrl.value,
+    priceCurrency: 'IRR',
+    price: schemaPrice.value,
+    availability: maxQuantity.value > 0
+      ? 'https://schema.org/InStock'
+      : 'https://schema.org/OutOfStock',
+    seller: {
+      '@type': 'Organization',
+      name: 'اسلیپر پاز',
+      url: 'https://slipperpaz.ir/'
+    }
+  }
+}))
+
+const breadcrumbSchema = computed(() => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'اسلیپر پاز', item: 'https://slipperpaz.ir/' },
+    { '@type': 'ListItem', position: 2, name: 'محصولات', item: 'https://slipperpaz.ir/products' },
+    { '@type': 'ListItem', position: 3, name: product.value?.name || 'محصول', item: productUrl.value }
+  ]
+}))
 
 useSeoMeta({
-  title: () => product.value ? `${product.value.name} | اسلیپر استور` : 'در حال بارگذاری… | اسلیپر استور',
+  title: () => product.value
+    ? `${product.value.name} | خرید از اسلیپر پاز`
+    : 'خرید آنلاین محصول | اسلیپر پاز',
   description: seoDescription,
-  ogTitle: () => product.value?.name,
+  ogTitle: () => product.value?.name ? `${product.value.name} | اسلیپر پاز` : 'اسلیپر پاز',
   ogDescription: seoDescription,
-  ogImage: () => product.value?.primary_image,
+  ogImage: () => absoluteImage(displayImages.value[0]?.image || product.value?.primary_image),
   ogType: 'product',
   ogUrl: productUrl,
   twitterCard: 'summary_large_image',
+  robots: 'index, follow'
 })
 
 useHead({
   link: [{ rel: 'canonical', href: productUrl }],
-  script: [{
-    type: 'application/ld+json',
-    innerHTML: computed(() => JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Product',
-      name: product.value?.name,
-      description: seoDescription.value,
-      image: product.value?.primary_image ? [product.value.primary_image] : undefined,
-      category: product.value?.category,
-      offers: {
-        '@type': 'Offer',
-        url: productUrl.value,
-        priceCurrency: 'IRR',
-        price: product.value?.on_sale ? product.value?.sale_price : product.value?.min_price,
-        availability: product.value?.total_quantity > 0
-            ? 'https://schema.org/InStock'
-            : 'https://schema.org/OutOfStock',
-      },
-    })),
-  }],
+  script: [
+    {
+      key: 'product-schema',
+      type: 'application/ld+json',
+      innerHTML: computed(() => JSON.stringify(productSchema.value))
+    },
+    {
+      key: 'breadcrumb-schema',
+      type: 'application/ld+json',
+      innerHTML: computed(() => JSON.stringify(breadcrumbSchema.value))
+    }
+  ]
 })
 
 const links = [
@@ -199,7 +257,7 @@ const links = [
           <Swiper :space-between="10" :thumbs="{ swiper: thumbsSwiper }"
                   :modules="[Thumbs, Navigation]" navigation :loop="true" class="mySwiper2">
             <SwiperSlide v-for="(img, i) in displayImages" :key="i">
-              <img :src="img.image||img.primary_image" :alt="`${product?.name} - تصویر ${i + 1}`" class="w-full object-cover aspect-square"/>
+              <img :src="img.image||img.primary_image" :alt="`${product?.name || 'اسلیپر پاز'} - تصویر ${i + 1}`" width="800" height="800" loading="eager" fetchpriority="high" class="w-full object-cover aspect-square"/>
             </SwiperSlide>
           </Swiper>
 
@@ -213,7 +271,7 @@ const links = [
         <Swiper @swiper="setThumbsSwiper" :space-between="12" :slides-per-view="4"
                 :watch-slides-progress="true" :modules="[Thumbs]" class="mySwiper mt-3">
           <SwiperSlide v-for="(img, i) in displayImages" :key="i">
-            <img :src="img.image||img.primary_image" :alt="`${product?.name} - تصویر کوچک ${i + 1}`"
+            <img :src="img.image||img.primary_image" :alt="`${product?.name || 'اسلیپر پاز'} - تصویر کوچک ${i + 1}`" loading="lazy" width="200" height="200"
                  class="rounded-xl cursor-pointer border-2 border-transparent opacity-60 hover:opacity-100 transition-all duration-200 object-cover aspect-square"/>
           </SwiperSlide>
         </Swiper>

@@ -63,7 +63,7 @@ function searchQueryHandler() {
     } else if (query.value.hasOwnProperty('search')) {
       delete query.value.page
     }
-    query.value['search'] = searchQuery;
+    query.value['search'] = searchQuery.value === 'اسلیپر' ? 'اسلیپر پاز' : searchQuery.value;
 
     router.push({
       path: '/products',

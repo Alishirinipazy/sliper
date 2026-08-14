@@ -43,28 +43,44 @@ const selectedCategoryName = computed(() => {
   const id = Number(route.query.category)
   return categoriesList.value?.data?.find(c => c.id === id)?.name
 })
+const hasOnlyCategory = computed(() => {
+  const keys = Object.keys(route.query)
+  return keys.length === 1 && keys[0] === 'category'
+})
+
 const pageTitle = computed(() =>
-    selectedCategoryName.value
-        ? `${selectedCategoryName.value} `
-        : 'محصولات | اسلیپر پاز'
+  selectedCategoryName.value
+    ? `${selectedCategoryName.value} | خرید آنلاین | اسلیپر پاز`
+    : 'محصولات | خرید دمپایی و کفش راحتی | اسلیپر پاز'
 )
+
 const pageDescription = computed(() =>
-    selectedCategoryName.value
-        ? `خرید آنلاین ${selectedCategoryName.value} با بهترین قیمت و ارسال سریع از اسلیپر پاز.`
-        : 'مشاهده و خرید آنلاین همه‌ی محصولات اسلیپر پاز: دمپایی و کفش راحتی زنانه، مردانه و بچگانه.'
+  selectedCategoryName.value
+    ? `خرید آنلاین ${selectedCategoryName.value} از اسلیپر پاز؛ مشاهده قیمت، تصاویر و مشخصات محصولات و سفارش آنلاین.`
+    : 'مشاهده و خرید آنلاین دمپایی و کفش راحتی زنانه، مردانه و بچگانه از اسلیپر پاز.'
 )
+
+const productsCanonical = computed(() => {
+  if (hasOnlyCategory.value && route.query.category) {
+    return `https://slipperpaz.ir/products?category=${encodeURIComponent(String(route.query.category))}`
+  }
+  return 'https://slipperpaz.ir/products'
+})
 
 useSeoMeta({
   title: pageTitle,
   description: pageDescription,
   ogTitle: pageTitle,
   ogDescription: pageDescription,
+  ogType: 'website',
   twitterCard: 'summary_large_image',
+  robots: () => hasOnlyCategory.value || Object.keys(route.query).length === 0
+    ? 'index, follow'
+    : 'noindex, follow'
 })
+
 useHead({
-  // Canonical strips filter/sort/pagination query params - those variants
-  // shouldn't be indexed as separate pages (duplicate content risk).
-  link: [{ rel: 'canonical', href: 'https://slipperpaz.ir/products' }],
+  link: [{ rel: 'canonical', href: productsCanonical }]
 })
 
 </script>
