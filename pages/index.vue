@@ -30,6 +30,36 @@ useSeoMeta({
 })
 useHead({
   link: [{ rel: 'canonical', href: 'https://slipperpaz.ir/' }],
+  script: [
+    {
+      key: 'site-schema',
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'Organization',
+            '@id': 'https://slipperpaz.ir/#organization',
+            name: 'اسلیپر پاز',
+            alternateName: 'Slipper Paz',
+            url: 'https://slipperpaz.ir/'
+          },
+          {
+            '@type': 'WebSite',
+            '@id': 'https://slipperpaz.ir/#website',
+            url: 'https://slipperpaz.ir/',
+            name: 'اسلیپر پاز',
+            publisher: { '@id': 'https://slipperpaz.ir/#organization' },
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: 'https://slipperpaz.ir/products?search={search_term_string}',
+              'query-input': 'required name=search_term_string'
+            }
+          }
+        ]
+      })
+    }
+  ]
 })
 </script>
 

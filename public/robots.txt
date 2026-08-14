@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /auth/
+Disallow: /profile/
+Disallow: /payment/
 
 Sitemap: https://slipperpaz.ir/sitemap.xml

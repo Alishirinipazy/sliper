@@ -14,7 +14,7 @@ function validate() {
   const e = {}
   if (!form.name.trim()) e.name = 'نام رو وارد کن'
   if (!form.email.trim()) e.email = 'ایمیل رو وارد کن'
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'ایمیل معتبر نیست'
+  else if (!/^09\d{9}$/.test(form.email)) e.email = 'شماره همراه معتبر نیست'
   if (!form.subject.trim()) e.subject = 'موضوع رو وارد کن'
   if (!form.text.trim()) e.text = 'متن پیام رو وارد کن'
   errors.value = e
@@ -127,8 +127,8 @@ useHead({
                 </div>
 
                 <div>
-                  <label class="block text-xs text-gray-400 mb-1.5">ایمیل شما</label>
-                  <input v-model="form.email" type="email" placeholder="example@email.com"
+                  <label class="block text-xs text-gray-400 mb-1.5">شماره تماس</label>
+                  <input v-model="form.email" type="tel" placeholder="09928608594"
                          class="w-full bg-white/5 border rounded-xl px-4 py-2.5 text-white placeholder:text-gray-500 outline-none transition focus:border-mainColor"
                          :class="errors.email ? 'border-red-500' : 'border-white/10'"/>
                   <p v-if="errors.email" class="text-xs text-red-400 mt-1">{{ errors.email }}</p>
