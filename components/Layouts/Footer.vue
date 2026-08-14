@@ -4,9 +4,9 @@
       <div class="flex flex-wrap justify-center lg:grid lg:grid-flow-col py-5 grid-cols-3 sm:grid-rows-3">
         <div class="row-span-5">
           <img src="/images/logo.avif" alt="اسلیپر پاز" class="w-6/12">
-          <h6 class="text-amber-400 px-5">با عشـــ❤️ــق پیش قدماتیم</h6>
-          <p class="py-2 px-5">نخستین پلتفرم فروش انواع دمپایی و مد استایل </p>
-          <p class="py-2 px-5">ما رو در چنل های زیر دنبال کنید .</p>
+          <h6 class="text-amber-400">با عشـــ❤️ــق پیش قدماتیم</h6>
+          <p class="py-2">نخستین پلتفرم فروش انواع دمپایی و مد استایل </p>
+          <p class="py-1">ما رو در چنل های زیر دنبال کنید .</p>
           <div class="flex gap-1">
             <a href="https://eitaa.com/slipperpaz" target="_blank" rel="noopener"
                class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white/10 hover:bg-mainColor hover:text-secColor flex items-center justify-center text-white transition">

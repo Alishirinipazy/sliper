@@ -83,10 +83,7 @@ if (props?.fixed) {
           <!---->
 
           <div class="hidden lg:block">
-            <!---->
-            <!---->
-            <UButton class="rounded-full mx-1" icon="mdi:cards-heart" color="yellow"/>
-            <!---->
+
             <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart" @click="store?.changeStatusModal()"
                      color="yellow">
               <UChip :text="store?.allItem?.length" v-if="store?.allItem?.length" size="lg" :ui="{background:'bg-secColor' ,}">
@@ -129,7 +126,7 @@ if (props?.fixed) {
         <nuxt-link to="/products" class="header-item" :class="{'text-amber-400': $route.path==='/products'}">
           <UIcon name="bxs:category" class="w-5 h-5"/>
           <p>محصولاتمون</p></nuxt-link>
-        <nuxt-link @click="store?.changeStatusModal()" class="header-item" >
+        <nuxt-link @click="store?.changeStatusModal()" class="material-symbols:shopping-cart" >
           <UChip :text="store?.allItem?.length" v-if="store?.allItem?.length" size="lg" :ui="{background:'bg-amber-400' ,}">
           </UChip>
             <UIcon name="icon-park-solid:buy" class="w-5 h-5"/>
