@@ -10,14 +10,9 @@ module.exports = {
             colors:{
                 mainColor:'#ffbe33',
                 secColor:'#222831',
-                cosColor:'#FF4C4C',
+                cosColor:'#E58B9A',
                 darkColor:'#1C1B22',
                 neonColor:'rgba(44,44,44,0)',
-                test:{
-                    main:'#634832',
-                    back:'#BBBBBB',
-                    backBtn:'#BBBBBB',
-                }
             }
         }
     }

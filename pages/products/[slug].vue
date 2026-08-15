@@ -261,11 +261,83 @@ const links = [
             </SwiperSlide>
           </Swiper>
 
-          <span v-if="product?.discount_percent"
-                class="absolute top-4 right-4 z-10 bg-cosColor text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+          <div v-if="product?.discount_percent"
+                class="absolute top-4 left-4 z-10 bg-cosColor w-[87%] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md flex justify-between">
+            <i class="absolute  -top-4 -right-12">
+              <svg
+                  width="50"
+                  height="50"
+                  viewBox="0 0 100 100"
+                  xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <linearGradient id="fireGradient" x1="20%" y1="0%" x2="80%" y2="100%">
+                    <stop offset="0%" stop-color="#FF9AB0"/>
+                    <stop offset="55%" stop-color="#F85C87"/>
+                    <stop offset="100%" stop-color="#ED3970"/>
+                  </linearGradient>
 
-            {{ product.discount_percent }}٪ تخفیف
-          </span>
+                  <filter id="fireGlow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="2.5" result="blur"/>
+                    <feMerge>
+                      <feMergeNode in="blur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+
+                <g class="fire">
+                  <path
+                      class="fire-body"
+                      fill="url(#fireGradient)"
+                      filter="url(#fireGlow)"
+                      d="M51.8 97
+          C27.5 97 10 80.8 10 57.4
+          C10 40.8 19.2 28.8 31.2 20
+          C28.8 32.2 33.5 39.5 39.8 43
+          C38.5 28.5 45.8 16.2 58.5 4
+          C58.2 15.5 64.8 21.2 68.8 27
+          C72.2 21.8 78.5 19.2 82 10
+          C86.8 22.5 89.5 31.2 87.5 41
+          C85.8 49.2 91 55.2 91 63.5
+          C91 82.2 74.5 97 51.8 97Z"
+                  />
+
+                  <path
+                      class="fire-inner"
+                      fill="#fff"
+                      d="M51.5 85
+          C40.8 85 33.5 77.8 33.5 68
+          C33.5 61.2 37.2 56.2 42.2 52.2
+          C41.8 59.2 45.5 62.5 49 63.8
+          C48.2 56.5 52 49.8 57.8 44.5
+          C57.8 51.2 62.2 54.8 64.5 59
+          C66.5 55.8 69.8 53.8 71.2 49.5
+          C73.5 55.5 75 60 74.5 64.5
+          C74 76.5 64.2 85 51.5 85Z"
+                  />
+
+                  <path
+                      class="fire-tip"
+                      fill="#F85C87"
+                      d="M69 27
+          C70 20 74 14 81 8
+          C80 15 84 20 82 26
+          C80 30 75 31 69 27Z"
+                  />
+                </g>
+              </svg>
+            </i>
+            <p>کوپنــ.پــاز</p>
+            <ClientOnly>
+              <VueCountdown v-if="saleEndTime > 0" :time="saleEndTime" v-slot="{ days, hours, minutes, seconds }"
+                            @end="saleTimerExpired = true">
+                <p class="text-xs font-bold ">
+                  ⏳ پایان تخفیف: {{ days > 0 ? `${days} روز و ` : '' }}{{ String(hours).padStart(2,'0') }}:{{ String(minutes).padStart(2,'0') }}:{{ String(seconds).padStart(2,'0') }}
+                </p>
+              </VueCountdown>
+            </ClientOnly>
+          </div>
         </div>
 
         <Swiper @swiper="setThumbsSwiper" :space-between="12" :slides-per-view="4"
@@ -346,7 +418,7 @@ const links = [
       </div>
 
       <!-- قیمت و خرید -->
-      <div class="price-details-product">
+      <div class="price-details-product ">
         <div class="hidden lg:block">
           <div class="flex justify-center mb-4">
             <img src="/images/logo.avif" class="w-[150px]" alt="اسلیپر استور"/>
@@ -362,9 +434,14 @@ const links = [
           <div class="h-px bg-mainColor/10 my-5"/>
         </div>
 
-        <div class="px-1">
+        <div class=" relative">
+          <div v-if="product?.on_sale"
+               class="absolute  -top-3 right-40 lg:left-20 bg-cosColor text-white text-xs font-bold  p-1 rounded-lg">
+            {{ product?.discount_percent }}%
+
+          </div>
           <!-- قیمت -->
-          <div class="text-center lg:text-right mb-3">
+          <div class="text-center lg:text-left mb-3">
             <template v-if="isOnSale">
               <p class="text-sm text-gray-400 line-through">
                 {{ numberFormat(regularPrice) }} <span class="text-[10px]"> تومان</span>
@@ -373,14 +450,7 @@ const links = [
                 {{ numberFormat(currentPrice) }}
                 <span class="text-sm font-medium text-secColor/60">تومان</span>
               </p>
-              <ClientOnly>
-                <VueCountdown v-if="saleEndTime > 0" :time="saleEndTime" v-slot="{ days, hours, minutes, seconds }"
-                              @end="saleTimerExpired = true">
-                  <p class="text-xs font-bold text-red-500 mt-1">
-                    ⏳ پایان تخفیف: {{ days > 0 ? `${days} روز و ` : '' }}{{ String(hours).padStart(2,'0') }}:{{ String(minutes).padStart(2,'0') }}:{{ String(seconds).padStart(2,'0') }}
-                  </p>
-                </VueCountdown>
-              </ClientOnly>
+
             </template>
             <template v-else>
               <p v-if="selectedSize" class="text-2xl lg:text-3xl font-extrabold text-mainColor">
@@ -449,7 +519,7 @@ const links = [
 .mySwiper2 { width: 100%; }
 
 .price-details-product {
-  @apply lg:col-span-3 fixed left-0 bottom-0 lg:text-secColor text-white w-screen lg:w-auto lg:relative z-20 pt-3 pb-4 lg:pb-5 px-4 lg:px-5 bg-white/95 backdrop-blur border-t border-gray-100 lg:border-t-0 lg:bg-white lg:rounded-3xl lg:shadow-xl lg:shadow-mainColor/5 lg:ring-1 lg:ring-black/5 lg:sticky lg:top-24 lg:self-start;
+  @apply lg:col-span-3 fixed left-0 bottom-14 lg:text-secColor text-white w-screen lg:w-auto lg:relative z-20 pt-3 pb-4 lg:pb-5 px-4 lg:px-5 bg-white/95 backdrop-blur border-t border-gray-100 lg:border-t-0 lg:bg-white lg:rounded-3xl lg:shadow-xl lg:shadow-mainColor/5 lg:ring-1 lg:ring-black/5 lg:sticky lg:top-24 lg:self-start;
 }
 
 .mySwiper { @apply box-border; }

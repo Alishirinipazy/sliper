@@ -90,13 +90,7 @@ if (props?.fixed) {
               </UChip>
             </UButton>
           </div>
-          <UButton
-              class="rounded-full mx-1"
-              icon="material-symbols:search"
-              color="yellow"
-              aria-label="جستجوی محصولات"
-              @click="searchOpen = true"
-          />
+
           <nuxt-link to="/auth/login" v-if="!authUser">
             <UButton color="yellow" class="mx-2" :ui="{ rounded: 'rounded-full' }">
               <span class="hidden md:block">ثبت نام | ورود</span>
@@ -126,10 +120,10 @@ if (props?.fixed) {
         <nuxt-link to="/products" class="header-item" :class="{'text-amber-400': $route.path==='/products'}">
           <UIcon name="bxs:category" class="w-5 h-5"/>
           <p>محصولاتمون</p></nuxt-link>
-        <nuxt-link @click="store?.changeStatusModal()" class="material-symbols:shopping-cart" >
+        <nuxt-link @click="store?.changeStatusModal()" class="header-item " >
           <UChip :text="store?.allItem?.length" v-if="store?.allItem?.length" size="lg" :ui="{background:'bg-amber-400' ,}">
           </UChip>
-            <UIcon name="icon-park-solid:buy" class="w-5 h-5"/>
+            <UIcon name="material-symbols:shopping-cart" class="w-5 h-5"/>
           <p>سبدخرید</p>
         </nuxt-link>
 

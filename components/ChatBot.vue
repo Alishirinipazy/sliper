@@ -101,7 +101,7 @@ function clearChat() {
     <!-- دکمه -->
     <UTooltip text="شروع مجدد">
       <button @click="isOpen = !isOpen"
-              class="fixed bottom-6 left-6 z-50 w-14 h-14 bg-secColor rounded-full shadow-xl flex items-center justify-center hover:scale-110 transition-all duration-300">
+              class="fixed bottom-12 left-6 z-50 w-14 h-14 bg-secColor rounded-full shadow-xl flex items-center justify-center hover:scale-110 transition-all duration-300">
         <Transition name="icon-swap" mode="out-in">
           <UIcon v-if="isOpen" key="close" name="i-heroicons-x-mark" class="w-6 h-6 text-mainColor"/>
           <div v-else key="open" class="relative">

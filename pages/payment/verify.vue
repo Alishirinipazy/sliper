@@ -59,7 +59,7 @@ onMounted(async () => {
         </div>
         <h2 class="text-lg font-bold text-secColor">پرداخت با موفقیت انجام شد 🎉</h2>
         <p v-if="refNumber" class="text-xs text-gray-400">کد پیگیری: {{ refNumber }}</p>
-        <NuxtLink to="/profile/orders" class="mt-2 px-6 py-2.5 bg-secColor text-white rounded-xl text-sm font-bold hover:opacity-90 transition">
+        <NuxtLink to="/profile/order" class="mt-2 px-6 py-2.5 bg-secColor text-white rounded-xl text-sm font-bold hover:opacity-90 transition">
           مشاهده سفارش‌ها
         </NuxtLink>
         <NuxtLink to="/" class="text-xs text-gray-400 hover:text-mainColor transition">بازگشت به فروشگاه</NuxtLink>

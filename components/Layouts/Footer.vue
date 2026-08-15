@@ -55,32 +55,29 @@
 
             <h5 class="text-2xl py-3 text-amber-400">محصولاتمون</h5>
             <ul class="">
-              <li class="p-2 ">
-                <nuxt-link to="/" @click="isOpen = false">
+              <li class="p-2 " >
+                <nuxt-link to="/products?category=2" @click="isOpen = false">
                   دمپایی
                 </nuxt-link>
               </li>
-              <li class="p-2 ">
-                <nuxt-link to="/products" @click="isOpen = false">
-                  کیف ها
-                </nuxt-link>
+              <li class=" ">
+                <UButton variant="ghost" size="xl" to="/products" disabled>کیف</UButton>
+
               </li>
-              <li class="p-2 ">
-                <nuxt-link to="/about" @click="isOpen = false">
-                  کفش
-                </nuxt-link>
+              <li class=" ">
+                <UButton variant="ghost"  size="xl" to="/products" disabled>کفش</UButton>
+
               </li>
-              <li class="p-2 ">
-                <nuxt-link to="/contact" @click="isOpen = false">
-                  اکسسوری
-                </nuxt-link>
+              <li class=" ">
+                <UButton variant="ghost"  size="xl" to="/products" disabled>صندل</UButton>
+
               </li>
             </ul>
           </div>
         </div>
         <div class="row-span-3 lg:text-right text-center ">
           <br><br>
-          <p class="py-2">آدرس انبار : تهران منیریه امیریه خیابان فروزش کوچه رضایی مجد</p>
+          <p class="py-2">آدرس انبار : قم شهرک فاطمیه خیابان بعثت کوچه 5 انبار پاز</p>
           <a class="py-2" href="tel:+989918608594">09918608594</a>
           <br>
           <a class="py-2" href="tel:+989372396496">09372396496</a>
