@@ -25,11 +25,6 @@ const items = [{
   icon: 'i-categoury-information-circle',
   defaultOpen: true,
   slot: 'color'
-}, {
-  label: 'مرتب سازی',
-  icon: 'i-sort',
-  defaultOpen: false,
-  slot: 'sort'
 }]
 
 // Flattens the parent/child category list into tree order (each parent
@@ -131,43 +126,7 @@ function handleFilter(filter) {
         </ul>
       </template>
 
-      <template #sort>
-        <form class="px-3">
-          <div class="form-check my-2">
-            <input class="form-check-input" @click="handleFilter('max')"
-                   :checked="route.query.hasOwnProperty('sort_by') && route.query.sort_by == 'max'"
-                   type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-            <label class="form-check-label cursor-pointer" for="flexRadioDefault1">
-              بیشترین قیمت
-            </label>
-          </div>
-          <div class="form-check my-2">
-            <input class="form-check-input" @click="handleFilter( 'min' )"
-                   :checked="route.query.hasOwnProperty('sort_by') && route.query.sort_by == 'min'"
-                   type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-            <label class="form-check-label cursor-pointer" for="flexRadioDefault2">
-              کمترین قیمت
-            </label>
-          </div>
-          <div class="form-check my-2">
-            <input class="form-check-input" @click="handleFilter( 'bestseller' )"
-                   :checked="route.query.hasOwnProperty('sort_by') && route.query.sort_by == 'bestseller'"
-                   type="radio" name="flexRadioDefault" id="flexRadioDefault3">
-            <label class="form-check-label cursor-pointer" for="flexRadioDefault3">
-              پرفروش ترین
-            </label>
-          </div>
-          <div class="form-check my-2">
-            <input class="form-check-input" @click="handleFilter( 'sale' )"
-                   :checked="route.query.hasOwnProperty('sort_by') && route.query.sort_by == 'sale'"
-                   type="radio" name="flexRadioDefault" id="flexRadioDefault4">
-            <label class="form-check-label cursor-pointer" for="flexRadioDefault4">
-              با تخفیف
-            </label>
-          </div>
 
-        </form>
-      </template>
       <template #size>
         <ul class="m-0  my-1 ">
           <template v-if="!pendingCategories" v-for="(value,index) in categories?.data?.sizes">
@@ -185,12 +144,12 @@ function handleFilter(filter) {
       </template>
       <template #color>
         <ul class="m-0  my-1 ">
-          <template v-if="!pendingCategories" v-for="(value,index) in orderedCategories">
+          <template v-if="!pendingCategories" v-for="(value,index) in categories?.data?.colors">
             <li
-                class="px-4 py-1 rounded-2xl mx-1  cursor-pointer decoration-dotted"
-                :style="{ paddingRight: `${1 + value.depth * 1.25}rem` }"
-                :class="route?.query?.category== value?.id ?'text-mainColor':'text-secColor'"
-                @click="categoriesHandel(value?.id)">{{ value?.name }}
+                class="px-4 py-1 rounded-2xl mx-1  cursor-pointer"
+                :class="route?.query?.color== value?.name ?'text-mainColor':'text-secColor'"
+                @click="router.push({query:{...route.query, color:value?.name}})">
+              <div class="flex justify-between"><p>{{value?.name}}</p><p class="w-6 h-6 border rounded" :style="{ backgroundColor: value?.color_code }"></p></div>
             </li>
           </template>
           <li v-else class=" rounded-2xl mx-1  cursor-pointer">

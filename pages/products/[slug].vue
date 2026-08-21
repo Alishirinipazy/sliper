@@ -418,14 +418,14 @@ const links = [
       </div>
 
       <!-- قیمت و خرید -->
-      <div class="price-details-product ">
+      <div class="price-details-product">
         <div class="hidden lg:block">
           <div class="flex justify-center mb-4">
-            <img src="/images/logo.avif" class="w-[150px]" alt="اسلیپر استور"/>
+            <img src="/images/logo.avif" class="w-[130px] xl:w-[150px]" alt="اسلیپر استور"/>
           </div>
           <ul class="text-sm space-y-3 text-secColor/80">
             <li class="flex items-center gap-2">
-              <Icon name="streamline-plump-color:return-3-flat" class="text-lg"/> مرجوعی تا 5 روز
+              <Icon name="streamline-plump-color:return-3-flat" class="text-lg shrink-0"/> مرجوعی تا 5 روز
             </li>
             <li class="flex items-center gap-2">🚚 ارسال سریع تا درب منزل</li>
             <li class="flex items-center gap-2">✨ کادو‌پیچ مجلسی</li>
@@ -434,30 +434,29 @@ const links = [
           <div class="h-px bg-mainColor/10 my-5"/>
         </div>
 
-        <div class=" relative">
+        <div class="relative">
           <div v-if="product?.on_sale"
-               class="absolute  -top-3 right-40 lg:left-20 bg-cosColor text-white text-xs font-bold  p-1 rounded-lg">
+               class="absolute -top-3 right-4 sm:right-6 lg:-left-2 lg:right-auto bg-cosColor text-white text-xs font-bold px-2 py-1 rounded-lg shadow">
             {{ product?.discount_percent }}%
-
           </div>
+
           <!-- قیمت -->
           <div class="text-center lg:text-left mb-3">
             <template v-if="isOnSale">
-              <p class="text-sm text-gray-400 line-through">
+              <p class="text-xs sm:text-sm text-gray-400 line-through">
                 {{ numberFormat(regularPrice) }} <span class="text-[10px]"> تومان</span>
               </p>
-              <p class="text-2xl lg:text-3xl font-extrabold text-cosColor">
+              <p class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-cosColor">
                 {{ numberFormat(currentPrice) }}
-                <span class="text-sm font-medium text-secColor/60">تومان</span>
+                <span class="text-xs sm:text-sm font-medium text-secColor/60">تومان</span>
               </p>
-
             </template>
             <template v-else>
-              <p v-if="selectedSize" class="text-2xl lg:text-3xl font-extrabold text-mainColor">
+              <p v-if="selectedSize" class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-mainColor">
                 {{ numberFormat(selectedSize.price) }}
-                <span class="text-sm font-medium text-secColor/60">تومان</span>
+                <span class="text-xs sm:text-sm font-medium text-secColor/60">تومان</span>
               </p>
-              <p v-else-if="product?.min_price" class="text-lg font-bold text-secColor/70">
+              <p v-else-if="product?.min_price" class="text-base sm:text-lg font-bold text-secColor/70">
                 از {{ numberFormat(product.min_price) }} تومان
               </p>
             </template>
@@ -469,8 +468,8 @@ const links = [
             {{ !selectedColor ? 'رنگ رو انتخاب کن' : 'سایز رو انتخاب کن' }}
           </div>
 
-          <u-button  block size="lg" :class="isOnSale?'bg-cosColor':'bg-mainColor'"
-                    class="font-bold rounded-2xl shadow-lg shadow-mainColor/20 transition-transform active:scale-95"
+          <u-button block size="lg" :class="isOnSale ? 'bg-cosColor' : 'bg-mainColor'"
+                    class="font-bold rounded-2xl shadow-lg shadow-mainColor/20 transition-transform active:scale-95 text-sm sm:text-base"
                     @click="addToCart"
                     :disabled="product?.has_variants ? (!selectedColor || !selectedSize || selectedSize?.quantity < 1) : (product?.total_quantity ?? 0) < 1">
             🛒 افزودن به سبد خرید
@@ -519,7 +518,19 @@ const links = [
 .mySwiper2 { width: 100%; }
 
 .price-details-product {
-  @apply lg:col-span-3 fixed left-0 bottom-14 lg:text-secColor text-white w-screen lg:w-auto lg:relative z-20 pt-3 pb-4 lg:pb-5 px-4 lg:px-5 bg-white/95 backdrop-blur border-t border-gray-100 lg:border-t-0 lg:bg-white lg:rounded-3xl lg:shadow-xl lg:shadow-mainColor/5 lg:ring-1 lg:ring-black/5 lg:sticky lg:top-24 lg:self-start;
+  @apply lg:col-span-3
+  fixed inset-x-0 bottom-14 z-20
+  w-full max-w-full
+  pt-3 px-4
+  pb-[calc(0.75rem+env(safe-area-inset-bottom))]
+  sm:px-6
+  bg-white/95 backdrop-blur border-t border-gray-100
+  text-white lg:text-secColor
+
+  lg:static lg:w-auto lg:max-w-none
+  lg:pb-5 lg:px-5
+  lg:bg-white lg:rounded-3xl lg:shadow-xl lg:shadow-mainColor/5 lg:ring-1 lg:ring-black/5
+  lg:sticky lg:top-24 lg:self-start;
 }
 
 .mySwiper { @apply box-border; }

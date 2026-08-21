@@ -91,12 +91,9 @@
 
       </div>
     </u-container>
-    <div class="absolute -bottom-14 left-1 w-full">
 
-
-    </div>
   </footer>
-  <div class="bg-black h-[3rem] w-full"></div>
+
 </template>
 <script setup lang="ts">
 </script>
