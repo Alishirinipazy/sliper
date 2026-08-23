@@ -34,7 +34,7 @@ useHead({
 </script>
 
 <template>
-  <NuxtLoadingIndicator color="#31d8ff"/>
+  <NuxtLoadingIndicator color="var(--main-color)"/>
   <nuxt-page/>
   <UNotifications/>
   <ClientOnly><ChatBot/></ClientOnly>
@@ -42,15 +42,15 @@ useHead({
 
 <style>
 :root {
+  --main-color: #ffbe33;
+  --main-color-soft: color-mix(in srgb, var(--main-color) 18%, transparent);
+  --main-color-glow: color-mix(in srgb, var(--main-color) 28%, transparent);
   --aqua-900: #04151f;
   --aqua-800: #072536;
   --aqua-700: #0b3549;
-  --aqua-500: #159cc4;
-  --aqua-300: #6ce7ff;
-  --aqua-glow: rgba(49, 216, 255, .28);
   --glass: rgba(9, 43, 58, .58);
   --glass-soft: rgba(255, 255, 255, .08);
-  --glass-border: rgba(169, 238, 255, .18);
+  --glass-border: color-mix(in srgb, var(--main-color) 18%, rgba(255,255,255,.12));
 }
 
 html { background: var(--aqua-900); }
@@ -59,7 +59,7 @@ body {
   min-height: 100vh;
   color: #eafaff;
   background:
-    radial-gradient(circle at 15% 10%, rgba(30, 173, 214, .18), transparent 28rem),
+    radial-gradient(circle at 15% 10%, color-mix(in srgb, var(--main-color) 10%, transparent), transparent 28rem),
     radial-gradient(circle at 90% 30%, rgba(15, 112, 154, .18), transparent 30rem),
     linear-gradient(160deg, #04151f 0%, #072b3b 48%, #03141e 100%);
   background-attachment: fixed;
@@ -76,10 +76,10 @@ body::before {
   background-size: 46px 46px;
 }
 
-* { scrollbar-color: rgba(108, 231, 255, .45) transparent; }
+* { scrollbar-color: color-mix(in srgb, var(--main-color) 45%, transparent) transparent; }
 *::-webkit-scrollbar { width: 7px; height: 7px; }
 *::-webkit-scrollbar-track { background: transparent; }
-*::-webkit-scrollbar-thumb { background: rgba(108, 231, 255, .3); border-radius: 999px; }
+*::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--main-color) 30%, transparent); border-radius: 999px; }
 
 .aqua-glass {
   background: linear-gradient(145deg, rgba(255,255,255,.11), rgba(255,255,255,.035));
@@ -90,13 +90,13 @@ body::before {
 }
 
 .aqua-pill {
-  border: 1px solid rgba(155, 235, 255, .2);
+  border: 1px solid color-mix(in srgb, var(--main-color) 20%, rgba(255,255,255,.08));
   background: rgba(255,255,255,.065);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
   backdrop-filter: blur(14px);
 }
 
-.aqua-glow { box-shadow: 0 0 28px var(--aqua-glow); }
+.aqua-glow { box-shadow: 0 0 28px var(--main-color-glow); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
