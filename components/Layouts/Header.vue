@@ -37,7 +37,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <header class="transition-all duration-500 ease-out z-110" :class="classHeader">
+  <header class="transition-all duration-500 ease-out z-[110] isolate" :class="classHeader">
     <u-container>
       <div class="nav-shell aqua-glass">
         <nav class="hidden lg:flex flex-1 items-center gap-2" aria-label="منوی اصلی">
@@ -57,7 +57,7 @@ onMounted(() => {
           </button>
           <button type="button" class="icon-action relative hidden lg:flex" aria-label="سبد خرید" @click="store?.changeStatusModal()">
             <UIcon name="material-symbols:shopping-cart-outline-rounded" class="w-5 h-5"/>
-            <UChip v-if="store?.allItem?.length" :text="store?.allItem?.length" size="sm" class="absolute -top-1 -right-1" :ui="{background:'bg-cyan-400 text-slate-950'}"/>
+            <UChip v-if="store?.allItem?.length" :text="store?.allItem?.length" size="sm" class="absolute -top-1 -right-1" :ui="{background:'bg-mainColor text-secColor'}"/>
           </button>
           <nuxt-link to="/auth/login" v-if="!authUser" class="aqua-cta">
             <span class="hidden md:inline">ثبت نام | ورود</span><UIcon name="octicon:sign-in-16" class="w-5 h-5"/>
@@ -78,7 +78,7 @@ onMounted(() => {
       </button>
       <button class="mobile-nav-item relative" @click="store?.changeStatusModal()">
         <UIcon name="material-symbols:shopping-cart-outline-rounded" class="w-5 h-5"/><span>سبدخرید</span>
-        <UChip v-if="store?.allItem?.length" :text="store?.allItem?.length" size="sm" class="absolute top-1/2 -translate-y-5 translate-x-4" :ui="{background:'bg-cyan-400 text-slate-950'}"/>
+        <UChip v-if="store?.allItem?.length" :text="store?.allItem?.length" size="sm" class="absolute top-1/2 -translate-y-5 translate-x-4" :ui="{background:'bg-mainColor text-secColor'}"/>
       </button>
       <button class="mobile-nav-item" @click="searchOpen = true">
         <UIcon name="material-symbols:search-rounded" class="w-5 h-5"/><span>جستجو</span>
@@ -92,7 +92,7 @@ onMounted(() => {
     </div>
   </header>
 
-  <USlideover v-model="searchOpen" side="top">
+  <USlideover v-model="searchOpen" side="top" :ui="{ base: 'z-[130]' }">
     <div dir="rtl" class="search-panel">
       <form @submit.prevent="submitSearch()" class="max-w-2xl mx-auto">
         <label for="site-search" class="search-label">جستجوی اسلیپر پاز</label>
@@ -107,26 +107,26 @@ onMounted(() => {
     </div>
   </USlideover>
 
-  <USlideover v-model="store.isOpenModal" class="flex flex-col flex-1" :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-cyan-100/10' }">
-    <ProductCart/>
+  <USlideover v-model="store.isOpenModal" class="flex flex-col flex-1" :ui="{ base: 'z-[125]', body: { base: 'flex-1 bg-[#071b24]' }, ring: '', divide: 'divide-y divide-mainColor/10' }">
+    <ProductCart preview />
   </USlideover>
 </template>
 
 <style>
-.header { @apply lg:fixed top-0 w-full py-3 px-2; }
-.header-scroll { @apply fixed top-0 w-full py-2 px-2; }
-.header-block { @apply block w-full py-3 px-2; }
+.header { @apply lg:fixed top-0 w-full py-3 px-2 z-[110] isolate; }
+.header-scroll { @apply fixed top-0 w-full py-2 px-2 z-[110] isolate; }
+.header-block { @apply block w-full py-3 px-2 z-[110] isolate; }
 .nav-shell { @apply mx-auto max-w-7xl min-h-[64px] rounded-[24px] px-3 sm:px-5 flex items-center gap-4; }
 .logo-wrap { @apply shrink-0 rounded-2xl px-2 py-1 transition-transform duration-300 hover:scale-105; }
-.nav-link { @apply px-4 py-2 rounded-full text-sm text-cyan-50/75 transition-all duration-300 hover:text-white hover:bg-white/10; }
-.nav-link-active { @apply text-white bg-white/10 shadow-[0_0_22px_rgba(49,216,255,.12)]; }
-.icon-action { @apply w-10 h-10 items-center justify-center rounded-full text-cyan-50/80 bg-white/[.06] border border-white/10 transition hover:bg-white/10 hover:text-white; }
-.aqua-cta { @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-4 text-sm font-bold text-slate-950 bg-gradient-to-r from-cyan-300 to-sky-400 shadow-[0_0_24px_rgba(49,216,255,.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_32px_rgba(49,216,255,.36)]; }
-.aqua-cta-active { @apply ring-2 ring-cyan-200/30; }
-.mobile-nav { @apply fixed bottom-3 left-2 right-2 z-30 mx-auto max-w-xl rounded-[26px] px-2 py-2 flex justify-around aqua-glass; }
-.mobile-nav-item { @apply relative flex min-w-0 flex-1 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] text-cyan-50/60 transition-all hover:text-white; }
-.mobile-active { @apply text-cyan-200 bg-white/[.08]; }
-.search-panel { @apply min-h-48 p-6 text-white; background: linear-gradient(150deg,#06202e,#0b3b50); }
-.search-label { @apply block text-sm font-bold text-cyan-50 mb-3; }
-.suggestion { @apply px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-sm text-cyan-50/80 hover:bg-cyan-300/20 transition; }
+.nav-link { @apply px-4 py-2 rounded-full text-sm text-white/70 transition-all duration-300 hover:text-white hover:bg-white/10; }
+.nav-link-active { @apply text-mainColor bg-mainColor/10 shadow-[0_0_22px_rgba(255,190,51,.14)]; }
+.icon-action { @apply w-10 h-10 items-center justify-center rounded-full text-white/80 bg-white/[.06] border border-white/10 transition hover:bg-mainColor/15 hover:text-mainColor; }
+.aqua-cta { @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-4 text-sm font-bold text-secColor bg-mainColor shadow-[0_0_24px_rgba(255,190,51,.20)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_32px_rgba(255,190,51,.34)]; }
+.aqua-cta-active { @apply ring-2 ring-mainColor/30; }
+.mobile-nav { @apply fixed bottom-3 left-2 right-2 z-[120] mx-auto max-w-xl rounded-[26px] px-2 py-2 flex justify-around aqua-glass; }
+.mobile-nav-item { @apply relative flex min-w-0 flex-1 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] text-white/60 transition-all hover:text-white; }
+.mobile-active { @apply text-mainColor bg-mainColor/10; }
+.search-panel { @apply min-h-48 p-6 text-white; background: linear-gradient(150deg,#1c1b22,#302b21); }
+.search-label { @apply block text-sm font-bold text-mainColor mb-3; }
+.suggestion { @apply px-3 py-1.5 rounded-full bg-white/10 border border-mainColor/15 text-sm text-white/80 hover:bg-mainColor/15 hover:text-mainColor transition; }
 </style>
