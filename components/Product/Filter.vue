@@ -6,29 +6,15 @@ const query = ref({});
 const toast = useToast()
 const {public: {apiBase}} = useRuntimeConfig();
 defineProps(['menu'])
-// /categories only returns a flat list of categories (no sizes/colors/price
-// range), but the template below reads categories.data.categories and
-// categories.data.sizes - that shape only exists on /filter-options.
 const {data: categories, pending: pendingCategories} = await useFetch(`${apiBase}/filter-options`);
 const items = [{
-  label: 'دسته بندی',
-  icon: 'i-categoury-information-circle',
-  defaultOpen: true,
-  slot: 'categoury'
+  label: 'دسته بندی', icon: 'i-categoury-information-circle', defaultOpen: true, slot: 'categoury'
 }, {
-  label: 'سایز',
-  icon: 'i-categoury-information-circle',
-  defaultOpen: true,
-  slot: 'size'
+  label: 'سایز', icon: 'i-categoury-information-circle', defaultOpen: true, slot: 'size'
 }, {
-  label: 'رنگ',
-  icon: 'i-categoury-information-circle',
-  defaultOpen: true,
-  slot: 'color'
+  label: 'رنگ', icon: 'i-categoury-information-circle', defaultOpen: true, slot: 'color'
 }]
 
-// Flattens the parent/child category list into tree order (each parent
-// immediately followed by its children) with a depth used for indentation.
 const orderedCategories = computed(() => {
   const list = categories.value?.data?.categories ?? []
   const byParent = {}
@@ -38,137 +24,86 @@ const orderedCategories = computed(() => {
     byParent[key].push(c)
   }
   const result = []
-
   function walk(parentKey, depth) {
     for (const c of byParent[parentKey] ?? []) {
       result.push({...c, depth})
       walk(c.id, depth + 1)
     }
   }
-
   walk('root', 0)
   return result
 })
 
 function searchQueryHandler() {
   if (searchQuery.value) {
-
-    if (query.value.hasOwnProperty('page')) {
-      delete query.value.page
-    } else if (query.value.hasOwnProperty('search')) {
-      delete query.value.page
-    }
+    if (query.value.hasOwnProperty('page')) delete query.value.page
+    else if (query.value.hasOwnProperty('search')) delete query.value.page
     query.value['search'] = searchQuery.value === 'اسلیپر' ? 'اسلیپر پاز' : searchQuery.value;
-
-    router.push({
-      path: '/products',
-      query: query.value
-    })
-  } else {
-    toast.add({title: 'بی زحمت کادر رو پر کنن .'})
-  }
+    router.push({ path: '/products', query: query.value })
+  } else toast.add({title: 'بی زحمت کادر رو پر کنن .'})
 }
 
 function categoriesHandel(idCategori) {
-  if (query.value.hasOwnProperty('page')) {
-    delete query.value.page
-  } else if (query.value.hasOwnProperty('search')) {
-    delete query.value.search
-  }
+  if (query.value.hasOwnProperty('page')) delete query.value.page
+  else if (query.value.hasOwnProperty('search')) delete query.value.search
   query.value['category'] = `${idCategori}`;
-
-  router.push({
-    path: '/products',
-    query: query.value
-  })
-
+  router.push({ path: '/products', query: query.value })
 }
-
-// the search handler send and res in api product (menu)
-
 
 function handleFilter(filter) {
-  if (query.value.hasOwnProperty('page')) {
-    delete query.value.page
-  }
+  if (query.value.hasOwnProperty('page')) delete query.value.page
   query.value['sort_by'] = `${filter}`;
-
-  router.push({
-    path: '/products',
-    query: query.value
-  })
-
+  router.push({ path: '/products', query: query.value })
 }
 </script>
-<template>
 
-  <div class="space-y-1 p-3 bg-white rounded-2xl">
+<template>
+  <div class="filter-shell">
     <UAccordion multiple :items="items" :ui="{default: {
-    openIcon: 'i-heroicons-chevron-down-20-solid',
-    closeIcon: '',
-    class: 'mb-1.5 w-full text-secColor',
-    variant: 'soft',
-    truncate: true
-  }}">
+      openIcon: 'i-heroicons-chevron-down-20-solid', closeIcon: '', class: 'mb-1.5 w-full text-white', variant: 'soft', truncate: true
+    }}">
       <template #categoury>
-        <ul class="m-0  my-1 ">
-          <template v-if="!pendingCategories" v-for="(value,index) in orderedCategories">
-            <li
-                class="px-4 py-1 rounded-2xl mx-1  cursor-pointer decoration-dotted"
-                :style="{ paddingRight: `${1 + value.depth * 1.25}rem` }"
-                :class="route?.query?.category== value?.id ?'text-mainColor':'text-secColor'"
-                @click="categoriesHandel(value?.id)">{{ value?.name }}
-            </li>
+        <ul class="m-0 my-1">
+          <template v-if="!pendingCategories" v-for="value in orderedCategories">
+            <li class="filter-item" :style="{ paddingRight: `${1 + value.depth * 1.25}rem` }" :class="route?.query?.category == value?.id ? 'filter-active' : ''" @click="categoriesHandel(value?.id)">{{ value?.name }}</li>
           </template>
-          <li v-else class=" rounded-2xl mx-1  cursor-pointer">
-            <USkeleton class="h-4 w-[400px]"/>
-          </li>
+          <li v-else class="mx-1 cursor-pointer"><USkeleton class="h-4 w-[80%] bg-white/10"/></li>
         </ul>
       </template>
-
 
       <template #size>
-        <ul class="m-0  my-1 ">
-          <template v-if="!pendingCategories" v-for="(value,index) in categories?.data?.sizes">
-            <li
-                class="px-4 py-1 rounded-2xl mx-1  cursor-pointer"
-                :class="route?.query?.size== value ?'text-mainColor':'text-secColor'"
-                @click="router.push({query:{...route.query, size:value}})">
-              <UCheckbox :model-value="route?.query?.size=== value" :label="value"/>
+        <ul class="m-0 my-1">
+          <template v-if="!pendingCategories" v-for="value in categories?.data?.sizes">
+            <li class="filter-item flex items-center gap-2" :class="route?.query?.size == value ? 'filter-active' : ''" @click="router.push({query:{...route.query, size:value}})">
+              <UCheckbox :model-value="route?.query?.size === value" :label="value" />
             </li>
           </template>
-          <li v-else class=" rounded-2xl mx-1  cursor-pointer">
-            <USkeleton class="h-4 w-[400px]"/>
-          </li>
+          <li v-else class="mx-1 cursor-pointer"><USkeleton class="h-4 w-[80%] bg-white/10"/></li>
         </ul>
       </template>
+
       <template #color>
-        <ul class="m-0  my-1 ">
-          <template v-if="!pendingCategories" v-for="(value,index) in categories?.data?.colors">
-            <li
-                class="px-4 py-1 rounded-2xl mx-1  cursor-pointer"
-                :class="route?.query?.color== value?.name ?'text-mainColor':'text-secColor'"
-                @click="router.push({query:{...route.query, color:value?.name}})">
-              <div class="flex justify-between"><p>{{value?.name}}</p><p class="w-6 h-6 border rounded" :style="{ backgroundColor: value?.color_code }"></p></div>
+        <ul class="m-0 my-1">
+          <template v-if="!pendingCategories" v-for="value in categories?.data?.colors">
+            <li class="filter-item" :class="route?.query?.color == value?.name ? 'filter-active' : ''" @click="router.push({query:{...route.query, color:value?.name}})">
+              <div class="flex justify-between items-center"><p>{{value?.name}}</p><p class="w-6 h-6 border border-white/15 rounded-lg" :style="{ backgroundColor: value?.color_code }"></p></div>
             </li>
           </template>
-          <li v-else class=" rounded-2xl mx-1  cursor-pointer">
-            <USkeleton class="h-4 w-[400px]"/>
-          </li>
+          <li v-else class="mx-1 cursor-pointer"><USkeleton class="h-4 w-[80%] bg-white/10"/></li>
         </ul>
       </template>
     </UAccordion>
-
-
-    <!--    <div class="  flex  bg-secColor text-white p-1 rounded relative py-2">-->
-    <!--      <form @submit.prevent="searchQueryHandler">-->
-    <!--        <input type="text" v-model="searchQuery" class=" bg-secColor  text-white "-->
-    <!--               placeholder="چیزی که میخوای اینجا پیدا کن ...">-->
-    <!--        <UButton type="submit" class="rounded-full  absolute left-2 top-1"-->
-    <!--                 icon="material-symbols:search" color="yellow"/>-->
-    <!--      </form>-->
-    <!--    </div>-->
   </div>
-
-
 </template>
+
+<style scoped>
+.filter-shell {
+  @apply space-y-1 p-3 rounded-2xl border border-mainColor/10 bg-[#111b20]/90 text-white shadow-[0_18px_55px_rgba(0,0,0,.18)] backdrop-blur-xl;
+}
+.filter-item {
+  @apply px-4 py-2 rounded-xl mx-1 cursor-pointer text-white/65 transition hover:bg-mainColor/10 hover:text-mainColor;
+}
+.filter-active {
+  @apply text-mainColor bg-mainColor/10 font-bold;
+}
+</style>
