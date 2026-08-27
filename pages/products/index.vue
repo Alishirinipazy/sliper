@@ -35,12 +35,12 @@ const selected = ref(people[0])
 <template>
   <LayoutsHeader/>
   <h1 class="sr-only">{{ pageTitle }}</h1>
-  <GlobalSlider :items="itemsSlider" h="lg:h-[45vh] h-[25vh]"/>
+  <GlobalSlider :items="itemsSlider" h="lg:h-[35vh] h-[5vh]"/>
   <div class="products-page">
     <UContainer>
       <UBreadcrumb dir="rtl" :links="links" :ui="{ active: 'text-mainColor', base: 'font-light text-white/60' }"/>
       <div class="flex justify-between items-center py-3">
-        <USelectMenu v-model="selected" :options="people" color="primary" class="md:hidden" :ui="{ background: 'bg-[#171820]', color: 'text-white', ring: 'ring-mainColor/20' }">
+        <USelectMenu v-model="selected" :options="people" color="white" class="md:hidden" :ui="{ ring: 'ring-mainColor/20' }">
           <template #option="{ option }"><p class="flex items-center"><span class="truncate">{{ option.label }}</span></p></template>
         </USelectMenu>
         <button @click="isOpen = true" class="rounded-full text-sm bg-mainColor text-secColor font-bold px-4 py-2 lg:hidden mx-2 shadow-[0_8px_24px_rgba(255,190,51,.16)]"><span>فیلتر محصولات</span><UIcon name="material-symbols:filter-alt-sharp"/></button>
@@ -66,7 +66,71 @@ const selected = ref(people[0])
               <li @click="handleFilter('max')" class="filter-class" :class="route.query.sort_by == 'max' ? 'text-mainColor font-bold' : 'text-white/60'">بیشترین قیمت</li>
               <li @click="handleFilter('min')" class="filter-class" :class="route.query.sort_by == 'min' ? 'text-mainColor font-bold' : 'text-white/60'">کمترین قیمت</li>
               <li @click="handleFilter('bestseller')" class="filter-class" :class="route.query.sort_by == 'bestseller' ? 'text-mainColor font-bold' : 'text-white/60'">پرفروش ترین</li>
-              <li @click="handleFilter('sale')" class="filter-class text-cosColor/80">کوپنـ.پاز</li>
+              <li @click="handleFilter('sale')" class="filter-class text-cosColor/80 flex items-center">
+                <svg
+                    width="30"
+                    height="30"
+                    viewBox="0 0 100 100"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                  <defs>
+                    <linearGradient id="fireGradient" x1="20%" y1="0%" x2="80%" y2="100%">
+                      <stop offset="0%" stop-color="#FF9AB0"/>
+                      <stop offset="55%" stop-color="#F85C87"/>
+                      <stop offset="100%" stop-color="#ED3970"/>
+                    </linearGradient>
+
+                    <filter id="fireGlow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+                      <feMerge>
+                        <feMergeNode in="blur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
+                  </defs>
+
+                  <g class="fire">
+                    <path
+                        class="fire-body"
+                        fill="url(#fireGradient)"
+                        filter="url(#fireGlow)"
+                        d="M51.8 97
+          C27.5 97 10 80.8 10 57.4
+          C10 40.8 19.2 28.8 31.2 20
+          C28.8 32.2 33.5 39.5 39.8 43
+          C38.5 28.5 45.8 16.2 58.5 4
+          C58.2 15.5 64.8 21.2 68.8 27
+          C72.2 21.8 78.5 19.2 82 10
+          C86.8 22.5 89.5 31.2 87.5 41
+          C85.8 49.2 91 55.2 91 63.5
+          C91 82.2 74.5 97 51.8 97Z"
+                    />
+
+                    <path
+                        class="fire-inner"
+                        fill="#fff"
+                        d="M51.5 85
+          C40.8 85 33.5 77.8 33.5 68
+          C33.5 61.2 37.2 56.2 42.2 52.2
+          C41.8 59.2 45.5 62.5 49 63.8
+          C48.2 56.5 52 49.8 57.8 44.5
+          C57.8 51.2 62.2 54.8 64.5 59
+          C66.5 55.8 69.8 53.8 71.2 49.5
+          C73.5 55.5 75 60 74.5 64.5
+          C74 76.5 64.2 85 51.5 85Z"
+                    />
+
+                    <path
+                        class="fire-tip"
+                        fill="#F85C87"
+                        d="M69 27
+          C70 20 74 14 81 8
+          C80 15 84 20 82 26
+          C80 30 75 31 69 27Z"
+                    />
+                  </g>
+                </svg>
+                کوپنـ.پاز</li>
             </ul>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">

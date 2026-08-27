@@ -37,7 +37,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <header class="transition-all duration-500 ease-out z-[110] isolate" :class="classHeader">
+  <header class="transition-all duration-500 ease-out  " :class="classHeader">
     <u-container>
       <div class="nav-shell aqua-glass">
         <nav class="hidden lg:flex flex-1 items-center gap-2" aria-label="منوی اصلی">
@@ -69,7 +69,7 @@ onMounted(() => {
       </div>
     </u-container>
 
-    <div class="mobile-nav lg:hidden" :class="{'hidden': $route.path.includes('profile')}">
+    <div class="mobile-nav " >
       <button class="mobile-nav-item" :class="{'mobile-active': $route.path==='/' }" @click="router.push('/')">
         <UIcon name="material-symbols:other-houses" class="w-5 h-5"/><span>خوونه</span>
       </button>
@@ -92,7 +92,7 @@ onMounted(() => {
     </div>
   </header>
 
-  <USlideover v-model="searchOpen" side="top" :ui="{ base: 'z-[130]' }">
+  <USlideover v-model="searchOpen" side="bottom" :ui="{ base: 'z-[300]' }">
     <div dir="rtl" class="search-panel">
       <form @submit.prevent="submitSearch()" class="max-w-2xl mx-auto">
         <label for="site-search" class="search-label">جستجوی اسلیپر پاز</label>
@@ -123,7 +123,7 @@ onMounted(() => {
 .icon-action { @apply w-10 h-10 items-center justify-center rounded-full text-white/80 bg-white/[.06] border border-white/10 transition hover:bg-mainColor/15 hover:text-mainColor; }
 .aqua-cta { @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-4 text-sm font-bold text-secColor bg-mainColor shadow-[0_0_24px_rgba(255,190,51,.20)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_32px_rgba(255,190,51,.34)]; }
 .aqua-cta-active { @apply ring-2 ring-mainColor/30; }
-.mobile-nav { @apply fixed bottom-3 left-2 right-2 z-[120] mx-auto max-w-xl rounded-[26px] px-2 py-2 flex justify-around border border-mainColor/15 bg-slate-950/35 backdrop-blur-2xl shadow-[inset_0_1px_0_rgba(255,255,255,.08),0_18px_60px_rgba(0,0,0,.22),0_0_45px_rgba(255,190,51,.06)]; }
+.mobile-nav { @apply md:hidden z-30 fixed bottom-3 left-2 right-2 z-[120] mx-auto max-w-xl rounded-[26px] px-2 py-2 flex justify-around border border-mainColor/15 bg-slate-950/35 backdrop-blur-2xl shadow-[inset_0_1px_0_rgba(255,255,255,.08),0_18px_60px_rgba(0,0,0,.22),0_0_45px_rgba(255,190,51,.06)]; }
 .mobile-nav-item { @apply relative flex min-w-0 flex-1 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] text-white/60 transition-all hover:text-white; }
 .mobile-active { @apply text-mainColor bg-mainColor/10; }
 .search-panel { @apply min-h-48 p-6 text-white; background: linear-gradient(150deg,#1c1b22,#302b21); }

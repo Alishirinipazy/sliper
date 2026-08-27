@@ -262,7 +262,7 @@ const links = [
           </Swiper>
 
           <div v-if="product?.discount_percent"
-                class="absolute top-4 left-4 z-10 bg-cosColor w-[87%] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md flex justify-between">
+                class="absolute top-4 left-4 z-10 bg-cosColor w-[80%] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md flex justify-between">
             <i class="absolute  -top-4 -right-12">
               <svg
                   width="50"
@@ -351,15 +351,15 @@ const links = [
 
       <!-- جزئیات محصول -->
       <div class="col-span-12 lg:col-span-4">
-        <p class="text-xs font-semibold text-mainColor/70 tracking-wide mb-1">{{ product?.category }}</p>
-        <h1 class="text-2xl md:text-3xl text-secColor py-1 font-extrabold leading-snug">{{ product?.name }}</h1>
+        <p class="text-xs font-semibold text-slate-400 tracking-wide mb-1">{{ product?.category }}</p>
+        <h1 class="text-2xl md:text-3xl text-mainColor py-1 font-extrabold leading-snug">{{ product?.name }}</h1>
 
 
         <div class="h-px bg-gray-100 my-5"/>
 
         <!-- انتخاب رنگ -->
         <div v-if="product?.has_variants" class="mb-6">
-          <p class="text-sm font-bold text-secColor mb-3">
+          <p class="text-sm font-bold  mb-3 text-slate-300">
             رنگ <span class="text-mainColor font-normal">· {{ selectedColor?.name }}</span>
           </p>
           <div class="flex gap-3 flex-wrap">
@@ -378,7 +378,7 @@ const links = [
 
         <!-- انتخاب سایز -->
         <div v-if="product?.has_variants" class="mb-6">
-          <p class="text-sm font-bold text-secColor mb-3">
+          <p class="text-sm font-bold text-slate-300 mb-3">
             سایز <span v-if="selectedSize" class="text-mainColor font-normal">: {{ selectedSize.size }}</span>
           </p>
           <div class="flex flex-wrap gap-2">
@@ -401,14 +401,14 @@ const links = [
 
         <!-- تعداد -->
         <div>
-          <p class="text-sm font-bold text-secColor mb-3">تعداد</p>
+          <p class="text-sm font-bold text-slate-300 mb-3">تعداد</p>
           <div class="flex items-center gap-4">
             <div class="flex items-center gap-1 bg-gray-50 rounded-2xl p-1 border border-gray-100">
               <button @click="quantity > 1 && quantity--" type="button"
-                      class="w-9 h-9 rounded-xl bg-white shadow-sm hover:bg-mainColor hover:text-white font-bold transition-colors">−</button>
+                      class="w-9 h-9 rounded-xl bg-white text-mainColor shadow-sm hover:bg-mainColor hover:text-white font-bold transition-colors">−</button>
               <span class="w-10 text-center font-bold text-secColor">{{ quantity }}</span>
               <button @click="quantity < maxQuantity && quantity++" type="button"
-                      class="w-9 h-9 rounded-xl bg-white shadow-sm hover:bg-mainColor hover:text-white font-bold transition-colors">+</button>
+                      class="w-9 h-9 rounded-xl bg-white shadow-sm hover:bg-mainColor hover:text-white font-bold text-mainColor transition-colors">+</button>
             </div>
             <span v-if="product?.has_variants ? selectedSize : product?.total_quantity" class="text-xs text-gray-400">
               {{ product?.has_variants ? selectedSize?.quantity : product.total_quantity }} عدد موجود
@@ -479,14 +479,14 @@ const links = [
     </div>
 <!--    توضیحات تکمیلی-->
     <div class="flex items-center gap-3 mb-6">
-      <h3 class="text-xl font-extrabold text-secColor">درباره {{ product?.name}}</h3>
+      <h3 class="text-xl font-extrabold text-mainColor">درباره {{ product?.name}}</h3>
       <div class="h-px flex-1 bg-gray-100"/>
     </div>
-    <div class="text-sm text-gray-500 leading-loose my-5" v-html="formattedDescription"/>
+    <div class="text-sm text-gray-200 leading-loose my-5" v-html="formattedDescription"/>
     <!-- محصولات مشابه -->
     <div v-if="randomProducts?.data?.length" class="my-14">
       <div class="flex items-center gap-3 mb-6">
-        <h3 class="text-xl font-extrabold text-secColor">محصولات مشابه</h3>
+        <h3 class="text-xl font-extrabold text-mainColor">محصولات مشابه</h3>
         <div class="h-px flex-1 bg-gray-100"/>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
@@ -526,8 +526,6 @@ const links = [
   sm:px-6
   bg-white/95 backdrop-blur border-t border-gray-100
   text-white lg:text-secColor
-
-  lg:static lg:w-auto lg:max-w-none
   lg:pb-5 lg:px-5
   lg:bg-white lg:rounded-3xl lg:shadow-xl lg:shadow-mainColor/5 lg:ring-1 lg:ring-black/5
   lg:sticky lg:top-24 lg:self-start;

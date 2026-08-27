@@ -9,7 +9,7 @@ useSeoMeta({
   <div class="cart-page min-h-screen">
     <LayoutsHeader :fixed="true" />
 
-    <main class="mx-auto max-w-6xl px-3 sm:px-5 pt-24 pb-10 lg:pt-28">
+    <main class="mx-auto max-w-6xl px-3 sm:px-5 pt-14 pb-10 lg:pt-6">
       <div class="mb-6">
         <p class="text-sm text-mainColor font-bold mb-2">خریدت آماده‌ست</p>
         <h1 class="text-2xl sm:text-3xl font-black text-white">سبد خرید</h1>

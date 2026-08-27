@@ -10,9 +10,9 @@ const {data: categories, pending: pendingCategories} = await useFetch(`${apiBase
 const items = [{
   label: 'دسته بندی', icon: 'i-categoury-information-circle', defaultOpen: true, slot: 'categoury'
 }, {
-  label: 'سایز', icon: 'i-categoury-information-circle', defaultOpen: true, slot: 'size'
+  label: 'سایز', icon: 'i-categoury-information-circle', defaultOpen: false, slot: 'size'
 }, {
-  label: 'رنگ', icon: 'i-categoury-information-circle', defaultOpen: true, slot: 'color'
+  label: 'رنگ', icon: 'i-categoury-information-circle', defaultOpen: false, slot: 'color'
 }]
 
 const orderedCategories = computed(() => {
@@ -60,7 +60,7 @@ function handleFilter(filter) {
 <template>
   <div class="filter-shell">
     <UAccordion multiple :items="items" :ui="{default: {
-      openIcon: 'i-heroicons-chevron-down-20-solid', closeIcon: '', class: 'mb-1.5 w-full text-white', variant: 'soft', truncate: true
+      openIcon: 'i-heroicons-chevron-down-20-solid', closeIcon: '', class: 'mb-1.5 w-full text-white bg-mainColor/30', variant: 'soft', truncate: true
     }}">
       <template #categoury>
         <ul class="m-0 my-1">
@@ -72,7 +72,7 @@ function handleFilter(filter) {
       </template>
 
       <template #size>
-        <ul class="m-0 my-1">
+        <ul class="m-0 my-1 scroll-smooth ">
           <template v-if="!pendingCategories" v-for="value in categories?.data?.sizes">
             <li class="filter-item flex items-center gap-2" :class="route?.query?.size == value ? 'filter-active' : ''" @click="router.push({query:{...route.query, size:value}})">
               <UCheckbox :model-value="route?.query?.size === value" :label="value" />
