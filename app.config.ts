@@ -1,9 +1,7 @@
 export default defineAppConfig({
     ui: {
-
-        primary: 'yellow',
+        primary: 'mainColor',
         notifications: {
-            // Show toasts at the top right of the screen
             position: 'bottom-0',
             background: 'bg-mainColor dark:bg-mainColor',
             ring: 'ring-1 ring-gray-800 dark:ring-gray-800',
@@ -22,10 +20,10 @@ export default defineAppConfig({
         },
         carousel: {
             indicators: {
-                wrapper: 'absolute flex items-center justify-center gap-3 bottom-8 inset-x-0',
+                wrapper: 'absolute flex items-center justify-center gap-3 bottom-8 inset-x-0 z-40',
                 base: 'h-2 w-8',
-                active: 'bg-mainColor dark:bg-mainColor ',
-                inactive: 'bg-gray-100 dark:bg-gray-100'
+                active: 'bg-mainColor dark:bg-mainColor',
+                inactive: 'bg-white/40 dark:bg-white/40'
             },
         },
         theme: {
@@ -35,5 +33,4 @@ export default defineAppConfig({
         },
         accordion: {}
     }
-
 })

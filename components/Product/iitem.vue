@@ -2,71 +2,23 @@
 import {numberFormat} from "~/utils/helper";
 
 const props = defineProps(['product'])
-
 const sizeRange = computed(() => {
-  const colors = props.product?.colors;
-
-  if (!colors?.length) return '';
-
-  const sizes = colors
-      .flatMap(color => color.sizes || [])
-      .map(item => Number(item.size))
-      .filter(size => !isNaN(size));
-
-  if (!sizes.length) return '';
-
-  const minSize = Math.min(...sizes);
-  const maxSize = Math.max(...sizes);
-
-  if (minSize === maxSize) {
-    return `تک سایز ${minSize}`;
-  }
-
-  return `از سایز ${minSize} تا ${maxSize}`;
-});
+  const colors = props.product?.colors
+  if (!colors?.length) return ''
+  const sizes = colors.flatMap(color => color.sizes || []).map(item => Number(item.size)).filter(size => !isNaN(size))
+  if (!sizes.length) return ''
+  const minSize = Math.min(...sizes), maxSize = Math.max(...sizes)
+  return minSize === maxSize ? `تک سایز ${minSize}` : `از سایز ${minSize} تا ${maxSize}`
+})
 </script>
+
 <template>
-
-  <!-- کانتینر اصلی کارت با حاشیه سفید و گوشه‌های گرد -->
-  <nuxt-link :to="`/products/${product?.slug}`">
-    <div
-        class="relative max-w-[400px]   rounded-[2.5rem] border-[3px] overflow-hidden shadow-lg shadow-gray-400 bg-white font-sans"
-        :class="product?.is_sale?'border-cosColor':'border-white'">
-      <!-- آیکون قلب (پس‌زمینه شیشه‌ای) -->
-
-
-      <!-- عکس محصول -->
-      <img class="w-full h-[230px] object-cover mix-blend-multiply" src="/images/preloader.png"
-           v-img="product?.primary_image" :alt="product?.name || 'محصول اسلیپر پاز'">
-      <!-- بخش متن و قیمت (محتوای پایین کارت) -->
-      <div class="relative w-full  pt-2 bg-transparent p-4">
-
-        <!-- عنوان محصول -->
-
-        <h3 class="text-lg font-bold mb-1 text-mainColor">{{ product?.name || 'بدون عنوان' }}</h3>
-
-        <p class="text-secColor text-sm" v-if="!product?.on_sale">{{ sizeRange }}</p>
-
-        <!-- ردیف قیمت و دکمه خرید -->
-        <div class="flex items-center justify-end text-left">
-          <div class="flex flex-col ">
-            <!-- اگر تخفیف داشت قیمت قبلی رو خط بزن -->
-            <span v-if="product?.on_sale" class="text-sm line-through text-secColor/50">
-             {{ numberFormat(product?.regular_price) }} تومان
-          </span>
-            <span class="text-xl font-bold" :class="product?.on_sale ?'text-cosColor':'text-secColor'">
-             {{
-                numberFormat(product?.price)
-              }} تومان
-          </span>
-          </div>
-          <!-- دکمه خرید قرصی شکل -->
-
-        </div>
-
-
-      </div>
-      <i class="absolute  top-3 right-3">
+  <nuxt-link :to="`/products/${product?.slug}`" class="product-link">
+    <article class="product-card" :class="{'product-sale': product?.is_sale}">
+      <div class="product-image-wrap">
+        <img class="product-image" src="/images/preloader.png" v-img="product?.primary_image"
+             :alt="product?.name || 'محصول اسلیپر پاز'">
+        <i  class="absolute left-2 top-0">
         <svg
             width="40"
             height="40"
@@ -130,92 +82,117 @@ const sizeRange = computed(() => {
             />
           </g>
         </svg>
-      </i>
-
-      <!-- تگ تخفیف (اختیاری - اگه خواستی نگهش داری) -->
-      <div v-if="product?.on_sale"
-           class="absolute bottom-16 left-2 bg-cosColor text-white text-xs font-bold  p-1 rounded-lg">
-        {{ product?.discount_percent }}% کوپنـپاز
-
+        </i>
       </div>
 
-    </div>
+      <div class="product-info">
+        <div class="flex items-start justify-between gap-2">
+          <div class="min-w-0 "><h3>{{ product?.name || 'بدون عنوان' }}</h3>
+            <p v-if="!product?.on_sale">{{ sizeRange }}</p></div>
+          <span class="buy-orb"><UIcon name="material-symbols:arrow-back-rounded" class="w-5 h-5"/></span>
+        </div>
+        <div class="price-row">
+
+          <span v-if="product?.on_sale" class="sale-badge">{{ product?.discount_percent }}% کوپنـ.پاز</span>
+          <span class="product-shine"></span>
+          <div>
+            <span v-if="product?.on_sale" class="old-price">{{ numberFormat(product?.regular_price) }} تومان</span>
+            <span class="price" :class="{'price-sale': product?.on_sale}">{{ numberFormat(product?.price) }} <small>تومان</small></span>
+          </div>
+          <p>{{product?.category}}</p>
+        </div>
+      </div>
+    </article>
   </nuxt-link>
 </template>
 
 <style>
-.color-product {
-  @apply w-3 h-3 mx-1 rounded-full relative
+.product-link {
+  @apply block h-full;
 }
 
-.product-option {
-  @apply absolute w-auto  p-1 rounded text-xs top-2 left-2 bg-cosColor text-center
-
+.product-card {
+  @apply relative h-full overflow-hidden rounded-[28px] border border-white/10 bg-white/[.065] shadow-[0_14px_45px_rgba(0,7,14,.22)] transition-all duration-500 hover:-translate-y-1 hover:border-cyan-200/25 hover:bg-white/[.09] hover:shadow-[0_20px_55px_rgba(0,9,16,.34)];
+  backdrop-filter: blur(12px);
 }
 
-.fire {
-  transform-origin: 50px 90px;
-  animation: fireFloat 0.8s infinite ease-in-out;
+.product-sale {
+  @apply border-cyan-200/15;
 }
 
-.fire-body {
-  transform-origin: 50px 85px;
-  animation: fireBody 0.55s infinite ease-in-out alternate;
+.product-image-wrap {
+  @apply relative m-1 overflow-hidden rounded-[24px] bg-gradient-to-b from-cyan-950/50 to-slate-950/60;
+  height: 225px;
 }
 
-.fire-inner {
-  transform-origin: 52px 70px;
-  animation: fireInner 0.35s infinite ease-in-out alternate;
+.product-image {
+  @apply w-full h-full object-cover transition duration-700 group-hover:scale-105;
+  mix-blend-mode: normal;
 }
 
-.fire-tip {
-  transform-origin: 76px 25px;
-  animation: fireTip 0.45s infinite ease-in-out alternate;
+.product-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(125deg, rgba(255, 255, 255, .13), transparent 28%, transparent 70%, rgba(105, 230, 255, .08));
 }
 
-@keyframes fireFloat {
-  0% {
-    transform: translateX(-1px) rotate(-1deg);
+.product-info {
+  @apply p-2 text-right;
+}
+
+.product-info h3 {
+  @apply text-base font-bold text-mainColor  truncate;
+}
+
+.product-info p {
+  @apply text-xs text-cyan-50/50 mt-1;
+  min-height: 1rem;
+}
+
+.heart-orb, .buy-orb {
+  @apply shrink-0 flex items-center justify-center rounded-full border border-white/10 bg-white/[.07] text-cyan-100/80;
+}
+
+.heart-orb {
+  @apply w-9 h-9;
+}
+
+.buy-orb {
+  @apply w-10 h-10 text-cyan-200 group-hover:bg-cyan-300/20;
+}
+
+.price-row {
+  @apply flex flex-row-reverse items-end justify-between gap-2 mt-4 text-left relative;
+}
+
+.old-price {
+  @apply block text-[11px] line-through text-cyan-50/35 mb-0.5;
+}
+
+.price {
+  @apply block text-xl font-black text-white ;
+}
+
+.price-sale {
+  @apply text-cosColor;
+}
+
+.price small {
+  @apply text-[10px] font-medium text-cyan-50/55;
+}
+
+.sale-badge {
+  @apply absolute -top-6 left-10  z-10 rounded-full px-2.5 py-1 text-[10px] font-bold text-white bg-cosColor shadow-[0_0_18px_rgba(108,231,255,.25)];
+}
+
+@media (max-width: 640px) {
+  .product-image-wrap {
+    height: 205px;
   }
 
-  50% {
-    transform: translateX(1px) rotate(1deg);
-  }
-
-  100% {
-    transform: translateX(-1px) rotate(-1deg);
-  }
-}
-
-@keyframes fireBody {
-  0% {
-    transform: scaleX(0.97) scaleY(0.98);
-  }
-
-  100% {
-    transform: scaleX(1.02) scaleY(1.04);
-  }
-}
-
-@keyframes fireInner {
-  0% {
-    transform: translate(-1px, 2px) scale(0.94);
-    opacity: 0.8;
-  }
-
-  100% {
-    transform: translate(1px, -1px) scale(1.03);
-    opacity: 1;
-  }
-}
-
-@keyframes fireTip {
-  0% {
-    transform: rotate(-8deg) scale(0.9);
-  }
-
-  100% {
-    transform: rotate(6deg) scale(1.08);
+  .product-card {
+    border-radius: 24px;
   }
 }
 </style>
