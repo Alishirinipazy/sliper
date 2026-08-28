@@ -71,6 +71,67 @@ body::before {
     color: #fffaf0;
 }
 
+/* Profile controls: keep Nuxt UI inputs/selects in the aquarium palette on every viewport. */
+.profile-form-card,
+.profile-addresses-card,
+.profile-modal-card {
+    background: linear-gradient(150deg, rgba(7,27,36,.94), rgba(28,27,34,.94)) !important;
+    color: #fffaf0 !important;
+    border-color: rgba(255,190,51,.14) !important;
+}
+
+.profile-form input,
+.profile-form textarea,
+.profile-form select,
+.profile-addresses-page input,
+.profile-addresses-page textarea,
+.profile-addresses-page select,
+.profile-modal-card input,
+.profile-modal-card textarea,
+.profile-modal-card select {
+    background: rgba(7,27,36,.94) !important;
+    color: #fffaf0 !important;
+    border-color: rgba(255,190,51,.18) !important;
+    -webkit-text-fill-color: #fffaf0 !important;
+}
+
+.profile-form input::placeholder,
+.profile-form textarea::placeholder,
+.profile-addresses-page input::placeholder,
+.profile-addresses-page textarea::placeholder,
+.profile-modal-card input::placeholder,
+.profile-modal-card textarea::placeholder {
+    color: rgba(255,255,255,.38) !important;
+    -webkit-text-fill-color: rgba(255,255,255,.38) !important;
+}
+
+.profile-form input:focus,
+.profile-form textarea:focus,
+.profile-form select:focus,
+.profile-addresses-page input:focus,
+.profile-addresses-page textarea:focus,
+.profile-addresses-page select:focus,
+.profile-modal-card input:focus,
+.profile-modal-card textarea:focus,
+.profile-modal-card select:focus {
+    border-color: #ffbe33 !important;
+    box-shadow: 0 0 0 2px rgba(255,190,51,.10) !important;
+}
+
+.profile-form input:disabled,
+.profile-addresses-page input:disabled,
+.profile-modal-card input:disabled {
+    background: rgba(255,255,255,.055) !important;
+    color: rgba(255,255,255,.48) !important;
+    -webkit-text-fill-color: rgba(255,255,255,.48) !important;
+}
+
+.profile-form label,
+.profile-addresses-page label,
+.profile-modal-card label {
+    color: rgba(255,255,255,.78) !important;
+}
+
 /* Mobile product purchase bar: compact, horizontal and always above the mobile nav. */
 .price-details-product {
     background: rgba(7, 27, 36, .97) !important;
@@ -80,17 +141,11 @@ body::before {
 }
 .price-details-product .text-secColor,
 .price-details-product .text-gray-400,
-.price-details-product .text-gray-300 {
-    color: rgba(255,255,255,.68) !important;
-}
+.price-details-product .text-gray-300 { color: rgba(255,255,255,.68) !important; }
 .price-details-product .text-cosColor,
-.price-details-product .text-mainColor {
-    color: #ffbe33 !important;
-}
+.price-details-product .text-mainColor { color: #ffbe33 !important; }
 .price-details-product .bg-cosColor,
-.price-details-product .bg-mainColor {
-    background-color: #ffbe33 !important;
-}
+.price-details-product .bg-mainColor { background-color: #ffbe33 !important; }
 
 @media (max-width: 1023px) {
     .price-details-product {
@@ -110,150 +165,49 @@ body::before {
         backdrop-filter: blur(24px) saturate(125%);
     }
 
-    .price-details-product > .hidden.lg\\:block {
-        display: none !important;
-    }
-
-    .price-details-product > .relative {
-        width: 100%;
-        display: grid;
-        grid-template-columns: minmax(112px, .72fr) minmax(155px, 1.28fr);
-        align-items: center;
-        gap: .65rem;
-    }
-
-    .price-details-product > .relative > .text-center {
-        grid-column: 1;
-        grid-row: 1;
-        margin: 0 !important;
-        text-align: right !important;
-        min-width: 0;
-    }
-
-    .price-details-product > .relative > .text-center p {
-        white-space: nowrap;
-    }
-
+    .price-details-product > .hidden.lg\\:block { display: none !important; }
+    .price-details-product > .relative { width: 100%; display: grid; grid-template-columns: minmax(112px, .72fr) minmax(155px, 1.28fr); align-items: center; gap: .65rem; }
+    .price-details-product > .relative > .text-center { grid-column: 1; grid-row: 1; margin: 0 !important; text-align: right !important; min-width: 0; }
+    .price-details-product > .relative > .text-center p { white-space: nowrap; }
     .price-details-product > .relative > .u-button,
-    .price-details-product > .relative > button {
-        grid-column: 2;
-        grid-row: 1;
-        min-height: 50px !important;
-        width: 100% !important;
-        margin: 0 !important;
-        border-radius: 16px !important;
-    }
-
-    .price-details-product > .relative > div:not(.text-center) {
-        grid-column: 1 / -1;
-        grid-row: 2;
-        margin: 0 !important;
-    }
-
-    .price-details-product > .relative > .absolute {
-        top: -8px !important;
-        right: auto !important;
-        left: 92px !important;
-        z-index: 2 !important;
-    }
-
-    /* Prevent the fixed bar from hiding the last content and keep the mobile nav below it. */
-    .products-page,
-    main {
-        padding-bottom: 1rem;
-    }
-
-    .mobile-nav {
-        bottom: 0.65rem !important;
-        z-index: 120 !important;
-    }
+    .price-details-product > .relative > button { grid-column: 2; grid-row: 1; min-height: 50px !important; width: 100% !important; margin: 0 !important; border-radius: 16px !important; }
+    .price-details-product > .relative > div:not(.text-center) { grid-column: 1 / -1; grid-row: 2; margin: 0 !important; }
+    .price-details-product > .relative > .absolute { top: -8px !important; right: auto !important; left: 92px !important; z-index: 2 !important; }
+    .products-page, main { padding-bottom: 1rem; }
+    .mobile-nav { bottom: .65rem !important; z-index: 120 !important; }
 }
 
 @media (max-width: 640px) {
-    .price-details-product {
-        padding-left: .65rem !important;
-        padding-right: .65rem !important;
-    }
-
-    .price-details-product > .relative {
-        grid-template-columns: minmax(105px, .68fr) minmax(145px, 1.32fr);
-        gap: .5rem;
-    }
-
+    .price-details-product { padding-left: .65rem !important; padding-right: .65rem !important; }
+    .price-details-product > .relative { grid-template-columns: minmax(105px, .68fr) minmax(145px, 1.32fr); gap: .5rem; }
     .price-details-product > .relative > .u-button,
-    .price-details-product > .relative > button {
-        min-height: 48px !important;
-        font-size: .82rem !important;
-    }
-
+    .price-details-product > .relative > button { min-height: 48px !important; font-size: .82rem !important; }
     .price-details-product .text-xl,
     .price-details-product .text-2xl,
-    .price-details-product .text-3xl {
-        font-size: 1.05rem !important;
-        line-height: 1.4 !important;
-    }
+    .price-details-product .text-3xl { font-size: 1.05rem !important; line-height: 1.4 !important; }
+    .price-details-product .text-xs { font-size: .68rem !important; }
+    .products-page .grid.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem !important; }
+    .products-page .product-card { border-radius: 20px !important; }
+    .products-page .product-image-wrap { height: auto !important; aspect-ratio: 1 / 1.05; margin: .3rem !important; border-radius: 17px !important; }
+    .products-page .product-info { padding: .55rem !important; }
+    .products-page .product-info h3 { font-size: .78rem !important; }
+    .products-page .product-info p { font-size: .65rem !important; }
+    .products-page .price-row { margin-top: .65rem !important; }
+    .products-page .price { font-size: .95rem !important; }
+    .products-page .buy-orb { width: 34px !important; height: 34px !important; }
+    .products-page .sale-badge { left: 0 !important; top: -1.7rem !important; font-size: .58rem !important; }
 
-    .price-details-product .text-xs {
-        font-size: .68rem !important;
-    }
-
-    .products-page .grid.grid-cols-2 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: .6rem !important;
-    }
-
-    .products-page .product-card {
-        border-radius: 20px !important;
-    }
-
-    .products-page .product-image-wrap {
-        height: auto !important;
-        aspect-ratio: 1 / 1.05;
-        margin: .3rem !important;
-        border-radius: 17px !important;
-    }
-
-    .products-page .product-info {
-        padding: .55rem !important;
-    }
-
-    .products-page .product-info h3 {
-        font-size: .78rem !important;
-    }
-
-    .products-page .product-info p {
-        font-size: .65rem !important;
-    }
-
-    .products-page .price-row {
-        margin-top: .65rem !important;
-    }
-
-    .products-page .price {
-        font-size: .95rem !important;
-    }
-
-    .products-page .buy-orb {
-        width: 34px !important;
-        height: 34px !important;
-    }
-
-    .products-page .sale-badge {
-        left: 0 !important;
-        top: -1.7rem !important;
-        font-size: .58rem !important;
+    .profile-form input, .profile-form textarea, .profile-form select,
+    .profile-addresses-page input, .profile-addresses-page textarea, .profile-addresses-page select,
+    .profile-modal-card input, .profile-modal-card textarea, .profile-modal-card select {
+        min-height: 46px !important;
+        border-radius: 14px !important;
     }
 }
 
-/* Tablet/desktop product grids stay dense without leaving large empty columns. */
 @media (min-width: 641px) and (max-width: 1023px) {
-    .products-page .grid.grid-cols-2 {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .products-page .product-image-wrap {
-        height: clamp(170px, 28vw, 210px) !important;
-    }
+    .products-page .grid.grid-cols-2 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .products-page .product-image-wrap { height: clamp(170px, 28vw, 210px) !important; }
 }
 
 @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
