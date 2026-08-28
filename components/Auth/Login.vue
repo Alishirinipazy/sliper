@@ -19,7 +19,7 @@ async function login() {
 
   loading.value = true
   try {
-    const data = await $fetch('/api/auth/login', {
+    await $fetch('/api/auth/login', {
       method: 'POST',
       body: { cellphone: cellphone.value }
     })
@@ -42,33 +42,105 @@ async function login() {
 </script>
 
 <template>
-  <div class="p-8 border-2 border-mainColor bg-secColor text-white rounded-2xl flex flex-col items-center">
+  <div class="auth-card">
+    <div class="auth-glow auth-glow-one"></div>
+    <div class="auth-glow auth-glow-two"></div>
 
-    <img src="/images/logo.avif" alt="اسلیپر پاز" class="w-5/5">
-    <p class="text-xl mt-3 mb-4">ورود و ثبت نام</p>
-    <p class="text-center">شماره تماست برای ما بفرست که یک کدی رو برات بفرستیم</p>
+    <div class="relative z-10 w-full flex flex-col items-center">
+      <div class="logo-orb">
+        <img src="/images/logo.avif" alt="اسلیپر پاز" class="auth-logo">
+      </div>
 
-    <form @submit.prevent="login" class="mt-5 w-full text-center">
-      <input
+      <p class="auth-title">ورود و ثبت نام</p>
+      <p class="auth-description">شماره تماست رو بفرست تا یک کد تایید برات ارسال کنیم</p>
+
+      <form @submit.prevent="login" class="mt-6 w-full">
+        <label class="auth-label" for="cellphone">شماره موبایل</label>
+        <input
+          id="cellphone"
           v-model="cellphone"
           type="tel"
           inputmode="numeric"
+          autocomplete="tel"
           :disabled="loading"
-          class="p-1 w-full my-3 text-secColor text-center border-mainColor rounded border-2 disabled:opacity-60"
+          class="auth-input"
           placeholder="09100000000"
-      >
+          dir="ltr"
+        >
 
-      <button
+        <button
           type="submit"
           :disabled="loading"
-          class="my-2 text-center bg-mainColor w-full rounded py-2 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-      >
-        <span
+          class="auth-submit"
+        >
+          <span
             v-if="loading"
             class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
-        />
-        {{ loading ? 'در حال ارسال...' : 'ورود' }}
-      </button>
-    </form>
+          />
+          {{ loading ? 'در حال ارسال...' : 'دریافت کد ورود' }}
+        </button>
+      </form>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.auth-card {
+  @apply relative w-full max-w-md overflow-hidden rounded-[30px] border border-mainColor/20 bg-slate-950/55 p-6 sm:p-9 text-white shadow-[0_30px_90px_rgba(0,0,0,.4)] backdrop-blur-2xl;
+}
+
+.auth-card::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: 29px;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255,255,255,.11), transparent 35%, rgba(255,190,51,.08));
+}
+
+.auth-glow {
+  @apply absolute rounded-full blur-3xl pointer-events-none;
+}
+
+.auth-glow-one {
+  @apply -right-20 -top-20 h-44 w-44 bg-mainColor/15;
+}
+
+.auth-glow-two {
+  @apply -left-24 bottom-0 h-40 w-40 bg-mainColor/10;
+}
+
+.logo-orb {
+  @apply flex h-24 w-24 items-center justify-center rounded-full border border-mainColor/25 bg-white/[.04] shadow-[0_0_35px_rgba(255,190,51,.12)];
+}
+
+.auth-logo {
+  @apply h-16 w-16 object-contain;
+}
+
+.auth-title {
+  @apply mt-5 text-xl sm:text-2xl font-black text-white;
+}
+
+.auth-description {
+  @apply mt-2 max-w-sm text-center text-sm leading-7 text-white/65;
+}
+
+.auth-label {
+  @apply mb-2 block text-right text-xs font-bold text-white/70;
+}
+
+.auth-input {
+  @apply w-full rounded-2xl border-2 border-white/80 bg-white px-4 py-3 text-center text-base font-bold text-slate-900 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-mainColor focus:ring-4 focus:ring-mainColor/15 disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.auth-submit {
+  @apply mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-mainColor py-3.5 text-sm font-black text-slate-950 shadow-[0_12px_30px_rgba(255,190,51,.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_35px_rgba(255,190,51,.28)] disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+@media (max-width: 640px) {
+  .auth-card {
+    @apply rounded-[26px] p-5;
+  }
+}
+</style>
