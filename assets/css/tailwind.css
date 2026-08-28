@@ -66,6 +66,58 @@ body::before {
 .direction-set-rtl { direction: rtl; }
 .fade-in-iamge { animation: fadeIn 1s; }
 
+/* Shared aquarium surfaces for Nuxt UI primitives */
+.u-card, .profile-addresses-card, .profile-modal-card {
+    color: #fffaf0;
+}
+
+/* Product detail: the mobile purchase panel must flow with the page instead of covering content. */
+.price-details-product {
+    background: rgba(7, 27, 36, .96) !important;
+    color: #fffaf0 !important;
+    border-color: rgba(255,190,51,.16) !important;
+    box-shadow: 0 -18px 50px rgba(0,0,0,.25) !important;
+}
+.price-details-product .text-secColor,
+.price-details-product .text-gray-400,
+.price-details-product .text-gray-300 {
+    color: rgba(255,255,255,.68) !important;
+}
+.price-details-product .text-cosColor,
+.price-details-product .text-mainColor {
+    color: #ffbe33 !important;
+}
+.price-details-product .bg-cosColor,
+.price-details-product .bg-mainColor {
+    background-color: #ffbe33 !important;
+}
+
+@media (max-width: 1023px) {
+    .price-details-product {
+        position: relative !important;
+        inset: auto !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        padding: 1rem !important;
+        border: 1px solid rgba(255,190,51,.14) !important;
+        border-radius: 22px !important;
+        backdrop-filter: blur(22px);
+    }
+
+    .price-details-product .hidden.lg\\:block {
+        display: none !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .price-details-product {
+        padding: .8rem !important;
+        border-radius: 18px !important;
+    }
+}
+
 @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
 @keyframes aquariumFloat { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, -40px, 0); } }
 @keyframes glassSweep { 0%, 45% { transform: translateX(-100%); } 75%, 100% { transform: translateX(100%); } }
