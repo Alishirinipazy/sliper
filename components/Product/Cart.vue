@@ -9,20 +9,37 @@ const { public: { apiBase } } = useRuntimeConfig()
 const allCard    = computed(() => store?.allItem)
 const totalItems = computed(() => allCard.value?.reduce((s, i) => s + i.qty, 0) ?? 0)
 
-// روش ارسال
-const { data: shippingMethods } = await useFetch(`${apiBase}/shipping-methods`)
+const coupon = reactive({ code: '', percent: 0 })
+const addressId = ref(null)
+
+// روش ارسال - لیست واقعی تاپین بر اساس شهر آدرس انتخابی (قیمت‌ها فرق می‌کنن،
+// پس تا آدرس مشخص نشه چیزی نمی‌گیریم)
+const shippingOptions = ref([])
 const selectedShipping = ref(null)
-watch(shippingMethods, (v) => {
-  if (v?.data?.length && !selectedShipping.value) selectedShipping.value = v.data[0]
-}, { immediate: true })
+const shippingLoading = ref(false)
+const shippingError = ref('')
+
+watch(addressId, async (id) => {
+  selectedShipping.value = null
+  shippingOptions.value = []
+  shippingError.value = ''
+  if (!id) return
+  shippingLoading.value = true
+  try {
+    const data = await $fetch('/api/tapin/shipping-options', { query: { address_id: id } })
+    shippingOptions.value = data?.options ?? []
+    if (shippingOptions.value.length) selectedShipping.value = shippingOptions.value[0]
+  } catch (error) {
+    shippingError.value = error.data?.statusMessage || 'امکان ارسال به این آدرس در حال حاضر وجود ندارد'
+  } finally {
+    shippingLoading.value = false
+  }
+})
 
 const shippingPrice  = computed(() => selectedShipping.value?.price ?? 0)
 const subTotal       = computed(() => store.totalAmount)
 const couponDiscount = computed(() => Math.round((subTotal.value * coupon.percent) / 100))
 const finalTotal     = computed(() => subTotal.value - couponDiscount.value + shippingPrice.value)
-
-const coupon = reactive({ code: '', percent: 0 })
-const addressId = ref(null)
 
 function removeFromCart(item) {
   store.remove(item._key)
@@ -111,20 +128,30 @@ function removeFromCart(item) {
         <!-- روش ارسال -->
         <div class="py-2">
           <p class="text-xs font-bold text-secColor mb-2">روش ارسال:</p>
-          <div class="space-y-1">
-            <label v-for="method in shippingMethods?.data" :key="method.id"
+
+          <p v-if="!addressId" class="text-xs text-gray-400 bg-gray-50 rounded-xl p-2">
+            اول آدرس رو انتخاب کن تا هزینه‌های ارسال نشون داده بشه
+          </p>
+          <div v-else-if="shippingLoading" class="space-y-1">
+            <USkeleton class="h-10 w-full rounded-xl" v-for="n in 2" :key="n"/>
+          </div>
+          <p v-else-if="shippingError" class="text-xs text-red-400 bg-red-50 rounded-xl p-2">
+            {{ shippingError }}
+          </p>
+          <div v-else class="space-y-1">
+            <label v-for="option in shippingOptions" :key="option.order_type"
                    class="flex items-center justify-between p-2 rounded-xl border cursor-pointer transition"
-                   :class="selectedShipping?.id === method.id ? 'border-mainColor bg-mainColor/10' : 'border-gray-200 hover:border-gray-300'">
+                   :class="selectedShipping?.order_type === option.order_type ? 'border-mainColor bg-mainColor/10' : 'border-gray-200 hover:border-gray-300'">
               <div class="flex items-center gap-2">
-                <input type="radio" :value="method.id" :checked="selectedShipping?.id === method.id"
-                       @change="selectedShipping = method" class="accent-yellow-400"/>
+                <input type="radio" :value="option.order_type" :checked="selectedShipping?.order_type === option.order_type"
+                       @change="selectedShipping = option" class="accent-yellow-400"/>
                 <div>
-                  <p class="text-xs font-bold">{{ method.name }}</p>
-                  <p class="text-xs text-gray-400">{{ method.delivery_days }} روز کاری</p>
+                  <p class="text-xs font-bold">{{ option.title }}</p>
+                  <p class="text-xs text-gray-400">{{ option.eta }}</p>
                 </div>
               </div>
-              <span class="text-xs font-bold" :class="method.price === 0 ? 'text-green-500' : 'text-secColor'">
-                {{ method.price === 0 ? 'رایگان' : numberFormat(method.price) + ' ت' }}
+              <span class="text-xs font-bold" :class="option.price === 0 ? 'text-green-500' : 'text-secColor'">
+                {{ option.price === 0 ? 'رایگان' : numberFormat(option.price) + ' ت' }}
               </span>
             </label>
           </div>
@@ -162,7 +189,7 @@ function removeFromCart(item) {
               :coupon="coupon"
               :addressId="addressId"
               :cart="allCard"
-              :shippingMethodId="selectedShipping?.id"/>
+              :tapinOrderType="selectedShipping?.order_type"/>
         </div>
       </template>
     </UCard>

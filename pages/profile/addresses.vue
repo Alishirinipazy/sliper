@@ -7,6 +7,19 @@ const {data, refresh} = await useFetch('/api/profile/addressess', {
   headers: useRequestHeaders(['cookie'])
 })
 
+// لیست واقعی استان/شهر تاپین - چون city_id/province_id باید کد واقعی تاپین
+// باشن (نه آی‌دی جدول قدیمی محلی)، وگرنه استعلام قیمت/ثبت سفارش رد می‌شه.
+// این endpoint هر استان رو با شهرهای زیرمجموعه‌ش توی یه درخواست برمی‌گردونه.
+const {data: tapinProvinces} = await useFetch('/api/tapin/provinces')
+
+function provinceTitle(code: number) {
+  return tapinProvinces.value?.find((p: any) => p.code == code)?.title ?? '—'
+}
+function cityTitle(provinceCode: number, cityCode: number) {
+  const province = tapinProvinces.value?.find((p: any) => p.code == provinceCode)
+  return province?.cities?.find((c: any) => c.code == cityCode)?.title ?? '—'
+}
+
 const toast = useToast()
 const loading = ref(false)
 const isOpenEdit = ref(false)
@@ -17,7 +30,7 @@ const editingRow = ref<Record<string, any> | null>(null)
 const addressSchema = z.object({
   title: z.string().min(1, 'عنوان نمی‌تواند خالی باشد'),
   cellphone: z.string().regex(/^(\+98|0)?9\d{9}$/, 'شماره تماس نامعتبر است'),
-  postal_code: z.string().min(1, 'کد پستی نمی‌تواند خالی باشد'),
+  postal_code: z.string().regex(/^\d{5,10}$/, 'کد پستی باید فقط عدد باشد'),
   province_id: z.coerce.number({invalid_type_error: 'استان را انتخاب کنید'}).min(1, 'استان را انتخاب کنید'),
   city_id: z.coerce.number({invalid_type_error: 'شهر را انتخاب کنید'}).min(1, 'شهر را انتخاب کنید'),
   address: z.string().min(5, 'آدرس باید حداقل ۵ کاراکتر باشد'),
@@ -53,18 +66,21 @@ const rows = computed(() =>
       title: item.title,
       cellphone: item.cellphone,
       postal_code: item.postal_code,
-      province: data?.value?.provinces?.find(i => i.id === item.province_id)?.name + ' / ' +  data?.value?.cities?.find(i => i.id === item.city_id)?.name,
+      province: provinceTitle(item.province_id) + ' / ' + cityTitle(item.province_id, item.city_id),
       address: item.address,
       _raw: item,
     }))
 )
 
 // ─── Province / City helpers ─────────────────────────────────────────────────
+// == نه === : USelect ممکنه مقدار انتخاب‌شده رو به‌صورت رشته برگردونه، در
+// حالی که p.code همیشه عدده - مقایسه‌ی دقیق (===) همیشه false می‌شد و
+// لیست شهرها هیچ‌وقت پر نمی‌شد.
 const filteredCitiesEdit = computed(() =>
-    (data.value?.cities ?? []).filter((c: any) => c.province_id == editState.province_id)
+    tapinProvinces.value?.find((p: any) => p.code == editState.province_id)?.cities ?? []
 )
 const filteredCitiesCreate = computed(() =>
-    (data.value?.cities ?? []).filter((c: any) => c.province_id == createState.province_id)
+    tapinProvinces.value?.find((p: any) => p.code == createState.province_id)?.cities ?? []
 )
 
 watch(() => editState.province_id, () => {
@@ -252,7 +268,7 @@ async function onSubmitCreate(event: FormSubmitEvent<AddressSchema>) {
               <UFormGroup label="استان" name="province_id" required>
                 <USelect
                     v-model="editState.province_id"
-                    :options="(data?.provinces ?? []).map((p: any) => ({ label: p.name, value: p.id }))"
+                    :options="(tapinProvinces ?? []).map((p: any) => ({ label: p.title, value: p.code }))"
                     placeholder="انتخاب استان"
                 />
               </UFormGroup>
@@ -260,7 +276,7 @@ async function onSubmitCreate(event: FormSubmitEvent<AddressSchema>) {
               <UFormGroup label="شهر" name="city_id" required>
                 <USelect
                     v-model="editState.city_id"
-                    :options="filteredCitiesEdit.map((c: any) => ({ label: c.name, value: c.id }))"
+                    :options="filteredCitiesEdit.map((c: any) => ({ label: c.title, value: c.code }))"
                     :disabled="!editState.province_id"
                     placeholder="انتخاب شهر"
                 />
@@ -319,7 +335,7 @@ async function onSubmitCreate(event: FormSubmitEvent<AddressSchema>) {
               <UFormGroup label="استان" name="province_id" required>
                 <USelect
                     v-model="createState.province_id"
-                    :options="(data?.provinces ?? []).map((p: any) => ({ label: p.name, value: p.id }))"
+                    :options="(tapinProvinces ?? []).map((p: any) => ({ label: p.title, value: p.code }))"
                     placeholder="انتخاب استان"
                 />
               </UFormGroup>
@@ -327,7 +343,7 @@ async function onSubmitCreate(event: FormSubmitEvent<AddressSchema>) {
               <UFormGroup label="شهر" name="city_id" required>
                 <USelect
                     v-model="createState.city_id"
-                    :options="filteredCitiesCreate.map((c: any) => ({ label: c.name, value: c.id }))"
+                    :options="filteredCitiesCreate.map((c: any) => ({ label: c.title, value: c.code }))"
                     :disabled="!createState.province_id"
                     placeholder="انتخاب شهر"
                 />
@@ -349,4 +365,4 @@ async function onSubmitCreate(event: FormSubmitEvent<AddressSchema>) {
     </UModal>
 
   </div>
-</template>
+</template> 
