@@ -12,7 +12,7 @@ async function logout() {
 </script>
 
 <template>
-  <section class="profile-layout lg:grid lg:grid-cols-12 gap-3">
+  <section class="profile-layout">
     <aside class="profile-aside-header">
       <ul class="list">
         <li class="list-group-item lg:hidden"><NuxtLink to="/"><UIcon name="material-symbols:other-houses"/><p>خوونه</p></NuxtLink></li>
@@ -28,20 +28,21 @@ async function logout() {
 </template>
 
 <style scoped>
-.profile-layout { @apply relative z-10 min-h-[calc(100vh-2rem)] pb-20 lg:pb-0; }
+.profile-layout { @apply relative z-10 min-h-[calc(100vh-2rem)] pb-24 lg:pb-0; }
 .list { @apply text-center lg:py-8 lg:m-3 lg:mx-5 flex lg:block justify-center w-full; }
-.list-group-item { @apply text-white lg:m-3 p-1 lg:p-3 lg:rounded-2xl m-1 bg-[#1c1b22] border border-mainColor/10 transition hover:border-mainColor/35; }
+.list-group-item { @apply text-white lg:m-3 p-1 lg:p-3 lg:rounded-2xl m-1 bg-[#111b20]/90 border border-mainColor/10 transition hover:border-mainColor/35; }
 .list-group-item a { @apply flex items-center justify-center gap-2 rounded-xl px-2 py-2 transition; }
 .list-group-item :deep(svg) { @apply w-5 h-5 shrink-0; }
 .profile-active { @apply text-mainColor bg-mainColor/10; }
 .profile-aside-header { @apply lg:h-[85vh] lg:col-span-2 text-white lg:border-mainColor lg:border-2 lg:rounded-2xl lg:bg-[#111b20]/90 lg:m-1 flex items-center w-full backdrop-blur-xl shadow-[0_18px_55px_rgba(0,0,0,.18)]; }
 @media (max-width: 1023px) {
-  .profile-aside-header { @apply fixed bottom-0 inset-x-0 z-[140] bg-[#071b24]/95 border-t border-mainColor/20 backdrop-blur-2xl px-1 py-1; }
+  .profile-aside-header { @apply fixed bottom-0 inset-x-0 z-[450] bg-[#071b24]/98 border-t border-mainColor/25 backdrop-blur-2xl px-1 py-1 shadow-[0_-16px_45px_rgba(0,0,0,.35)]; padding-bottom: max(.25rem, env(safe-area-inset-bottom)); }
   .list { @apply flex items-stretch gap-1 m-0 p-0 max-w-2xl mx-auto; }
   .list-group-item { @apply flex-1 min-w-0 m-0 p-0 bg-transparent border-0; }
   .list-group-item a { @apply min-h-14 flex-col gap-1 px-1 py-2 text-[10px] text-white/60; }
   .list-group-item a:hover { @apply bg-white/5; }
   .profile-active { @apply bg-mainColor/10 text-mainColor; }
+  .profile-content { padding-bottom: 5.5rem !important; }
 }
 @media (max-width: 380px) {
   .list-group-item a { @apply min-h-12 text-[9px]; }
