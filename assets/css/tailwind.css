@@ -19,6 +19,7 @@ html { background: #0f1015; color-scheme: dark; }
 body {
     min-height: 100vh;
     margin: 0;
+    overflow-x: hidden;
     background:
         radial-gradient(circle at 12% 8%, rgba(255,190,51,.10), transparent 28rem),
         radial-gradient(circle at 88% 18%, rgba(229,139,154,.08), transparent 32rem),
@@ -66,17 +67,16 @@ body::before {
 .direction-set-rtl { direction: rtl; }
 .fade-in-iamge { animation: fadeIn 1s; }
 
-/* Shared aquarium surfaces for Nuxt UI primitives */
 .u-card, .profile-addresses-card, .profile-modal-card {
     color: #fffaf0;
 }
 
-/* Product detail: the mobile purchase panel must flow with the page instead of covering content. */
+/* Mobile product purchase bar: compact, horizontal and always above the mobile nav. */
 .price-details-product {
-    background: rgba(7, 27, 36, .96) !important;
+    background: rgba(7, 27, 36, .97) !important;
     color: #fffaf0 !important;
-    border-color: rgba(255,190,51,.16) !important;
-    box-shadow: 0 -18px 50px rgba(0,0,0,.25) !important;
+    border-color: rgba(255,190,51,.18) !important;
+    box-shadow: 0 -18px 50px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.06) !important;
 }
 .price-details-product .text-secColor,
 .price-details-product .text-gray-400,
@@ -94,27 +94,165 @@ body::before {
 
 @media (max-width: 1023px) {
     .price-details-product {
-        position: relative !important;
-        inset: auto !important;
-        width: 100% !important;
-        max-width: none !important;
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-        padding: 1rem !important;
-        border: 1px solid rgba(255,190,51,.14) !important;
-        border-radius: 22px !important;
-        backdrop-filter: blur(22px);
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        inset-inline: 0 !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        margin: 0 !important;
+        padding: .7rem .8rem calc(.7rem + env(safe-area-inset-bottom)) !important;
+        border: 0 !important;
+        border-top: 1px solid rgba(255,190,51,.18) !important;
+        border-radius: 20px 20px 0 0 !important;
+        z-index: 140 !important;
+        backdrop-filter: blur(24px) saturate(125%);
     }
 
-    .price-details-product .hidden.lg\\:block {
+    .price-details-product > .hidden.lg\\:block {
         display: none !important;
+    }
+
+    .price-details-product > .relative {
+        width: 100%;
+        display: grid;
+        grid-template-columns: minmax(112px, .72fr) minmax(155px, 1.28fr);
+        align-items: center;
+        gap: .65rem;
+    }
+
+    .price-details-product > .relative > .text-center {
+        grid-column: 1;
+        grid-row: 1;
+        margin: 0 !important;
+        text-align: right !important;
+        min-width: 0;
+    }
+
+    .price-details-product > .relative > .text-center p {
+        white-space: nowrap;
+    }
+
+    .price-details-product > .relative > .u-button,
+    .price-details-product > .relative > button {
+        grid-column: 2;
+        grid-row: 1;
+        min-height: 50px !important;
+        width: 100% !important;
+        margin: 0 !important;
+        border-radius: 16px !important;
+    }
+
+    .price-details-product > .relative > div:not(.text-center) {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin: 0 !important;
+    }
+
+    .price-details-product > .relative > .absolute {
+        top: -8px !important;
+        right: auto !important;
+        left: 92px !important;
+        z-index: 2 !important;
+    }
+
+    /* Prevent the fixed bar from hiding the last content and keep the mobile nav below it. */
+    .products-page,
+    main {
+        padding-bottom: 1rem;
+    }
+
+    .mobile-nav {
+        bottom: 0.65rem !important;
+        z-index: 120 !important;
     }
 }
 
 @media (max-width: 640px) {
     .price-details-product {
-        padding: .8rem !important;
-        border-radius: 18px !important;
+        padding-left: .65rem !important;
+        padding-right: .65rem !important;
+    }
+
+    .price-details-product > .relative {
+        grid-template-columns: minmax(105px, .68fr) minmax(145px, 1.32fr);
+        gap: .5rem;
+    }
+
+    .price-details-product > .relative > .u-button,
+    .price-details-product > .relative > button {
+        min-height: 48px !important;
+        font-size: .82rem !important;
+    }
+
+    .price-details-product .text-xl,
+    .price-details-product .text-2xl,
+    .price-details-product .text-3xl {
+        font-size: 1.05rem !important;
+        line-height: 1.4 !important;
+    }
+
+    .price-details-product .text-xs {
+        font-size: .68rem !important;
+    }
+
+    .products-page .grid.grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .6rem !important;
+    }
+
+    .products-page .product-card {
+        border-radius: 20px !important;
+    }
+
+    .products-page .product-image-wrap {
+        height: auto !important;
+        aspect-ratio: 1 / 1.05;
+        margin: .3rem !important;
+        border-radius: 17px !important;
+    }
+
+    .products-page .product-info {
+        padding: .55rem !important;
+    }
+
+    .products-page .product-info h3 {
+        font-size: .78rem !important;
+    }
+
+    .products-page .product-info p {
+        font-size: .65rem !important;
+    }
+
+    .products-page .price-row {
+        margin-top: .65rem !important;
+    }
+
+    .products-page .price {
+        font-size: .95rem !important;
+    }
+
+    .products-page .buy-orb {
+        width: 34px !important;
+        height: 34px !important;
+    }
+
+    .products-page .sale-badge {
+        left: 0 !important;
+        top: -1.7rem !important;
+        font-size: .58rem !important;
+    }
+}
+
+/* Tablet/desktop product grids stay dense without leaving large empty columns. */
+@media (min-width: 641px) and (max-width: 1023px) {
+    .products-page .grid.grid-cols-2 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .products-page .product-image-wrap {
+        height: clamp(170px, 28vw, 210px) !important;
     }
 }
 
