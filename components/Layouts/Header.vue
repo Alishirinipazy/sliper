@@ -92,7 +92,7 @@ onMounted(() => {
     </div>
   </header>
 
-  <USlideover v-model="searchOpen" side="bottom" :ui="{ base: 'z-[1000]' }">
+  <USlideover v-model="searchOpen" side="bottom" :ui="{ base: 'z-[1000]', overlay: 'z-[990]', wrapper: 'z-[995]' }">
     <div dir="rtl" class="search-panel">
       <form @submit.prevent="submitSearch()" class="max-w-2xl mx-auto">
         <label for="site-search" class="search-label">جستجوی اسلیپر پاز</label>
@@ -107,7 +107,7 @@ onMounted(() => {
     </div>
   </USlideover>
 
-  <USlideover v-model="store.isOpenModal" class="flex flex-col flex-1" :ui="{ base: 'z-[950]', body: { base: 'flex-1 bg-[#071b24]' }, ring: '', divide: 'divide-y divide-mainColor/10' }">
+  <USlideover v-model="store.isOpenModal" class="flex flex-col flex-1" :ui="{ base: 'z-[950]', overlay: 'z-[940]', wrapper: 'z-[945]', body: { base: 'flex-1 bg-[#071b24]' }, ring: '', divide: 'divide-y divide-mainColor/10' }">
     <ProductCart preview />
   </USlideover>
 </template>
