@@ -121,14 +121,14 @@ async function checkOTP() {
             autocomplete="one-time-code"
             aria-label="رقم کد تایید"
             class="otp-box"
-            :class="backState"
+            :class="[backState, { 'is-filled': otpDigits[index] }]"
             :disabled="loading"
             @input="onOtpInput(index, $event)"
             @keydown="onOtpKeydown(index, $event)"
           >
         </div>
 
-        <p class="otp-hint">کد را به صورت خودکار بین کادرها جابه‌جا می‌کنیم</p>
+        <p class="otp-hint">هر رقم که وارد شود، کادر بعدی به صورت خودکار فعال می‌شود</p>
 
         <button
           type="submit"
@@ -197,8 +197,10 @@ async function checkOTP() {
   direction: ltr;
 }
 
-.otp-box:not(:placeholder-shown) {
+.otp-box.is-filled {
   animation: otpPop .25s ease-out;
+  border-color: rgba(255, 190, 51, .8);
+  box-shadow: 0 8px 24px rgba(255, 190, 51, .14);
 }
 
 .otp-box.otp-success {
