@@ -1,49 +1,21 @@
 <script setup lang="ts">
 import { useModalStore } from "~/stores/cart"
 
-const { authUser } = useAuth()
 const toast = useToast()
 const store = useModalStore()
-const { public: { apiBase } } = useRuntimeConfig()
 
 const allCard    = computed(() => store?.allItem)
 const totalItems = computed(() => allCard.value?.reduce((s, i) => s + i.qty, 0) ?? 0)
-
-const coupon = reactive({ code: '', percent: 0 })
-const addressId = ref(null)
-
-// روش ارسال - لیست واقعی تاپین بر اساس شهر آدرس انتخابی (قیمت‌ها فرق می‌کنن،
-// پس تا آدرس مشخص نشه چیزی نمی‌گیریم)
-const shippingOptions = ref([])
-const selectedShipping = ref(null)
-const shippingLoading = ref(false)
-const shippingError = ref('')
-
-watch(addressId, async (id) => {
-  selectedShipping.value = null
-  shippingOptions.value = []
-  shippingError.value = ''
-  if (!id) return
-  shippingLoading.value = true
-  try {
-    const data = await $fetch('/api/tapin/shipping-options', { query: { address_id: id } })
-    shippingOptions.value = data?.options ?? []
-    if (shippingOptions.value.length) selectedShipping.value = shippingOptions.value[0]
-  } catch (error) {
-    shippingError.value = error.data?.statusMessage || 'امکان ارسال به این آدرس در حال حاضر وجود ندارد'
-  } finally {
-    shippingLoading.value = false
-  }
-})
-
-const shippingPrice  = computed(() => selectedShipping.value?.price ?? 0)
-const subTotal       = computed(() => store.totalAmount)
-const couponDiscount = computed(() => Math.round((subTotal.value * coupon.percent) / 100))
-const finalTotal     = computed(() => subTotal.value - couponDiscount.value + shippingPrice.value)
+const finalTotal = computed(() => store.totalAmount)
 
 function removeFromCart(item) {
   store.remove(item._key)
   toast.add({ title: `${item.name} حذف شد`, color: 'red', timeout: 2000 })
+}
+
+function goToCheckout() {
+  store.changeStatusModal()
+  navigateTo('/cart')
 }
 </script>
 
@@ -64,21 +36,18 @@ function removeFromCart(item) {
         </div>
       </template>
 
-      <!-- لیست محصولات -->
+      <!-- نمونه‌ی محصولات سبد -->
       <div class="flex flex-col h-full">
-        <ul v-if="allCard?.length" class="divide-y divide-gray-100 overflow-y-auto max-h-[40vh]">
+        <ul v-if="allCard?.length" class="divide-y divide-gray-100 overflow-y-auto">
           <li v-for="item in allCard" :key="item._key"
               class="flex gap-3 py-3 px-1 hover:bg-gray-50 transition">
 
-            <!-- تصویر -->
             <img :src="item.selectedColor?.image || item.primary_image || '/images/preloader.png'"
                  :alt="item.name" class="w-16 h-16 rounded-xl object-cover flex-shrink-0 border border-gray-100"/>
 
-            <!-- اطلاعات -->
             <div class="flex-1 min-w-0">
               <p class="font-bold text-sm text-secColor truncate">{{ item.name }}</p>
 
-              <!-- رنگ و سایز -->
               <div class="flex items-center gap-2 mt-1">
                 <span v-if="item.selectedColor"
                       class="w-4 h-4 rounded-full border border-gray-300 flex-shrink-0"
@@ -92,22 +61,14 @@ function removeFromCart(item) {
                 </span>
               </div>
 
-              <!-- تعداد + قیمت -->
               <div class="flex items-center justify-between mt-2">
-                <div class="flex items-center gap-1 bg-gray-100 rounded-full px-1">
-                  <button @click="item.qty > 1 && store.dicrement(item._key)"
-                          class="w-6 h-6 rounded-full hover:bg-mainColor hover:text-white text-lg font-bold flex items-center justify-center transition">−</button>
-                  <span class="w-6 text-center text-sm font-bold">{{ item.qty }}</span>
-                  <button @click="store.increment(item._key)"
-                          class="w-6 h-6 rounded-full hover:bg-mainColor hover:text-white text-lg font-bold flex items-center justify-center transition">+</button>
-                </div>
+                <span class="text-xs text-gray-400">{{ item.qty }} عدد</span>
                 <span class="text-sm font-bold text-secColor">
                   {{ numberFormat(item.selectedPrice * item.qty) }} تومان
                 </span>
               </div>
             </div>
 
-            <!-- حذف -->
             <button @click="removeFromCart(item)"
                     class="text-gray-300 hover:text-cosColor self-start mt-1 transition">
               <UIcon name="i-heroicons-x-mark-20-solid" class="w-4 h-4"/>
@@ -122,75 +83,15 @@ function removeFromCart(item) {
         </div>
       </div>
 
-      <!-- فوتر -->
+      <!-- فوتر: فقط جمع نهایی + دکمه‌ی رفتن به صفحه‌ی تسویه‌حساب -->
       <template #footer v-if="allCard?.length">
-
-        <!-- روش ارسال -->
-        <div class="py-2">
-          <p class="text-xs font-bold text-secColor mb-2">روش ارسال:</p>
-
-          <p v-if="!addressId" class="text-xs text-gray-400 bg-gray-50 rounded-xl p-2">
-            اول آدرس رو انتخاب کن تا هزینه‌های ارسال نشون داده بشه
-          </p>
-          <div v-else-if="shippingLoading" class="space-y-1">
-            <USkeleton class="h-10 w-full rounded-xl" v-for="n in 2" :key="n"/>
-          </div>
-          <p v-else-if="shippingError" class="text-xs text-red-400 bg-red-50 rounded-xl p-2">
-            {{ shippingError }}
-          </p>
-          <div v-else class="space-y-1">
-            <label v-for="option in shippingOptions" :key="option.order_type"
-                   class="flex items-center justify-between p-2 rounded-xl border cursor-pointer transition"
-                   :class="selectedShipping?.order_type === option.order_type ? 'border-mainColor bg-mainColor/10' : 'border-gray-200 hover:border-gray-300'">
-              <div class="flex items-center gap-2">
-                <input type="radio" :value="option.order_type" :checked="selectedShipping?.order_type === option.order_type"
-                       @change="selectedShipping = option" class="accent-yellow-400"/>
-                <div>
-                  <p class="text-xs font-bold">{{ option.title }}</p>
-                  <p class="text-xs text-gray-400">{{ option.eta }}</p>
-                </div>
-              </div>
-              <span class="text-xs font-bold" :class="option.price === 0 ? 'text-green-500' : 'text-secColor'">
-                {{ option.price === 0 ? 'رایگان' : numberFormat(option.price) + ' ت' }}
-              </span>
-            </label>
-          </div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-sm text-gray-500">جمع کل</span>
+          <span class="text-lg font-extrabold text-mainColor">{{ numberFormat(finalTotal) }} تومان</span>
         </div>
-
-        <!-- کوپن -->
-        <CartCoupon :coupon="coupon"/>
-
-        <!-- محاسبه قیمت -->
-        <ul class="bg-secColor rounded-2xl text-white text-sm divide-y divide-white/10 overflow-hidden my-2">
-          <li class="flex justify-between px-3 py-2">
-            <span>جمع کالاها</span>
-            <span>{{ numberFormat(subTotal) }} تومان</span>
-          </li>
-          <li v-if="coupon.percent" class="flex justify-between px-3 py-2 text-cosColor">
-            <span>تخفیف {{ coupon.percent }}٪</span>
-            <span>- {{ numberFormat(couponDiscount) }} تومان</span>
-          </li>
-          <li class="flex justify-between px-3 py-2">
-            <span>هزینه ارسال</span>
-            <span :class="shippingPrice === 0 ? 'text-green-400' : ''">
-              {{ shippingPrice === 0 ? 'رایگان' : numberFormat(shippingPrice) + ' تومان' }}
-            </span>
-          </li>
-          <li class="flex justify-between px-3 py-2 font-bold text-mainColor">
-            <span>مبلغ نهایی</span>
-            <span>{{ numberFormat(finalTotal) }} تومان</span>
-          </li>
-        </ul>
-
-        <!-- آدرس و پرداخت -->
-        <div class="grid grid-cols-2 gap-2 mt-2">
-          <CartAddress @set-address-id="(id) => addressId = id"/>
-          <CartPayment
-              :coupon="coupon"
-              :addressId="addressId"
-              :cart="allCard"
-              :tapinOrderType="selectedShipping?.order_type"/>
-        </div>
+        <UButton color="yellow" block size="lg" class="font-extrabold rounded-2xl" @click="goToCheckout">
+          مشاهده سبد و تسویه‌حساب
+        </UButton>
       </template>
     </UCard>
   </ClientOnly>

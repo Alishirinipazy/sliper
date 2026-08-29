@@ -35,10 +35,10 @@ async function payment() {
 </script>
 
 <template>
-  <UButton v-if="!loading" color="blue" block @click="payment" class="h-full font-bold">
-    💳 پرداخت
+  <UButton v-if="!loading" color="yellow" block size="lg" @click="payment" class="font-extrabold mt-3 rounded-2xl">
+    💳 پرداخت و ثبت سفارش
   </UButton>
-  <UButton v-else loading color="blue" block class="h-full">
+  <UButton v-else loading color="yellow" block size="lg" class="mt-3 rounded-2xl">
     در حال انتقال...
   </UButton>
 </template>

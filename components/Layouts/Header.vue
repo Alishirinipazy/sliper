@@ -123,7 +123,7 @@ if (props?.fixed) {
         <nuxt-link @click="store?.changeStatusModal()" class="header-item " >
           <UChip :text="store?.allItem?.length" v-if="store?.allItem?.length" size="lg" :ui="{background:'bg-amber-400' ,}">
           </UChip>
-            <UIcon name="material-symbols:shopping-cart" class="w-5 h-5"/>
+          <UIcon name="material-symbols:shopping-cart" class="w-5 h-5"/>
           <p>سبدخرید</p>
         </nuxt-link>
 
@@ -149,23 +149,23 @@ if (props?.fixed) {
         <label for="site-search" class="block text-sm font-bold text-secColor mb-2">جستجوی اسلیپر پاز</label>
         <div class="flex gap-2">
           <UInput
-            id="site-search"
-            v-model="searchTerm"
-            autofocus
-            icon="material-symbols:search"
-            placeholder="مثلاً اسلیپر، دمپایی یا کفش راحتی"
-            class="flex-1"
+              id="site-search"
+              v-model="searchTerm"
+              autofocus
+              icon="material-symbols:search"
+              placeholder="مثلاً اسلیپر، دمپایی یا کفش راحتی"
+              class="flex-1"
           />
           <UButton type="submit" color="yellow" label="جستجو" />
         </div>
 
         <div v-if="searchSuggestions.length" class="mt-3 flex flex-wrap gap-2">
           <button
-            v-for="suggestion in searchSuggestions"
-            :key="suggestion"
-            type="button"
-            class="px-3 py-1.5 rounded-full bg-slate-100 text-sm text-secColor hover:bg-mainColor transition"
-            @click="submitSearch(suggestion)"
+              v-for="suggestion in searchSuggestions"
+              :key="suggestion"
+              type="button"
+              class="px-3 py-1.5 rounded-full bg-slate-100 text-sm text-secColor hover:bg-mainColor transition"
+              @click="submitSearch(suggestion)"
           >
             {{ suggestion }}
           </button>

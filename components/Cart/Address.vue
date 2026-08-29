@@ -6,12 +6,12 @@ const emit = defineEmits(['setAddressId'])
 
 <template>
 
-  <select @change="(el)=>emit('setAddressId',el.target.value)" class="bg-mainColor/30    p-1 rounded" aria-label="Default select example">
+  <select @change="(el)=>emit('setAddressId',el.target.value)" class="bg-mainColor/30    p-1 rounded w-8/12 mx-1" aria-label="Default select example">
     <option value="">انتخاب آدرس</option>
     <option v-for="(address) in addresses" :key="address.id" :value="address.id">{{ address.title }}</option>
   </select>
   <NuxtLink to="/profile/addresses" >
-    <u-button color="yellow" block class="my-1">
+    <u-button color="yellow"  class="my-1">
       آدرس جدید
     </u-button>
   </NuxtLink>

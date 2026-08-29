@@ -32,7 +32,7 @@ async function checkCoupon() {
 
 <template>
   <div class="flex mb-1">
-  <UInput color="pink" variant="outline" v-model="coponCode" placeholder="کد تخفیف داری" />
+    <UInput color="pink" class="w-9/12" variant="outline" v-model="coponCode" placeholder="کد تخفیف داری" />
 
   <u-button v-if="!loading" @click="checkCoupon" class="mr-1 " color="pink" >
     اعمال کنم
