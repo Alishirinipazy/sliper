@@ -35,11 +35,11 @@ const slideStyle = (item: any) => ({
     <USkeleton class="h-[70vh]" :ui="{ background: 'bg-[#171820]' }"/>
   </div>
 
-  <div v-else class="relative z-0 isolate px-2 pt-2 lg:px-3">
+  <div v-else class=" px-2 pt-2 lg:px-3">
     <template v-if="props?.items?.data?.length">
       <ClientOnly>
-        <swiper-container ref="containerRef" :init="false" class="relative z-[1] block">
-          <swiper-slide v-for="(item, idx) in items.data" :key="item?.id || idx" class="relative z-0">
+        <swiper-container ref="containerRef" :init="false" class=" block">
+          <swiper-slide v-for="(item, idx) in items.data" :key="item?.id || idx" class=" ">
             <div class="slider-body aqua-surface" :class="h" :style="slideStyle(item)">
               <div class="underwater-grid" aria-hidden="true"></div>
               <div class="water-light light-one" aria-hidden="true"></div>
@@ -118,7 +118,7 @@ const slideStyle = (item: any) => ({
 }
 
 .slider-copy {
-  @apply relative z-30 max-w-2xl text-center sm:text-right;
+  @apply relative  max-w-2xl text-center sm:text-right;
 }
 
 .eyebrow {
@@ -141,7 +141,7 @@ const slideStyle = (item: any) => ({
 }
 
 .slider-ghost {
-  @apply relative z-40 inline-flex rounded-full border border-mainColor/20 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur-md transition hover:border-mainColor/40 hover:bg-mainColor/10;
+  @apply relative  inline-flex rounded-full border border-mainColor/20 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur-md transition hover:border-mainColor/40 hover:bg-mainColor/10;
 }
 
 .story-dock {
@@ -179,7 +179,7 @@ const slideStyle = (item: any) => ({
 
 .underwater-grid {
   position: absolute;
-  z-index: 3;
+
   inset: 0;
   pointer-events: none;
   opacity: .12;

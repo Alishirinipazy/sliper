@@ -146,7 +146,7 @@ const selected = ref(people[0])
 </template>
 
 <style scoped>
-.products-page { @apply relative z-10 min-h-[50vh]; }
+.products-page { @apply  min-h-[50vh]; }
 .products-filter-drawer { background: #111b20 !important; }
 .filter-class { @apply rounded-2xl mx-1 cursor-pointer py-1 px-2 text-sm transition hover:bg-mainColor/10; }
 </style>

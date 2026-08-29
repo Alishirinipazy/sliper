@@ -262,7 +262,7 @@ const links = [
           </Swiper>
 
           <div v-if="product?.discount_percent"
-                class="absolute top-4 left-4 z-10 bg-cosColor w-[80%] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md flex justify-between">
+                class="absolute top-4 left-4  bg-cosColor w-[80%] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md flex justify-between">
             <i class="absolute  -top-4 -right-12">
               <svg
                   width="50"

@@ -81,11 +81,11 @@ useHead({
 
     <h1 class="sr-only">اسلیپر پاز؛ خرید آنلاین دمپایی و کفش راحتی زنانه، مردانه و بچگانه</h1>
 
-    <section class="relative z-[1]">
+    <section class="">
       <GlobalSlider :items="slide" h="lg:h-[90vh] h-[40vh]" :stories="stories"/>
     </section>
 
-    <u-container class="relative z-[1]">
+    <u-container class="">
       <section class="ocean-section">
         <div class="section-glow"></div>
         <HomeTab/>

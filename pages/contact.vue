@@ -79,7 +79,7 @@ useHead({
             </a>
           </div>
 
-          <div class="relative z-10 flex flex-col lg:flex-row-reverse items-stretch">
+          <div class="  flex flex-col lg:flex-row-reverse items-stretch">
 
             <!-- ستون راست: عکس داخل شکل ارگانیک -->
             <div class="hidden lg:flex lg:w-[42%] relative items-end justify-center pt-16">
