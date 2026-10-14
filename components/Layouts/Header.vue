@@ -5,6 +5,8 @@ import {useModalStore} from '@/stores/cart'
 const store = useModalStore()
 
 const isOpen = ref(false)
+const menuOpen = ref(false)
+const route = useRoute()
 const searchOpen = ref(false)
 const searchTerm = ref('')
 const router = useRouter()
@@ -28,20 +30,31 @@ function submitSearch(term = searchTerm.value) {
 const classHeader = ref('header');
 const {authUser} = useAuth();
 const props = defineProps(['fixed'])
+
+// منوی همبرگری با هر تغییر مسیر بسته می‌شود
+watch(() => route.fullPath, () => {
+  menuOpen.value = false
+})
+
+const menuLinks = [
+  {to: '/', label: 'خونه', icon: 'material-symbols:other-houses'},
+  {to: '/products', label: 'محصولاتمون', icon: 'bxs:category'},
+  {to: '/about', label: 'دربارمون', icon: 'material-symbols:info-outline'},
+  {to: '/contact', label: 'تماس با ما', icon: 'material-symbols:call-outline'},
+]
+
 if (props?.fixed) {
   classHeader.value = "header-block"
 } else {
   classHeader.value = "header"
+  const onScroll = () => {
+    classHeader.value = window.scrollY <= 200 ? "header" : "header-scroll"
+  }
   onMounted(() => {
-    window.onscroll = () => {
-      if (document.documentElement.scrollTop <= 200) {
-        classHeader.value = "header"
-      } else {
-        classHeader.value = "header-scroll"
-
-      }
-    }
+    window.addEventListener('scroll', onScroll, {passive: true})
+    onScroll()
   })
+  onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 }
 
 </script>
@@ -50,8 +63,12 @@ if (props?.fixed) {
     <u-container>
       <div class="flex justify-between lg:justify-around md:justify-around items-center w-full">
 
-        <div class="hidden  lg:flex w-1/3  justify-center">
-          <ul class="flex ">
+        <div class="w-1/3 flex justify-start lg:justify-center">
+          <button type="button" class="hamburger lg:!hidden" aria-label="باز کردن منو" :aria-expanded="menuOpen"
+                  @click="menuOpen = true">
+            <span></span><span></span><span></span>
+          </button>
+          <ul class="hidden lg:flex">
             <li class="px-2" :class="{'text-amber-400': $route.path==='/'}">
               <nuxt-link to="/">
                 خونه
@@ -82,9 +99,9 @@ if (props?.fixed) {
         <div class=" w-1/3 flex justify-end mx-1">
           <!---->
 
-          <div class="hidden lg:block">
+          <div>
 
-            <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart" @click="store?.changeStatusModal()"
+            <UButton class="rounded-full mx-1" icon="material-symbols:shopping-cart" aria-label="سبد خرید" @click="store?.changeStatusModal()"
                      color="yellow">
               <UChip :text="store?.allItem?.length" v-if="store?.allItem?.length" size="lg" :ui="{background:'bg-secColor' ,}">
               </UChip>
@@ -107,41 +124,59 @@ if (props?.fixed) {
         </div>
       </div>
     </u-container>
-    <!------------------the mobile menu slide over------------------->
-    <div class="fixed lg:hidden bottom-0 flex justify-center w-screen z-20 bg-secColor"
-         :class="{'hidden': $route.path.includes('profile')}">
+  </header>
 
+  <!-- منوی همبرگری موبایل -->
+  <USlideover v-model="menuOpen" side="right" :ui="{ width: 'max-w-[290px]' }">
+    <div dir="rtl" class="flex h-full flex-col bg-secColor text-cyan-50">
+      <div class="flex items-center justify-between p-4">
+        <img src="/images/logo.avif" class="w-[110px]" alt="اسلیپر پاز">
+        <button type="button" class="rounded-full bg-white/10 p-2 transition hover:bg-white/20" aria-label="بستن منو"
+                @click="menuOpen = false">
+          <UIcon name="i-heroicons-x-mark" class="h-5 w-5"/>
+        </button>
+      </div>
 
-      <div class="   flex  text-center">
-        <nuxt-link to="/" class="header-item" :class="{'text-amber-400': $route.path==='/'}">
-          <UIcon name="material-symbols:other-houses" class="w-5 h-5"/>
-          <p>خوونه</p>
+      <nav class="flex-1 space-y-1 px-3">
+        <nuxt-link v-for="(link, i) in menuLinks" :key="link.to" :to="link.to" class="menu-link"
+                   :class="{'menu-link-active': link.to === '/' ? $route.path === '/' : $route.path.startsWith(link.to)}"
+                   :style="{'--i': i * 60}">
+          <UIcon :name="link.icon" class="h-5 w-5"/>
+          {{ link.label }}
         </nuxt-link>
-        <nuxt-link to="/products" class="header-item" :class="{'text-amber-400': $route.path==='/products'}">
-          <UIcon name="bxs:category" class="w-5 h-5"/>
-          <p>محصولاتمون</p></nuxt-link>
-        <nuxt-link @click="store?.changeStatusModal()" class="header-item " >
-          <UChip :text="store?.allItem?.length" v-if="store?.allItem?.length" size="lg" :ui="{background:'bg-amber-400' ,}">
-          </UChip>
-          <UIcon name="material-symbols:shopping-cart" class="w-5 h-5"/>
-          <p>سبدخرید</p>
+
+        <button type="button" class="menu-link w-full" :style="{'--i': 240}"
+                @click="menuOpen = false; store?.changeStatusModal()">
+          <UIcon name="material-symbols:shopping-cart" class="h-5 w-5"/>
+          سبد خرید
+          <span v-if="store?.allItem?.length" class="mr-auto rounded-full bg-mainColor px-2 text-xs font-bold text-secColor">
+            {{ store.allItem.length }}
+          </span>
+        </button>
+
+        <nuxt-link v-if="!authUser" to="/auth/login" class="menu-link" :style="{'--i': 300}">
+          <UIcon name="octicon:sign-in-16" class="h-5 w-5"/>
+          ثبت نام | ورود
         </nuxt-link>
-
-        <nuxt-link to="/auth/login" class="header-item" v-if="!authUser">
-
-          <UIcon name="octicon:sign-in-16" class="w-5 h-5"/>
-          <p> ورود</p>
-
+        <nuxt-link v-else to="/profile/" class="menu-link" :style="{'--i': 300}">
+          <UIcon name="material-symbols:account-circle" class="h-5 w-5"/>
+          {{ authUser?.name || 'پروفایل' }}
         </nuxt-link>
-        <nuxt-link to="/profile/" v-else class="header-item"
-                   :class="{'text-amber-400': $route.path.includes('profile')}">
-          <UIcon name="material-symbols:account-circle" class="w-5 h-5"/>
-          <p>پروفایل</p>
+      </nav>
 
-        </nuxt-link>
+      <div class="flex justify-center gap-3 p-4">
+        <a href="https://www.instagram.com/slipperpaz" target="_blank" rel="noopener" aria-label="اینستاگرام" class="menu-social">
+          <UIcon name="simple-icons:instagram" class="h-4 w-4"/>
+        </a>
+        <a href="http://t.me/slipperpaz" target="_blank" rel="noopener" aria-label="تلگرام" class="menu-social">
+          <UIcon name="simple-icons:telegram" class="h-4 w-4"/>
+        </a>
+        <a href="https://wa.link/t5isoi" target="_blank" rel="noopener" aria-label="واتساپ" class="menu-social">
+          <UIcon name="simple-icons:whatsapp" class="h-4 w-4"/>
+        </a>
       </div>
     </div>
-  </header>
+  </USlideover>
 
   <USlideover v-model="searchOpen" side="top">
     <div dir="rtl" class="p-5 bg-white">
@@ -181,19 +216,52 @@ if (props?.fixed) {
 </template>
 <style>
 .header {
-  @apply lg:fixed top-0 w-full z-20   py-2
+  @apply sticky lg:fixed top-0 w-full z-20 py-2 bg-secColor
 }
 
 .header-scroll {
-  @apply lg:fixed top-0 w-full z-20 bg-secColor py-1
+  @apply sticky lg:fixed top-0 w-full z-20 bg-secColor py-1
 }
 
-.header-item {
-  @apply flex flex-1 items-center flex-col px-5 py-2
+.hamburger {
+  @apply flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-full bg-white/10 transition hover:bg-white/20 active:scale-95
 }
 
-.header-item p {
-  @apply text-xs
+.hamburger span {
+  @apply block h-[2px] w-5 rounded bg-cyan-50 transition-all
+}
+
+.hamburger span:nth-child(2) {
+  @apply w-3 self-end mr-[10px]
+}
+
+.hamburger:hover span:nth-child(2) {
+  @apply w-5 mr-0
+}
+
+.menu-link {
+  @apply flex items-center gap-3 rounded-2xl px-4 py-3 text-base transition hover:bg-white/10;
+  animation: menu-in .4s cubic-bezier(.22, 1, .36, 1) both;
+  animation-delay: calc(var(--i, 0) * 1ms + 120ms);
+}
+
+.menu-link-active {
+  @apply bg-white/10 text-amber-400
+}
+
+.menu-social {
+  @apply flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition hover:bg-mainColor hover:text-secColor
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .header-block {
