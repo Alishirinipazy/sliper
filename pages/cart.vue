@@ -143,15 +143,17 @@ function removeFromCart(item) {
             {{ shippingError }}
           </p>
           <div v-else class="space-y-2">
-            <label v-for="option in shippingOptions" :key="option.order_type"
+            <label v-for="option in shippingOptions" :key="option.key"
                    class="flex items-center justify-between p-3 rounded-xl border cursor-pointer transition"
-                   :class="selectedShipping?.order_type === option.order_type ? 'border-mainColor bg-mainColor/10' : 'border-gray-200 hover:border-gray-300'">
+                   :class="selectedShipping?.key === option.key ? 'border-mainColor bg-mainColor/10' : 'border-gray-200 hover:border-gray-300'">
               <div class="flex items-center gap-2">
-                <input type="radio" :value="option.order_type" :checked="selectedShipping?.order_type === option.order_type"
+                <input type="radio" :value="option.key" :checked="selectedShipping?.key === option.key"
                        @change="selectedShipping = option" class="accent-yellow-400"/>
                 <div>
-                  <p class="text-sm font-bold">{{ option.title }}</p>
-                  <p class="text-xs text-gray-400">{{ option.eta }}</p>
+                  <p class="text-sm font-bold">
+                    <span v-if="option.carrier && !option.title.includes(option.carrier)" class="text-gray-400 font-normal">{{ option.carrier }} · </span>{{ option.title }}
+                  </p>
+                  <p v-if="option.eta" class="text-xs text-gray-400">{{ option.eta }}</p>
                 </div>
               </div>
               <span class="text-sm font-bold" :class="option.price === 0 ? 'text-green-500' : 'text-secColor'">
@@ -195,7 +197,9 @@ function removeFromCart(item) {
               :coupon="coupon"
               :addressId="addressId"
               :cart="allCard"
-              :tapinOrderType="selectedShipping?.order_type"/>
+              :tapinOrderType="selectedShipping?.order_type"
+              :shippingMethodId="selectedShipping?.shipping_method_id"
+              :shippingChosen="!!selectedShipping"/>
         </div>
       </div>
     </div>

@@ -16,6 +16,8 @@ export default defineNuxtConfig({
         }
     },
 
+    css: ['~/assets/css/shop.css'],
+
     colorMode: { preference: 'light' },
 
     modules: [
