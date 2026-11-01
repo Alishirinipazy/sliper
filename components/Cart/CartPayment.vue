@@ -1,14 +1,14 @@
 <script setup lang="ts">
 const toast    = useToast()
 const loading  = ref(false)
-const props    = defineProps(['coupon', 'addressId', 'cart', 'tapinOrderType'])
+const props    = defineProps(['coupon', 'addressId', 'cart', 'tapinOrderType', 'shippingMethodId', 'shippingChosen'])
 
 async function payment() {
   if (!props.addressId) {
     toast.add({ title: 'آدرس انتخاب نشده 📍', color: 'red' })
     return
   }
-  if (!props.tapinOrderType) {
+  if (!props.shippingChosen) {
     toast.add({ title: 'روش ارسال انتخاب نشده 🚚', color: 'red' })
     return
   }
@@ -20,7 +20,10 @@ async function payment() {
       body: {
         coupon:           props.coupon.code,
         address_id:       props.addressId,
-        tapin_order_type: props.tapinOrderType,
+        // یا ارسال تاپین (order_type) یا ارسال خود فروشگاه (shipping_method_id)
+        ...(props.shippingMethodId
+            ? { shipping_method_id: props.shippingMethodId }
+            : { tapin_order_type: props.tapinOrderType }),
       }
     })
     toast.add({ title: 'در حال انتقال به صفحه پرداخت...', color: 'green' })
