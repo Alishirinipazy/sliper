@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const route = useRoute()
 const siteUrl = 'https://slipperpaz.ir'
 
 useHead({
@@ -51,7 +52,7 @@ useHead({
   <nuxt-page/>
   <UNotifications/>
   <ClientOnly>
-    <ChatBot/>
+    <ChatBot v-if="!route.path.startsWith('/pos')"/>
   </ClientOnly>
 </template>
 

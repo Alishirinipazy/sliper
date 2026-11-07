@@ -38,7 +38,9 @@ export default defineNuxtConfig({
         '/storage/**': { proxy: `${apiOrigin}/storage/**` },
         '/profile/**': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
         '/auth/**': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
-        '/payment/**': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } }
+        '/payment/**': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
+        // فروش حضوری: بدون SSR، بدون ایندکس (عمداً توی robots.txt هم نیامده تا آدرسش لو نره)
+        '/pos': { ssr: false, headers: { 'X-Robots-Tag': 'noindex, nofollow' } }
     },
 
     compatibilityDate: '2025-02-12',
