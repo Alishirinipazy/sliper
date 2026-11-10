@@ -1,6 +1,12 @@
 // پروب مجازی: عکس کاربر + محصول انتخابی را به بک‌اند می‌فرستد.
 // عکس کاربر هیچ‌جا ذخیره نمی‌شود؛ نتیجه مستقیم به مرورگر برمی‌گردد.
+// فقط کاربر واردشده می‌تواند (روزی یک بار)؛ توکن از کوکی خوانده و به بک‌اند داده می‌شود.
 export default defineEventHandler(async (event) => {
+    const token = getCookie(event, 'token')
+    if (!token) {
+        throw createError({ statusCode: 401, message: 'برای پرو هوشمند اول وارد حسابت شو', data: { reason: 'login' } })
+    }
+
     const parts = await readMultipartFormData(event)
     if (!parts?.length) {
         throw createError({ statusCode: 400, message: 'عکسی ارسال نشد' })
@@ -27,15 +33,18 @@ export default defineEventHandler(async (event) => {
             body: form,
             headers: {
                 Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
                 ...(ip ? { 'X-Forwarded-For': ip } : {}),
             },
             timeout: 150000,
         })
         return data.data // { image: "data:image/png;base64,..." }
     } catch (error) {
+        const status = error.response?.status || 500
         throw createError({
-            statusCode: error.response?.status || 500,
+            statusCode: status,
             message: error.data?.message || 'ساخت عکس انجام نشد، دوباره امتحان کن',
+            data: { reason: error.data?.data?.reason || (status === 401 ? 'login' : null) },
         })
     }
 })

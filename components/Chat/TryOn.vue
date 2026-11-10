@@ -20,6 +20,23 @@ const cameraInput = ref<HTMLInputElement | null>(null)
 
 const productImage = computed(() => selectedColor.value?.image || props.product?.primary_image)
 
+// ---------- سهمیه‌ی پرو هوشمند: روزی یک بار برای هر کاربر واردشده؛ بعدش فقط حالت دستی ----------
+const quota = ref<{ logged_in: boolean; remaining: number } | null>(null)
+const aiAvailable = computed(() => !quota.value || (quota.value.logged_in && quota.value.remaining > 0))
+
+async function loadQuota() {
+  try {
+    quota.value = await $fetch('/api/chat/tryon-status')
+  } catch {
+    quota.value = null // نامشخص؛ فرض می‌کنیم در دسترسه و خطای واقعی موقع ساخت نشان داده می‌شود
+  }
+}
+
+// اگر سهمیه تمام شد (یا کاربر وارد نشده)، مستقیم می‌رویم سراغ حالت دستی
+watch(aiAvailable, (ok) => {
+  if (!ok && photoUrl.value && status.value !== 'done') mode.value = 'manual'
+})
+
 // ---------- انتخاب و کوچک‌کردن عکس (موبایل‌ها عکس‌های چندمگابایتی می‌دهند) ----------
 async function shrink(file: File, max = 1280): Promise<Blob> {
   const url = URL.createObjectURL(file)
@@ -58,6 +75,7 @@ async function setFile(file?: File | null) {
     status.value = 'idle'
     errorMsg.value = ''
     view.value = 'result'
+    if (!aiAvailable.value) mode.value = 'manual'
   } catch {
     errorMsg.value = 'این عکس باز نشد؛ یه عکس دیگه امتحان کن.'
     status.value = 'error'
@@ -97,7 +115,21 @@ async function generate() {
     resultUrl.value = data.image
     view.value = 'result'
     status.value = 'done'
+    if (quota.value) quota.value.remaining = 0 // سهمیه‌ی امروز مصرف شد
   } catch (e: any) {
+    const reason = e?.data?.data?.reason
+    if (reason === 'daily_limit') {
+      quota.value = {logged_in: true, remaining: 0}
+      mode.value = 'manual'
+      status.value = 'idle'
+      return
+    }
+    if (reason === 'login') {
+      quota.value = {logged_in: false, remaining: 0}
+      mode.value = 'manual'
+      status.value = 'idle'
+      return
+    }
     errorMsg.value = e?.data?.message || e?.statusMessage || 'ساخت عکس انجام نشد؛ دوباره امتحان کن.'
     status.value = 'error'
   } finally {
@@ -140,6 +172,7 @@ function onKey(e: KeyboardEvent) {
 }
 
 onMounted(() => {
+  loadQuota()
   document.body.style.overflow = 'hidden'
   window.addEventListener('keydown', onKey)
 })
@@ -174,6 +207,21 @@ onBeforeUnmount(() => {
         </div>
 
         <div class="max-h-[75vh] overflow-y-auto p-4">
+          <!-- وضعیت سهمیه‌ی پرو هوشمند -->
+          <div v-if="quota && !aiAvailable" class="mb-3 rounded-2xl bg-mainColor/15 p-3 text-xs leading-6 text-secColor" data-test="quota-note">
+            <template v-if="!quota.logged_in">
+              پرو هوشمند (با هوش مصنوعی) مخصوص کاربرهای واردشده‌ست و روزی یک بار.
+              <NuxtLink to="/auth/login" class="font-bold underline" @click="emit('close')">وارد شو</NuxtLink>
+              — تا اون موقع می‌تونی <b>دستی</b> پرو کنی.
+            </template>
+            <template v-else>
+              پرو هوشمند امروزت رو استفاده کردی؛ فردا دوباره می‌تونی. الان می‌تونی <b>دستی</b> پرو کنی.
+            </template>
+          </div>
+          <p v-else-if="quota && aiAvailable && !photoUrl" class="mb-3 text-center text-[11px] text-gray-400" data-test="quota-hint">
+            پرو هوشمند: روزی ۱ بار برای هر کاربر ✨
+          </p>
+
           <!-- ۱) آپلود عکس -->
           <div v-if="!photoUrl"
                class="dropzone" :class="{'dropzone-over': dragging}"
@@ -206,7 +254,8 @@ onBeforeUnmount(() => {
                 <label>اندازه<input v-model.number="place.scale" type="range" min="10" max="90" class="w-full accent-yellow-500"></label>
                 <label>چرخش<input v-model.number="place.rotate" type="range" min="-90" max="90" class="w-full accent-yellow-500"></label>
               </div>
-              <UButton class="mt-3" block color="gray" variant="soft" @click="mode = 'ai'">برگشت به پروب هوشمند</UButton>
+              <UButton v-if="aiAvailable" class="mt-3" block color="gray" variant="soft" @click="mode = 'ai'">برگشت به پروب هوشمند</UButton>
+              <UButton v-else class="mt-3" block color="gray" variant="ghost" @click="photoUrl = ''; reset()">عکس دیگه</UButton>
             </div>
 
             <!-- حالت هوشمند -->
@@ -241,7 +290,8 @@ onBeforeUnmount(() => {
                   <UButton class="flex-1 justify-center" color="yellow" icon="material-symbols:download" :href="resultUrl" download="slipperpaz-tryon.png" tag="a">
                     ذخیره عکس
                   </UButton>
-                  <UButton color="gray" variant="soft" icon="material-symbols:refresh" @click="reset">دوباره</UButton>
+                  <UButton v-if="aiAvailable" color="gray" variant="soft" icon="material-symbols:refresh" @click="reset">دوباره</UButton>
+                  <UButton v-else color="gray" variant="soft" icon="material-symbols:pan-tool-outline" data-test="to-manual" @click="mode = 'manual'">پرو دستی</UButton>
                 </template>
                 <UButton color="gray" variant="ghost" icon="material-symbols:swap-horiz" :disabled="status === 'loading'" @click="photoUrl = ''; reset()">
                   عکس دیگه

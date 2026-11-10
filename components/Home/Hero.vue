@@ -43,7 +43,7 @@ const stageStyle = computed(() => ({
 
 <template>
   <div ref="stage" class="hero-stage" :style="stageStyle">
-    <div class="grid gap-3 lg:grid-cols-[1.35fr_1fr]">
+    <div class="grid gap-3 lg:grid-cols-[1.5fr_1fr]">
       <!-- اسلایدر -->
       <div class="hero-slider">
         <ClientOnly>
@@ -83,7 +83,8 @@ const stageStyle = computed(() => ({
 
 <style scoped>
 .hero-stage {
-  @apply mx-auto w-full max-w-[1400px] px-3 will-change-transform;
+  /* pb-6: برگه‌ی محتوا (-mt-6) روی همین فاصله می‌نشیند و نقطه‌های اسلایدر/کارت‌های منتخب زیرش گم نمی‌شن */
+  @apply mx-auto w-full max-w-[1400px] px-3 pb-6 will-change-transform;
 }
 
 .hero-slider {

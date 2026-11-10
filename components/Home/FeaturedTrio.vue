@@ -1,32 +1,41 @@
 <script setup lang="ts">
 import {numberFormat} from '~/utils/helper'
 
-// سه کارت کنار اسلایدر (طبق طرح): منتخب‌های همین ویزیت
+// سه کارت منتخب کنار اسلایدر: کارت‌های افقی و کم‌ارتفاع (تصویر + نام + قیمت)؛
+// روی دسکتاپ زیر هم و هم‌قد اسلایدر، روی موبایل ردیف قابل‌کشیدن.
 defineProps<{ products: any[]; label: string }>()
 </script>
 
 <template>
-  <div class="flex h-full flex-col">
+  <div class="flex min-w-0 flex-col lg:h-[min(64vh,520px)]">
     <div class="mb-2 flex items-center gap-2 px-1">
       <span class="h-2 w-2 animate-pulse rounded-full bg-mainColor"></span>
       <h2 class="text-sm font-black text-secColor">{{ label }}</h2>
     </div>
 
-    <div class="no-scrollbar -mx-3 flex flex-1 snap-x snap-mandatory gap-3 overflow-x-auto px-3 pb-1 lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0">
+    <div class="no-scrollbar -mx-3 flex flex-1 snap-x snap-mandatory gap-3 overflow-x-auto px-3 pb-1 lg:mx-0 lg:grid lg:min-h-0 lg:grid-cols-1 lg:grid-rows-3 lg:overflow-visible lg:px-0 lg:pb-0">
       <NuxtLink v-for="(p, i) in products" :key="p.id" :to="`/products/${p.slug}`"
                 class="trio-card pop-in group" :style="{'--i': i * 120}">
-        <img :src="p.primary_image || '/images/preloader.png'" :alt="p.name" loading="lazy"
-             class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-110">
-        <div class="absolute inset-0 bg-gradient-to-t from-secColor/90 via-secColor/10 to-transparent"></div>
-
-        <span v-if="p.on_sale && p.discount_percent" class="absolute right-2 top-2 rounded-full bg-cosColor px-2 py-0.5 text-[11px] font-bold text-white">
-          {{ p.discount_percent }}٪
+        <span class="trio-img">
+          <img :src="p.primary_image || '/images/preloader.png'" :alt="p.name" loading="lazy"
+               class="h-full w-full object-cover transition duration-700 group-hover:scale-110">
+          <span v-if="p.on_sale && p.discount_percent" class="trio-badge">{{ p.discount_percent }}٪</span>
         </span>
 
-        <div class="absolute inset-x-0 bottom-0 p-3 text-white">
-          <p class="truncate text-xs font-bold lg:text-sm">{{ p.name }}</p>
-          <p class="mt-0.5 text-xs text-mainColor">{{ numberFormat(p.final_price ?? p.min_price) }} تومان</p>
-        </div>
+        <span class="min-w-0 flex-1">
+          <span v-if="p.category" class="block truncate text-[11px] text-gray-400">{{ p.category }}</span>
+          <span class="line-clamp-2 text-sm font-black leading-6 text-secColor lg:text-base">{{ p.name }}</span>
+          <span class="mt-1 flex items-baseline gap-2">
+            <span class="text-sm font-black" :class="p.on_sale ? 'text-cosColor' : 'text-secColor'">
+              {{ numberFormat(p.final_price ?? p.min_price) }} <small class="text-[11px] font-normal">تومان</small>
+            </span>
+            <span v-if="p.on_sale" class="text-xs text-gray-400 line-through">{{ numberFormat(p.regular_price) }}</span>
+          </span>
+        </span>
+
+        <span class="trio-go" aria-hidden="true">
+          <UIcon name="material-symbols:arrow-back-rounded" class="h-4 w-4"/>
+        </span>
       </NuxtLink>
     </div>
   </div>
@@ -34,6 +43,18 @@ defineProps<{ products: any[]; label: string }>()
 
 <style scoped>
 .trio-card {
-  @apply relative block min-h-[200px] w-[42%] shrink-0 snap-start overflow-hidden rounded-3xl bg-slate-300 shadow-lg shadow-gray-400/50 transition duration-300 hover:-translate-y-1 lg:min-h-0 lg:w-auto;
+  @apply relative flex h-[104px] w-[82%] shrink-0 snap-start items-center gap-3 rounded-3xl bg-white p-2.5 shadow-md shadow-gray-300/70 transition duration-300 hover:-translate-y-0.5 hover:shadow-xl sm:w-[60%] lg:h-auto lg:min-h-0 lg:w-auto lg:p-3;
+}
+
+.trio-img {
+  @apply relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-gray-100 lg:h-[7.5rem] lg:w-[7.5rem];
+}
+
+.trio-badge {
+  @apply absolute right-1 top-1 rounded-full bg-cosColor px-1.5 py-0.5 text-[10px] font-bold leading-none text-white;
+}
+
+.trio-go {
+  @apply grid h-8 w-8 shrink-0 place-items-center rounded-full bg-mainColor/20 text-secColor transition duration-300 group-hover:-translate-x-1 group-hover:bg-mainColor;
 }
 </style>
