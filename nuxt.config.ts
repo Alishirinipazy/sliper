@@ -1,4 +1,4 @@
-const apiBase = process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8000/api/v1'
+const apiBase = process.env.NUXT_PUBLIC_API_BASE || 'https://api.slipperpaz.ir/api/v1'
 const siteUrl = (process.env.NUXT_PUBLIC_SITE_URL || 'https://slipperpaz.ir').replace(/\/$/, '')
 // backend origin without the /api/v1 suffix, e.g. http://localhost:8000 -
 // used to proxy /storage/** (product/category/etc images) through to FastAPI,

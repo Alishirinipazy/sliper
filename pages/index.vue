@@ -109,8 +109,8 @@ useHead({
   <h1 class="sr-only">اسلیپر پاز؛ خرید آنلاین دمپایی و کفش راحتی زنانه، مردانه و بچگانه</h1>
 
   <main class="relative pb-4 lg:pt-24">
-    <!-- استوری‌ها: بالا و وسط -->
-    <HomeStoryBar :stories="stories?.data ?? []"/>
+
+
 
     <!-- اسلایدر + سه محصول منتخب؛ با اسکرول زیر برگه‌ی محتوا می‌رود -->
     <div class="relative">
@@ -120,12 +120,13 @@ useHead({
 
       <div class="sheet">
         <u-container>
+          <HomeStoryBar :stories="stories?.data ?? []"/>
           <HomeShowcaseRow v-for="row in rows" :key="row.tone" v-bind="row"/>
 
+          <HomeBanner :dataBanner="bannerItemData"/>
           <HomeTab/>
           <HomeShowcaseRow v-bind="{ kicker: 'تازه رسیده‌ها', title: 'جدیدترین محصولات', products: lists.newest, link: '/products', tone: 'new' }"/>
 
-          <HomeBanner :dataBanner="bannerItemData"/>
         </u-container>
       </div>
     </div>
